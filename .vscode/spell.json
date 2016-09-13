@@ -1,0 +1,49 @@
+{
+  "language": "es",
+  "ignoreWordsList": [
+    "sh",
+    "log",
+    "node",
+    "MIT",
+    "Main",
+    "layer",
+    "License",
+    "The",
+    "README",
+    "of",
+    "any",
+    "the",
+    "and",
+    "this",
+    "or",
+    "AND",
+    "all",
+    "OR",
+    "FROM",
+    "OUT",
+    "OF",
+    "THE"
+  ],
+  "mistakeTypeToStatus": {
+    "Passive voice": "Hint",
+    "Spelling": "Error",
+    "Complex Expression": "Disable",
+    "Hidden Verbs": "Information",
+    "Hyphen Required": "Disable",
+    "Redundant Expression": "Disable",
+    "Did you mean...": "Disable",
+    "Repeated Word": "Warning",
+    "Missing apostrophe": "Warning",
+    "Cliches": "Disable",
+    "Missing Word": "Disable",
+    "Make I uppercase": "Warning"
+  },
+  "languageIDs": [
+    "markdown",
+    "plaintext"
+  ],
+  "ignoreRegExp": [
+    "/\\(.*\\.(jpg|jpeg|png|md|gif|JPG|JPEG|PNG|MD|GIF)\\)/g",
+    "/((http|https|ftp|git)\\S*)/g"
+  ]
+}
