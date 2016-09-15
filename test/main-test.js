@@ -30,22 +30,3 @@ test.cb('sign up', t => {
       t.end()
     })
 })
-
-test.cb('sign up error', t => {
-  let username = t.context.username
-
-  t.context.request
-    .post('/signup')
-    .send({
-      username: username,
-      password: 'aRandomPassw0rd'
-    })
-    .expect(500)
-    .end(function (err, res) {
-      if (err) throw err
-      console.log(err.message)
-      console.log(res.message)
-      t.is(res.body.message, `hi ${username}`)
-      t.end()
-    })
-})

@@ -18,6 +18,7 @@ exports.localStrategy = new LocalStrategy((username, password, done) => {
       }
 
       user.token = token
+      console.log(`${username} has been loged in`)
       return done(null, user)
     })
   })

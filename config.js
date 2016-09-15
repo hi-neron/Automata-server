@@ -8,7 +8,12 @@ const config = {
       auth: 'http://api.platzigram.com/auth'
     }
   },
-  secret: process.env.AUTOMATA_PASS || 'aut*mata' // never use default
+  secret: process.env.AUTOMATA_PASS || 'aut*mata', // never use default
+  aws: {
+    bucket: process.env.BUCKET || 'automata-images',
+    accessKeyId: process.env.AWS_ACCESS_KEY,
+    secretAccessKey: process.env.AWS_SECRET_KEY
+  }
 }
 
 // For development use local micro instances
