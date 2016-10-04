@@ -1,18 +1,15 @@
 "use strict"
 
 const http = require('http')
-const app = require('../app.js')
+const app = require('../app.js').app
 const chalk = require('chalk')
 
 const port = process.env.PORT || 9050
 const server = http.createServer(app)
 
-const name = 'Automata'
-
-
 server.listen(port)
-// var io = require('socket.io')(server)
-// require('../sockets')(io)
+var io = require('socket.io')(server)
+require('../app').socket(io)
 
 server.on('listening', function (){
   console.log(chalk.black.bgYellow(`Automata listening on port: ${port}`))
@@ -43,4 +40,3 @@ function onError(error) {
       throw error;
   }
 }
-

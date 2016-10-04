@@ -8,7 +8,9 @@ const config = {
       auth: 'http://api.platzigram.com/auth'
     }
   },
-  secret: process.env.AUTOMATA_PASS || 'aut*mata', // never use default
+  redis: process.env.REDIS_URL || 'http://localhost:6379',
+  secret: process.env.AUTOMATA_PASS || 'aut*mata', // never use default,
+  server: process.env.AUTOMATA_NAME || 'automata-server',
   aws: {
     bucket: process.env.BUCKET || 'automata-images',
     accessKeyId: process.env.AWS_ACCESS_KEY,

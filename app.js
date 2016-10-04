@@ -7,7 +7,22 @@ const config = require('./config')
 const cookieParser = require('cookie-parser')
 const express = require('express')
 const expressSession = require('express-session')
+
+// utils
+const _ = require('lodash')
+// const uuid = require('uuid-base62') // to delete
+
+// passport
+const RedisStore = require('connect-redis')(expressSession)
+const redisUrl = require('redis-url')
+
+const sessionStore = new RedisStore(
+  {client: redisUrl.connect(config.redis)})
+
 const passport = require('passport')
+const passportSIo = require('passport.socketio')
+
+const Rt = require('./lib/realtime')
 
 // Multer and aws
 const aws = require('aws-sdk')
@@ -15,6 +30,7 @@ const multer = require('multer')
 const multerS3 = require('multer-s3')
 const ext = require('file-extension')
 
+// servidor
 const app = express()
 
 // Arma las peticiones a los microservicios
@@ -45,12 +61,21 @@ let upload = multer({
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
 
+app.use(function (err, req, res, next) {
+  if (err instanceof SyntaxError && err.status === 400) {
+    res.json({error: 'Bad JSON'})
+  }
+})
+
 app.use(cookieParser())
-app.use(expressSession({
-  secret: config.secret,
+let sessionMiddleware = expressSession({
+  key: 'connect.sid',
   resave: false,
-  saveUninitialized: false
-}))
+  saveUninitialized: false,
+  secret: config.secret,
+  store: sessionStore
+})
+app.use(sessionMiddleware)
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(express.static('public'))
@@ -58,6 +83,82 @@ app.use(express.static('public'))
 passport.use(auth.localStrategy)
 passport.deserializeUser(auth.deserializeUser)
 passport.serializeUser(auth.serializeUser)
+
+// socket.io
+
+let usersSockets = []
+
+function onSuccess (data, accept) {
+  console.log('success socket')
+  accept()
+}
+
+function onFail (data, message, error, accept) {
+  if (error) {
+    console.log(message)
+  }
+  console.log(message)
+  accept(new Error(message))
+}
+
+function ioFunc (io) {
+  io.use(passportSIo.authorize({
+    cookieParser: cookieParser,
+    key: 'connect.sid',
+    passport: passport,
+    secret: config.secret,
+    store: sessionStore,
+    success: onSuccess,
+    fail: onFail
+  }))
+
+  io.on('connection', (socket) => {
+    // se busca el perfil logeado
+    let user = {
+      publicId: socket.request.user.publicId,
+      username: 'jose'
+    }
+
+    // let user = req.user
+
+    // busca si ya existe un socket del usuario
+    let oldUserSocket = _.findIndex(usersSockets, {id: user.publicId})
+
+    // elmina ese socket
+    if (oldUserSocket !== -1) {
+      usersSockets.splice(oldUserSocket, 1)
+      console.log(oldUserSocket)
+    }
+
+    // crea un nuevo socket para el usuario
+    // template para crear un objeto RT con socket
+    let userSession = {
+      username: user.username,
+      userData: user,
+      socket: socket,
+      io: io
+    }
+
+    // se crea el objeto RT del usuario
+    let rt = new Rt(userSession)
+
+    // se crea el template del socket de usuario
+    let userRt = {
+      id: user.publicId,
+      rt: rt
+    }
+
+    // se agrega el socket al array
+    usersSockets.push(userRt)
+
+    socket.on('disconnect', () => {
+      let socketToKill = _.findIndex(usersSockets, {id: user.publicId})
+      console.log(socketToKill, ' see you later rat')
+      usersSockets.splice(socketToKill, 1)
+    })
+  })
+}
+
 // Requests
 
 /**
@@ -150,8 +251,18 @@ app.get('/api/users/mastery/:mastery', (req, res) => {
 /* createPicture
 * token firmado con username
 */
+
 app.post('/api/images', secure, (req, res) => {
-  upload(req, res, function (err) {
+  // buscar el socket en la lista de usuarios conectados
+  // utilizar el publicId para hacer la busqueda
+
+  let userSocket = _.find(usersSockets, {index: req.user.publicId})
+
+  if (!userSocket) {
+    return res.status(500).json({error: 'You need loged with RT'})
+  }
+
+  upload(req, res, (err) => {
     if (err) return res.status(500).json(err)
     let username = req.user.username
     let description = req.body.description || ''
@@ -172,9 +283,18 @@ app.post('/api/images', secure, (req, res) => {
 
     client.createPicture(image, token, (err, data) => {
       if (err) return res.send(err)
-      let reg = /\w+([A-z])-\w+([0-9]).\w+([a-z])$/g
-      let imagename = reg.exec(src)
-      res.status(200).json({message: `image: ${imagename[0]} was uploaded`})
+
+      image.username = req.user.username
+      let toSend = {}
+
+      // activar la accion pushImage en el socket
+      userSocket.rt.pushImage(image, (err, response) => {
+        if (err) return res.status(400).json(err)
+        let reg = /\w+([A-z])-\w+([0-9]).\w+([a-z])$/g
+        let imagename = reg.exec(src)
+        toSend.message = `image: ${imagename[0]} was uploaded`
+        res.status(200).json(toSend)
+      })
     })
   })
 })
@@ -215,17 +335,42 @@ app.get('/api/images/byuser/:username', (req, res) => {
   }
 */
 app.get('/api/images/delete/:image', secure, (req, res) => {
-  let imageId = req.params.image
+  let publicId = req.params.image
   let token = req.user.token
   let userId = req.user.username
 
   let data = {
     userId: userId,
-    imageId: imageId
+    publicId: publicId
+  }
+
+  // buscar el socket en la lista de usuarios conectados
+  // utilizar el publicId para hacer la busqueda
+  let userSocket = _.find(usersSockets, {index: req.user.publicId})
+
+  if (!userSocket) {
+    return res.status(500).json({error: 'You need loged with RT'})
   }
 
   client.deletePicture(data, token, (err, response) => {
+    /*
+      response = {
+        code: 200,
+        message: 'image was deleted',
+        status: 'ok',
+        publicId: publicId
+      }
+    */
     if (err) return res.status(500).json(err)
+
+    // activar la accion pushImage en el socket
+    data.username = req.user.username
+
+    userSocket.rt.deleteImage(data, (err, response) => {
+      if (err) return res.status(400).json(err)
+      res.status(200).json(response)
+    })
+
     res.status(200).json(response)
   })
 })
@@ -250,10 +395,52 @@ app.post('/api/images/award/:picture', secure, (req, res) => {
   })
 })
 
+/* GAME CRUD */
+// ----------------------------------
+
+// activar una skill
+// El usuario activa una skill
+
+app.post('/game/:skill', secure, (req, res) => {
+  // peticion POST al cliente RT:
+  /*
+    data: {
+      pos: {x:, y:},
+      skill: <skillname>,
+      username: <para implementar el modulo score>
+    }
+  */
+
+  let userSocket = _.find(usersSockets, {index: publicId})
+  // activar la accion pushImage en el socket
+  if (!userSocket) {
+    return res.status(500).json({error: 'You need loged with RT'})
+  }
+
+  let body = req.body
+  let skill = req.params.skill
+  let username = req.user.username
+  let publicId = req.user.publicId
+
+  let data = {
+    pos: body.pos,
+    skill: skill,
+    username: username
+  }
+
+  userSocket.rt.skillActivate(data, (err, response) => {
+    if (err) return res.status(400).json(err)
+    res.status(200).json(response)
+  })
+})
+
 // secure middleware
 function secure (req, res, next) {
   if (req.isAuthenticated()) return next()
   res.status(401).json({error: 'not authorized'})
 }
 
-module.exports = app
+module.exports = {
+  app: app,
+  socket: ioFunc
+}

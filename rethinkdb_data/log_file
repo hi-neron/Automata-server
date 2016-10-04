@@ -38,3 +38,87 @@
 2016-09-13T11:29:23.620839000 2102.573003s info: Table 1c1b97e9-38ab-4da0-b66f-206c87466f59: Starting a new Raft election for term 1.
 2016-09-13T11:29:23.621012000 2102.573175s info: Table 1c1b97e9-38ab-4da0-b66f-206c87466f59: Added replica on this server.
 2016-09-13T11:29:24.113987000 2103.066150s info: Table 1c1b97e9-38ab-4da0-b66f-206c87466f59: This server is Raft leader for term 1. Latest log index is 0.
+2016-09-27T10:51:58.595519000 0.593317s notice: Running rethinkdb 2.3.4 (CLANG 7.3.0 (clang-703.0.31))...
+2016-09-27T10:51:58.634889000 0.632685s notice: Running on Darwin 15.6.0 x86_64
+2016-09-27T10:51:58.634927000 0.632722s notice: Loading data from directory /Users/mutatipo/Proyects/Automata2/automata-server/rethinkdb_data
+2016-09-27T10:51:59.199576000 1.197370s info: Automatically using cache size of 243 MB
+2016-09-27T10:51:59.200367000 1.198162s notice: Listening for intracluster connections on port 29015
+2016-09-27T10:51:59.590322000 1.588172s notice: Listening for client driver connections on port 28015
+2016-09-27T10:51:59.590414000 1.588265s notice: Listening for administrative HTTP connections on port 8080
+2016-09-27T10:51:59.590437000 1.588287s notice: Listening on cluster addresses: 127.0.0.1, ::1
+2016-09-27T10:51:59.590441000 1.588291s notice: Listening on driver addresses: 127.0.0.1, ::1
+2016-09-27T10:51:59.590442000 1.588292s notice: Listening on http addresses: 127.0.0.1, ::1
+2016-09-27T10:51:59.590443000 1.588293s notice: To fully expose RethinkDB on the network, bind to all addresses by running rethinkdb with the `--bind all` command line option.
+2016-09-27T10:51:59.590444000 1.588295s notice: Server ready, "Joses_iMac_local_ix2" b2491685-b5e9-440b-b6c0-265a2a9e0c35
+2016-09-27T10:52:00.355456000 2.353306s info: Table 8821744a-228c-4c3a-9aa6-44da12d2016e: Starting a new Raft election for term 2.
+2016-09-27T10:52:00.512478000 2.510385s info: Table 8821744a-228c-4c3a-9aa6-44da12d2016e: This server is Raft leader for term 2. Latest log index is 5.
+2016-09-27T10:52:00.642825000 2.640732s info: Table 1c1b97e9-38ab-4da0-b66f-206c87466f59: Starting a new Raft election for term 2.
+2016-09-27T10:52:00.668766000 2.666673s notice: A newer version of the RethinkDB server is available: 2.3.5. You can read the changelog at <https://github.com/rethinkdb/rethinkdb/releases>.
+2016-09-27T10:52:00.863337000 2.861243s info: Table daf61ad0-5ffe-465e-89fd-f3245eb41805: Starting a new Raft election for term 2.
+2016-09-27T10:52:00.914234000 2.912140s info: Table e91eeebb-bd23-433f-894b-dd1782a33993: Starting a new Raft election for term 2.
+2016-09-27T10:52:01.005967000 3.003874s info: Table 1c1b97e9-38ab-4da0-b66f-206c87466f59: This server is Raft leader for term 2. Latest log index is 3.
+2016-09-27T10:52:01.207441000 3.205348s info: Table daf61ad0-5ffe-465e-89fd-f3245eb41805: This server is Raft leader for term 2. Latest log index is 4.
+2016-09-27T10:52:01.215087000 3.212993s info: Table d645a296-1558-48f3-b2b9-ac2562ae70b1: Starting a new Raft election for term 2.
+2016-09-27T10:52:01.308726000 3.306632s info: Table e91eeebb-bd23-433f-894b-dd1782a33993: This server is Raft leader for term 2. Latest log index is 4.
+2016-09-27T10:52:01.486045000 3.484008s info: Table d645a296-1558-48f3-b2b9-ac2562ae70b1: This server is Raft leader for term 2. Latest log index is 2.
+2016-09-27T11:11:45.995143000 1188.055851s notice: Removing file /Users/mutatipo/Proyects/Automata2/automata-server/rethinkdb_data/1c1b97e9-38ab-4da0-b66f-206c87466f59
+2016-09-27T11:11:45.995153000 1188.055860s info: Table 1c1b97e9-38ab-4da0-b66f-206c87466f59: Deleted the table.
+2016-09-27T11:11:46.438823000 1188.499588s notice: Removing file /Users/mutatipo/Proyects/Automata2/automata-server/rethinkdb_data/8821744a-228c-4c3a-9aa6-44da12d2016e
+2016-09-27T11:11:46.438832000 1188.499596s info: Table 8821744a-228c-4c3a-9aa6-44da12d2016e: Deleted the table.
+2016-09-27T11:11:46.743437000 1188.804202s notice: Removing file /Users/mutatipo/Proyects/Automata2/automata-server/rethinkdb_data/daf61ad0-5ffe-465e-89fd-f3245eb41805
+2016-09-27T11:11:46.743447000 1188.804211s info: Table daf61ad0-5ffe-465e-89fd-f3245eb41805: Deleted the table.
+2016-09-27T11:12:39.414524000 1241.478103s info: Table 8dbfaaa5-f796-412e-a2bb-b0cef8ef8e2c: Starting a new Raft election for term 1.
+2016-09-27T11:12:39.414664000 1241.478243s info: Table 8dbfaaa5-f796-412e-a2bb-b0cef8ef8e2c: Added replica on this server.
+2016-09-27T11:12:39.672866000 1241.736444s info: Table 8dbfaaa5-f796-412e-a2bb-b0cef8ef8e2c: This server is Raft leader for term 1. Latest log index is 0.
+2016-09-27T11:12:41.909624000 1243.973316s info: Table 8dbfaaa5-f796-412e-a2bb-b0cef8ef8e2c: Configuration is changing.
+2016-09-27T11:12:44.573220000 1246.637080s info: Table 788b273b-bee5-445c-961c-2b81130b20b9: Starting a new Raft election for term 1.
+2016-09-27T11:12:44.573356000 1246.637216s info: Table 788b273b-bee5-445c-961c-2b81130b20b9: Added replica on this server.
+2016-09-27T11:12:44.953670000 1247.017530s info: Table 788b273b-bee5-445c-961c-2b81130b20b9: This server is Raft leader for term 1. Latest log index is 0.
+2016-09-27T11:12:46.921080000 1248.985052s info: Table 788b273b-bee5-445c-961c-2b81130b20b9: Configuration is changing.
+2016-09-27T11:12:47.215858000 1249.279830s info: Table 788b273b-bee5-445c-961c-2b81130b20b9: Configuration is changing.
+2016-09-27T11:12:50.753480000 1252.817679s info: Table e852070c-5c7e-4e97-ac51-9056ff8db3ec: Starting a new Raft election for term 1.
+2016-09-27T11:12:50.753643000 1252.817842s info: Table e852070c-5c7e-4e97-ac51-9056ff8db3ec: Added replica on this server.
+2016-09-27T11:12:51.066152000 1253.130350s info: Table e852070c-5c7e-4e97-ac51-9056ff8db3ec: This server is Raft leader for term 1. Latest log index is 0.
+2016-09-27T11:12:54.467185000 1256.531553s info: Table e852070c-5c7e-4e97-ac51-9056ff8db3ec: Configuration is changing.
+2016-10-03T08:48:02.285204000 0.477597s notice: Running rethinkdb 2.3.4 (CLANG 7.3.0 (clang-703.0.31))...
+2016-10-03T08:48:02.305320000 0.497711s notice: Running on Darwin 15.6.0 x86_64
+2016-10-03T08:48:02.305357000 0.497747s notice: Loading data from directory /Users/mutatipo/Proyects/Automata2/automata-server/rethinkdb_data
+2016-10-03T08:48:02.537320000 0.729710s info: Automatically using cache size of 2166 MB
+2016-10-03T08:48:02.538186000 0.730576s notice: Listening for intracluster connections on port 29015
+2016-10-03T08:48:02.926526000 1.118916s notice: Listening for client driver connections on port 28015
+2016-10-03T08:48:02.926624000 1.119014s notice: Listening for administrative HTTP connections on port 8080
+2016-10-03T08:48:02.926626000 1.119016s notice: Listening on cluster addresses: 127.0.0.1, ::1
+2016-10-03T08:48:02.926628000 1.119018s notice: Listening on driver addresses: 127.0.0.1, ::1
+2016-10-03T08:48:02.926639000 1.119029s notice: Listening on http addresses: 127.0.0.1, ::1
+2016-10-03T08:48:02.926640000 1.119030s notice: To fully expose RethinkDB on the network, bind to all addresses by running rethinkdb with the `--bind all` command line option.
+2016-10-03T08:48:02.926642000 1.119031s notice: Server ready, "Joses_iMac_local_ix2" b2491685-b5e9-440b-b6c0-265a2a9e0c35
+2016-10-03T08:48:03.707092000 1.899543s notice: A newer version of the RethinkDB server is available: 2.3.5. You can read the changelog at <https://github.com/rethinkdb/rethinkdb/releases>.
+2016-10-03T08:48:03.970588000 2.163039s info: Table e91eeebb-bd23-433f-894b-dd1782a33993: Starting a new Raft election for term 3.
+2016-10-03T08:48:04.101029000 2.293480s info: Table 788b273b-bee5-445c-961c-2b81130b20b9: Starting a new Raft election for term 2.
+2016-10-03T08:48:04.170427000 2.362879s info: Table 8dbfaaa5-f796-412e-a2bb-b0cef8ef8e2c: Starting a new Raft election for term 2.
+2016-10-03T08:48:04.218583000 2.411035s info: Table e852070c-5c7e-4e97-ac51-9056ff8db3ec: Starting a new Raft election for term 2.
+2016-10-03T08:48:04.226157000 2.418608s info: Table e91eeebb-bd23-433f-894b-dd1782a33993: This server is Raft leader for term 3. Latest log index is 8.
+2016-10-03T08:48:04.462401000 2.654913s info: Table 788b273b-bee5-445c-961c-2b81130b20b9: This server is Raft leader for term 2. Latest log index is 5.
+2016-10-03T08:48:04.462439000 2.654951s info: Table 8dbfaaa5-f796-412e-a2bb-b0cef8ef8e2c: This server is Raft leader for term 2. Latest log index is 4.
+2016-10-03T08:48:04.524730000 2.717242s info: Table d645a296-1558-48f3-b2b9-ac2562ae70b1: Starting a new Raft election for term 3.
+2016-10-03T08:48:04.595047000 2.787559s info: Table e852070c-5c7e-4e97-ac51-9056ff8db3ec: This server is Raft leader for term 2. Latest log index is 4.
+2016-10-03T08:48:04.987131000 3.179643s info: Table d645a296-1558-48f3-b2b9-ac2562ae70b1: This server is Raft leader for term 3. Latest log index is 5.
+2016-10-03T22:13:07.727584000 48308.538193s notice: Removing file /Users/mutatipo/Proyects/Automata2/automata-server/rethinkdb_data/788b273b-bee5-445c-961c-2b81130b20b9
+2016-10-03T22:13:07.727594000 48308.538202s info: Table 788b273b-bee5-445c-961c-2b81130b20b9: Deleted the table.
+2016-10-03T22:13:08.065933000 48308.876601s notice: Removing file /Users/mutatipo/Proyects/Automata2/automata-server/rethinkdb_data/8dbfaaa5-f796-412e-a2bb-b0cef8ef8e2c
+2016-10-03T22:13:08.065941000 48308.876608s info: Table 8dbfaaa5-f796-412e-a2bb-b0cef8ef8e2c: Deleted the table.
+2016-10-03T22:13:08.312980000 48309.123647s notice: Removing file /Users/mutatipo/Proyects/Automata2/automata-server/rethinkdb_data/e852070c-5c7e-4e97-ac51-9056ff8db3ec
+2016-10-03T22:13:08.312987000 48309.123654s info: Table e852070c-5c7e-4e97-ac51-9056ff8db3ec: Deleted the table.
+2016-10-03T22:13:59.923215000 48360.736637s info: Table 06b217a8-63fc-4946-999c-1d97cc9b48e3: Starting a new Raft election for term 1.
+2016-10-03T22:13:59.923356000 48360.736778s info: Table 06b217a8-63fc-4946-999c-1d97cc9b48e3: Added replica on this server.
+2016-10-03T22:14:00.235345000 48361.048807s info: Table 06b217a8-63fc-4946-999c-1d97cc9b48e3: This server is Raft leader for term 1. Latest log index is 0.
+2016-10-03T22:14:02.474887000 48363.288481s info: Table 06b217a8-63fc-4946-999c-1d97cc9b48e3: Configuration is changing.
+2016-10-03T22:14:06.244546000 48367.058312s info: Table 6bfa2949-89f1-4b65-ac87-de5d12178ea7: Starting a new Raft election for term 1.
+2016-10-03T22:14:06.244694000 48367.058460s info: Table 6bfa2949-89f1-4b65-ac87-de5d12178ea7: Added replica on this server.
+2016-10-03T22:14:06.602526000 48367.416292s info: Table 6bfa2949-89f1-4b65-ac87-de5d12178ea7: This server is Raft leader for term 1. Latest log index is 0.
+2016-10-03T22:14:09.802986000 48370.616924s info: Table 6bfa2949-89f1-4b65-ac87-de5d12178ea7: Configuration is changing.
+2016-10-03T22:14:10.197169000 48371.011165s info: Table 6bfa2949-89f1-4b65-ac87-de5d12178ea7: Configuration is changing.
+2016-10-03T22:14:13.958649000 48374.772817s info: Table c299206a-dead-4b42-8125-cc45cc48a287: Starting a new Raft election for term 1.
+2016-10-03T22:14:13.958818000 48374.772986s info: Table c299206a-dead-4b42-8125-cc45cc48a287: Added replica on this server.
+2016-10-03T22:14:14.412636000 48375.226861s info: Table c299206a-dead-4b42-8125-cc45cc48a287: This server is Raft leader for term 1. Latest log index is 0.
+2016-10-03T22:14:19.339465000 48380.153919s info: Table c299206a-dead-4b42-8125-cc45cc48a287: Configuration is changing.
