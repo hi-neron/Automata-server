@@ -10,7 +10,7 @@ const config = {
   },
   redis: process.env.REDIS_URL || 'http://localhost:6379',
   secret: process.env.AUTOMATA_PASS || 'aut*mata', // never use default,
-  server: process.env.AUTOMATA_NAME || 'automata-server',
+  appName: process.env.AUTOMATA_NAME || 'Autómata',
   aws: {
     bucket: process.env.BUCKET || 'automata-images',
     accessKeyId: process.env.AWS_ACCESS_KEY,

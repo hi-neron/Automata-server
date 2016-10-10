@@ -44,7 +44,28 @@ en el que se construyen contenidos entre varios autores.
 5. AUTH
 
 
+# User camps
 
+**user form**
+username
+password
+name
+email
+bio
+**data**
+createdAt
+avatar
+masteries
+**Scores & prizes**
+skills
+points
+badges
+level
+**Comunications**
+alerts
+messages
+**helpers**
+images
 
 
 # Layers

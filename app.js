@@ -7,10 +7,10 @@ const config = require('./config')
 const cookieParser = require('cookie-parser')
 const express = require('express')
 const expressSession = require('express-session')
+const path = require('path')
 
 // utils
 const _ = require('lodash')
-// const uuid = require('uuid-base62') // to delete
 
 // passport
 const RedisStore = require('connect-redis')(expressSession)
@@ -58,6 +58,7 @@ let upload = multer({
   }
 }).single('file')
 
+// req parser
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
 
@@ -67,6 +68,9 @@ app.use(function (err, req, res, next) {
   }
 })
 
+// archivos estaticos
+app.use(express.static(path.join(__dirname, 'public')))
+
 app.use(cookieParser())
 let sessionMiddleware = expressSession({
   key: 'connect.sid',
@@ -75,17 +79,19 @@ let sessionMiddleware = expressSession({
   secret: config.secret,
   store: sessionStore
 })
+
+// sessions & security
 app.use(sessionMiddleware)
 app.use(passport.initialize())
 app.use(passport.session())
-app.use(express.static('public'))
+// Templates
+app.set('view engine', 'ejs')
 
 passport.use(auth.localStrategy)
 passport.deserializeUser(auth.deserializeUser)
 passport.serializeUser(auth.serializeUser)
 
-// socket.io
-
+// socket.io & realtime module
 let usersSockets = []
 
 function onSuccess (data, accept) {
@@ -95,9 +101,9 @@ function onSuccess (data, accept) {
 
 function onFail (data, message, error, accept) {
   if (error) {
-    console.log(message)
+    console.log(message, 'FAIL')
   }
-  console.log(message)
+  console.log(message, 'FAIL')
   accept(new Error(message))
 }
 
@@ -114,9 +120,10 @@ function ioFunc (io) {
 
   io.on('connection', (socket) => {
     // se busca el perfil logeado
+    console.log(socket.request.user)
     let user = {
       publicId: socket.request.user.publicId,
-      username: 'jose'
+      username: socket.request.user.username,
     }
 
     // let user = req.user
@@ -170,22 +177,43 @@ function ioFunc (io) {
  * name:
  * }
 */
+
+app.get('/', (req, res) => {
+  res.render('index', {title: config.appName, message: ''})
+})
+
+app.get('/signup', (req, res) => {
+  res.render('index', {title: config.appName + ' Signup', message: ''})
+})
+
+app.get('/signin', (req, res) => {
+  res.render('index', {title: config.appName + ' Signin', message: ''})
+})
+
 app.post('/signup', (req, res) => {
   let user = req.body
   client.createUser(user, (err, usr) => {
-    if (err) return res.status(500).json(err.message)
-    res.status(200).json({message: `hi ${user.username}`})
+    if (err) {
+      return res.render('index', {title: config.appName + ' Signup', message: err.error.error})
+    }
+    res.status(200).redirect('/#!/signin')
   })
 })
 
 /* login */
 app.post('/login', passport.authenticate('local', {
   successRedirect: '/',
-  failureRedirect: '/signin'
+  failureRedirect: '/#!/signin'
 }))
 
+app.get('/logout', function (req, res){
+  req.logout();
+  res.redirect('/#!/signin');
+});
+
+
 /* profile */
-app.get('/myprofile', function (req, res) {
+app.get('/whoami', function (req, res) {
   if (req.isAuthenticated()) {
     return res.json(req.user)
   }
@@ -259,7 +287,7 @@ app.post('/api/images', secure, (req, res) => {
   let userSocket = _.find(usersSockets, {index: req.user.publicId})
 
   if (!userSocket) {
-    return res.status(500).json({error: 'You need loged with RT'})
+    return res.status(500).json({error: 'you need be logged with realtime too'})
   }
 
   upload(req, res, (err) => {
@@ -349,7 +377,7 @@ app.get('/api/images/delete/:image', secure, (req, res) => {
   let userSocket = _.find(usersSockets, {index: req.user.publicId})
 
   if (!userSocket) {
-    return res.status(500).json({error: 'You need loged with RT'})
+    return res.status(500).json({error: 'you need be logged with realtime too'})
   }
 
   client.deletePicture(data, token, (err, response) => {
@@ -414,7 +442,7 @@ app.post('/game/:skill', secure, (req, res) => {
   let userSocket = _.find(usersSockets, {index: publicId})
   // activar la accion pushImage en el socket
   if (!userSocket) {
-    return res.status(500).json({error: 'You need loged with RT'})
+    return res.status(500).json({error: 'you need be logged with realtime too'})
   }
 
   let body = req.body

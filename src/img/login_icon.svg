@@ -1,0 +1,25 @@
+<svg id="icons" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 27.8 27.8">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+      }
+
+      .cls-2 {
+        clip-path: url(#clip-path);
+      }
+
+      .cls-3 {
+        fill: #fffa75;
+      }
+    </style>
+    <clipPath id="clip-path">
+      <rect class="cls-1" x="-422.9" y="308.95" width="197.61" height="336.55"/>
+    </clipPath>
+  </defs>
+  <title>icons</title>
+  <g>
+    <polygon class="cls-3" points="11.42 13.85 5.64 8.09 5.64 11.91 2.23 11.91 2.23 15.89 5.64 15.89 5.64 19.71 11.42 13.85"/>
+    <path class="cls-3" d="M10,3.75V9.23l4.62,4.61L10,18.52V24H25.57V3.75H10Zm13.05,17.8H17V6.25h6.06v15.3Z"/>
+  </g>
+</svg>

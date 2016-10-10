@@ -1,0 +1,26 @@
+@charset "UTF-8";
+
+@import 'reset';
+@import 'materialize/mixins';
+@import 'materialize/color';
+@import 'materialize/variables';
+@import 'materialize/global';
+@import 'materialize/grid';
+@import 'myColors';
+@import 'modal';
+@import 'menu';
+
+@font-face {
+    font-family: 'cast';
+    src: url('/fonts/cast.otf');
+}
+
+@font-face {
+    font-family: 'dense';
+    src: url('/fonts/dense.otf');
+}
+
+body {
+  background-color: #E5E5E1;
+  font-family: 'dense';
+}

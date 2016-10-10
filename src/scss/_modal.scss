@@ -1,0 +1,276 @@
+.shadow-gradient {
+  background: rgba(43,43,43,0.15);
+  background: -moz-linear-gradient(top, rgba(43,43,43,0.15) 0%, rgba(243,243,240,0) 100%);
+  background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(43,43,43,0.15)), color-stop(100%, rgba(243,243,240,0)));
+  background: -webkit-linear-gradient(top, rgba(43,43,43,0.15) 0%, rgba(243,243,240,0) 100%);
+  background: -o-linear-gradient(top, rgba(43,43,43,0.15) 0%, rgba(243,243,240,0) 100%);
+  background: -ms-linear-gradient(top, rgba(43,43,43,0.15) 0%, rgba(243,243,240,0) 100%);
+  background: linear-gradient(to bottom, rgba(43,43,43,0.15) 0%, rgba(243,243,240,0) 100%);
+}
+
+a {
+  color: $gray-dark;
+}
+
+#modal-container {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+}
+
+#modal-center {
+  background-color: $white-modal;
+  position: relative;
+  width: 50%;
+  min-width: 320px;
+  max-width: 370px;
+  height: 480px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -55%);
+  border-radius: 2px;
+
+  .signin-up {
+    text-align: center;
+
+    .divisor {
+      position: relative;
+      widows: 100%;
+      height: 20px;
+    }
+    .first {
+      height: 70px;
+    }
+  }
+
+  &:before {
+    @extend .shadow-gradient;
+    content: '';
+    width: 36px;
+    position: absolute;
+    height: 50px;
+    display: block;
+    left: 50%;
+    margin-left: -18px;
+  }
+  &:after {
+    content: '';
+    height: 10px;
+    width: 100%;
+    display: inline-block;
+    position: absolute;
+    margin-top: -4px;
+    top: 100%;
+    background-color: $shadow;
+  }
+}
+
+
+
+::-webkit-input-placeholder {
+  color: $placeholder-text-color;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+  color: $placeholder-text-color;
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+  color: $placeholder-text-color;
+}
+
+:-ms-input-placeholder {
+  color: $placeholder-text-color;
+}
+
+/* Text inputs */
+
+input:not([type]),
+input[type=text],
+input[type=password],
+input[type=email],
+textarea.materialize-textarea {
+
+  // General Styles
+  border: none;
+  border-bottom: 0.14em solid $white-modal;
+  border-radius: 0;
+  outline: none;
+  height: $input-height;
+  width: 70%;
+  font-size: 2em;
+  margin-top: -15px;
+  box-shadow: none;
+  box-sizing: content-box;
+  transition: $input-transition;
+  text-align: center;
+  font-family: 'dense';
+
+  &:hover {
+    border-bottom: 0.14em solid $yellow-light !important;
+  }
+
+  // Disabled input style
+  &:disabled,
+  &[readonly="readonly"] {
+    color: $input-disabled-color;
+    border-bottom: $input-disabled-border;
+  }
+
+  // Disabled label style
+  &:disabled+label,
+  &[readonly="readonly"]+label {
+    color: red;
+  }
+
+  // Focused input style
+  &:focus:not([readonly]) {
+    border-bottom: 0.14em solid $yellow-light !important;
+    margin-top: 10px;
+  }
+
+  // Focused label style
+  &:focus:not([readonly])+label {
+    color: $shadow-light;
+  }
+
+  // Valid Input Style
+  &.valid,
+  &:focus.valid {
+    border-bottom: 1px solid $input-success-color;
+    box-shadow: 0 1px 0 0 $input-success-color;
+  }
+
+  // Custom Success Message
+  &.valid + label:after,
+  &:focus.valid + label:after {
+    content: attr(data-success);
+    color: $input-success-color;
+    opacity: 1;
+  }
+
+  // Invalid Input Style
+  &.invalid,
+  &:focus.invalid {
+    border-bottom: $input-invalid-border;
+    box-shadow: 0 1px 0 0 $input-error-color;
+  }
+
+  // Custom Error message
+  &.invalid + label:after,
+  &:focus.invalid + label:after {
+    content: attr(data-error);
+    color: $input-error-color;
+    opacity: 1;
+  }
+
+  // Full width label when using validate for error messages
+  &.validate + label {
+    width: 100%;
+    pointer-events: none;
+  }
+
+  // Form Message Shared Styles
+  & + label:after {
+    display: block;
+    content: "";
+    position: absolute;
+    top: 60px;
+    opacity: 0;
+    transition: .2s opacity ease-out, .2s color ease-out;
+  }
+}
+
+.signup-button {
+  background: url('/img/sun.svg');
+  width: 40px;
+  height: 40px;
+  transition: .1s ease-out;
+  &:hover {
+    background: url('/img/sun-hover.svg');
+  }
+}
+
+
+.input-sign {
+  height: 70px;
+  position: relative;
+  overflow: hidden;
+
+  button {
+    background-color: transparent;
+    cursor: pointer;
+    border: none;
+  }
+
+  label {
+    font-family: 'cast';
+    color: $gray-dark;
+    position: absolute;
+    z-index: -1;
+    left: 50%;
+    transform: translate(-50%, 0);
+    top: 0.8rem;
+    font-size: 2.8rem;
+    letter-spacing: 3px;
+    cursor: text;
+    transition: .2s ease-out;
+  }
+
+  label.active {
+    color: $shadow-light;
+  }
+
+  input.active {
+    border-bottom: 0.14em solid $yellow-light !important;
+    margin-top: 10px;
+  }
+}
+
+.bottom-sign {
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  height: 75px;
+
+  .facebook-signup {
+    display: block;
+    background: url('/img/fb.svg');
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    position: absolute;
+    right: 11px;
+    bottom: 14px;
+    transition: .1s ease-out;
+
+    &:after {
+      content: 'login with facebook';
+      position: relative;
+      background-color: $gray-dark;
+      visibility: hidden;
+      display: block;
+      color: white;
+      left: 6px;
+      width: 60px;
+      font-size: 1.2em;
+      bottom: 47px;
+      padding: 5px;
+    }
+
+    &:hover {
+      background: url('/img/fb-hover.svg');
+      &:after {
+        visibility: visible;
+      }
+    }
+  }
+
+  a.already {
+    font-size: 1.5em;
+    transition: .1s ease-out;
+    &:hover{
+      color: $shadow-dark;
+    }
+  }
+}

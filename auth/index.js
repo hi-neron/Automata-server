@@ -11,7 +11,7 @@ exports.localStrategy = new LocalStrategy((username, password, done) => {
     if (err) {
       return done(null, false, { message: 'username and password not found' })
     }
-
+    console.log('local estrategy')
     client.getUser(username, (err, user) => {
       if (err) {
         return done(null, false, { message: `an error ocurred: ${err.message}` })
@@ -66,15 +66,47 @@ exports.facebookStrategy = new FacebookStrategy({
 exports.serializeUser = function (user, done) {
   done(null, {
     username: user.username,
-    token: user.token
+    token: user.token,
+    publicId: user.publicId
   })
 }
 
 exports.deserializeUser = function (user, done) {
+  // client.getUser(user.username, (err, usr) => {
+  //   // tener en cuanta para optimizar, deserializar, devolver el usario y agregar el token
+  //   // sin llamar a la BD
+  //   /*
+  //   Optimize PassportJS
+  //     I realized that in the old app, we followed the default suggestion and were
+  //     hitting the database twice on every single API call to populate all the user's
+  //     information in memory. But in practice, we rarely needed more than the userId
+  //     in our backend code. So this time around, I've made the decision to stuff the
+  //     name and email into the session object and avoid making multiple database trips
+  //     on every single API call. With many pages on the site making 5-10 calls to render
+  //     a single page, this seemed like a cheap way to significantly reduce database load.
+  //     Here's what the new app looks like:
+
+  //     passport.serializeUser( (user, done) => {
+  //       var sessionUser = { _id: user._id, name: user.name, email: user.email, roles: user.roles }
+  //       done(null, sessionUser)
+  //     })
+
+  //     passport.deserializeUser( (sessionUser, done) => {
+  //       // The sessionUser object is different from the user mongoose collection
+  //       // it's actually req.session.passport.user and comes from the session collection
+  //       done(null, sessionUser)
+  //     })
+  //   */
+  //   if (err) return done(err)
+  //   console.log('deserializeUser')
+  //   usr.token = user.token
+  //   done(null, usr)
+  // })
   client.getUser(user.username, (err, usr) => {
     if (err) return done(err)
-
+    console.log('deserializeUser')
     usr.token = user.token
     done(null, usr)
   })
+  // done(null, user)
 }
