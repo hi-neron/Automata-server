@@ -1,19 +1,19 @@
 'user strict'
 
-if (typeof(jQuery) === 'undefined') {
-  var jQuery;
+if (typeof (jQuery) === 'undefined') {
+  var jQuery
   // Check if require is a defined function.
-  if (typeof(require) === 'function') {
-    jQuery = $ = require('jquery');
+  if (typeof (require) === 'function') {
+    var $
+    jQuery = $ = require('jquery')
   // Else use the dollar sign alias.
   } else {
-    jQuery = $;
+    jQuery = $
   }
 }
 
 (function ($) {
-  $(document).ready(function() {
-
+  $(document).ready(function () {
     // Text based inputs
     var input_selector = 'input[type=text], input[type=password], input[type=email], input[type=url], input[type=tel], input[type=number], input[type=search], textarea';
 

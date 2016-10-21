@@ -1,6 +1,6 @@
 'use strict'
 
-const gsap = require('gsap')
+require('gsap')
 const noise = require('./noise.js')
 const empty = require('empty-element')
 const yo = require('yo-yo')
@@ -202,7 +202,7 @@ let startMenu = function () {
     width: '50%',
     minWidth: 360
   },'-=0.05').to('.cls-9', 0.3, {
-    stroke: '#FFFFFF'
+    stroke: '#FFCB00'
   }).to(search_line1, 0.1, {
     attr: {
       x1:'35.06',
@@ -303,9 +303,9 @@ let startMenu = function () {
       x2:"41.31",
       y2:"41.59"
     },
-    stroke: '#fffa75'
+    stroke: '#FFCB00'
   }).set('.cls-9', {
-    stroke: '#fffa75'
+    stroke: '#FFCB00'
   })
   .set(search_line2, {
     attr: {
@@ -314,7 +314,7 @@ let startMenu = function () {
       x2:"41.06",
       y2:"41.73"
     },
-    stroke: '#fffa75'
+    stroke: '#FFCB00'
   }).to(search_trigger, 0.6, {
     left: '49',
     ease: Bounce.easeOut
@@ -352,9 +352,14 @@ let startMenu = function () {
 function render (ctx) {
   return yo`
     <div>
+      <aside id="profile"></aside>
+      <aside id="images"></aside>
       <menu id="menu">
         <div id="logo">
           <img src="img/logo.svg" alt="">
+          <a id="logout" href="/logout">
+            <a class="fa fa-close"></a>
+          </a>
         </div>
         <div class="trigger_menu">
           <svg id="menuSvg" viewBox="48 2 85 76.67">
@@ -394,10 +399,11 @@ function render (ctx) {
           </svg>
         </div>
         <div id="noise">
-          <a id="sign_in" class="over_noise" title="button" href="/logout"></a>
+          <a id="profile" class="over_noise" title="button">
+          </a>
           <div class="line over_noise">
             <svg id="lineSvg" viewBox="0 0 10 130">
-              <line x1="1" y1="2" x2="9" y2="127" stroke="#1C1C1C" stroke-width="2"/>
+              <line x1="1" y1="2" x2="4" y2="127" stroke="#2b2b29" stroke-width="2"/>
             </svg>
           </div>
           <a id="template" class="over_noise"></a>
@@ -411,15 +417,15 @@ function render (ctx) {
           <defs>
             <style>
               .cls-1 {
-                fill: #8c8940;
+                fill: #959590;
               }
 
               .cls-2 {
-                fill: #aba74d;
+                fill: #c4c4c2;
               }
 
               .cls-3 {
-                fill: #fffa75;
+                fill: #343430;
               }
 
               .cls-4 {
@@ -427,11 +433,11 @@ function render (ctx) {
               }
 
               .cls-5 {
-                fill: #dbd765;
+                fill: #FFCB00;
               }
 
               .cls-6 {
-                fill: #fffa75;
+                fill: #FFCB00;
               }
 
               .cls-7, .cls-8, .cls-9 {
@@ -440,13 +446,13 @@ function render (ctx) {
               }
 
               .cls-7 {
-                stroke: #fffa75;
+                stroke: #FFCB00;
                 stroke-width: 7px;
               }
 
               .cls-8 {
                 /*stroke: #545327;*/
-                stroke: #fffa75;
+                stroke: #FFCB00;
                 stroke-width: 5px;
               }
 
@@ -459,7 +465,7 @@ function render (ctx) {
               }
 
               .cls-9 {
-                stroke: #fffa75;
+                stroke: #FFCB00;
                 stroke-width: 4px;
               }
             </style>

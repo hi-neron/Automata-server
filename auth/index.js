@@ -11,7 +11,6 @@ exports.localStrategy = new LocalStrategy((username, password, done) => {
     if (err) {
       return done(null, false, { message: 'username and password not found' })
     }
-    console.log('local estrategy')
     client.getUser(username, (err, user) => {
       if (err) {
         return done(null, false, { message: `an error ocurred: ${err.message}` })
@@ -67,7 +66,8 @@ exports.serializeUser = function (user, done) {
   done(null, {
     username: user.username,
     token: user.token,
-    publicId: user.publicId
+    publicId: user.publicId,
+    avatar: user.avatar,
   })
 }
 
@@ -102,11 +102,10 @@ exports.deserializeUser = function (user, done) {
   //   usr.token = user.token
   //   done(null, usr)
   // })
-  client.getUser(user.username, (err, usr) => {
-    if (err) return done(err)
-    console.log('deserializeUser')
-    usr.token = user.token
-    done(null, usr)
-  })
+  // client.getUser(user.username, (err, usr) => {
+  //   if (err) return done(err)
+  //   usr.token = user.token
+  // })
+  done(null, user)
   // done(null, user)
 }

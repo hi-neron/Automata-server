@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser')
 const express = require('express')
 const expressSession = require('express-session')
 const path = require('path')
+const flash = require('connect-flash')
 
 // utils
 const _ = require('lodash')
@@ -84,6 +85,7 @@ let sessionMiddleware = expressSession({
 app.use(sessionMiddleware)
 app.use(passport.initialize())
 app.use(passport.session())
+app.use(flash())
 // Templates
 app.set('view engine', 'ejs')
 
@@ -92,7 +94,7 @@ passport.deserializeUser(auth.deserializeUser)
 passport.serializeUser(auth.serializeUser)
 
 // socket.io & realtime module
-let usersSockets = []
+var usersSockets = []
 
 function onSuccess (data, accept) {
   console.log('success socket')
@@ -121,9 +123,10 @@ function ioFunc (io) {
   io.on('connection', (socket) => {
     // se busca el perfil logeado
     console.log(socket.request.user)
+
     let user = {
       publicId: socket.request.user.publicId,
-      username: socket.request.user.username,
+      username: socket.request.user.username
     }
 
     // let user = req.user
@@ -134,6 +137,7 @@ function ioFunc (io) {
     // elmina ese socket
     if (oldUserSocket !== -1) {
       usersSockets.splice(oldUserSocket, 1)
+      console.log('existe un viejo socket con este usuario')
       console.log(oldUserSocket)
     }
 
@@ -152,16 +156,17 @@ function ioFunc (io) {
     // se crea el template del socket de usuario
     let userRt = {
       id: user.publicId,
+      username: user.username,
       rt: rt
     }
 
     // se agrega el socket al array
     usersSockets.push(userRt)
+    console.log(usersSockets)
 
     socket.on('disconnect', () => {
       let socketToKill = _.findIndex(usersSockets, {id: user.publicId})
-      console.log(socketToKill, ' see you later rat')
-      usersSockets.splice(socketToKill, 1)
+      console.log(`see you later ${usersSockets[socketToKill].username}`)
     })
   })
 }
@@ -179,15 +184,16 @@ function ioFunc (io) {
 */
 
 app.get('/', (req, res) => {
-  res.render('index', {title: config.appName, message: ''})
+  req.socket.emit('hiToo', 'hi')
+  res.render('index', {title: config.appName, message: req.flash('status')})
 })
 
 app.get('/signup', (req, res) => {
-  res.render('index', {title: config.appName + ' Signup', message: ''})
+  res.render('index', {title: config.appName + ' Signup', message: req.flash('status')})
 })
 
 app.get('/signin', (req, res) => {
-  res.render('index', {title: config.appName + ' Signin', message: ''})
+  res.render('index', {title: config.appName + ' Signin', message: req.flash('status')})
 })
 
 app.post('/signup', (req, res) => {
@@ -196,21 +202,35 @@ app.post('/signup', (req, res) => {
     if (err) {
       return res.render('index', {title: config.appName + ' Signup', message: err.error.error})
     }
-    res.status(200).redirect('/#!/signin')
+    req.flash('status', 'Log in with your new account')
+    res.redirect('/#!/signin')
   })
 })
 
 /* login */
-app.post('/login', passport.authenticate('local', {
-  successRedirect: '/',
-  failureRedirect: '/#!/signin'
-}))
+app.post('/login', function(req, res, next) {
+  passport.authenticate('local', function(err, user, info) {
+    if (err) return next(err)
+    if (!user) {
+      req.flash('status', 'Invalid username or password')
+      return res.redirect('/#!/signin')
+    } else {
+      req.logIn(user, function(err) {
+        if (err) {
+          req.flash('status', err)
+          return res.redirect('/#!/signin')
+        }
+        return res.redirect('/');
+      })
+    }
+  })(req, res, next)
+})
 
-app.get('/logout', function (req, res){
-  req.logout();
-  res.redirect('/#!/signin');
-});
-
+app.get('/logout', function (req, res) {
+  req.flash('status', 'logout successful')
+  req.logout()
+  res.redirect('/#!/signin')
+})
 
 /* profile */
 app.get('/whoami', function (req, res) {
@@ -327,25 +347,6 @@ app.post('/api/images', secure, (req, res) => {
   })
 })
 
-/* getAllPictures */
-app.get('/api/images', (req, res) => {
-  console.log('hi')
-  client.getAllPictures((err, pictures) => {
-    if (err) return res.status(500).json(err)
-    res.status(200).json(pictures)
-  })
-})
-
-/* getPicture */
-app.get('/api/images/:image', (req, res) => {
-  let imageId = req.params.image
-
-  client.getPicture(imageId, (err, picture) => {
-    if (err) return res.status(500).json(err)
-    res.status(200).json(picture)
-  })
-})
-
 /* getPicturesByUser */
 app.get('/api/images/byuser/:username', (req, res) => {
   let username = req.params.username
@@ -423,6 +424,25 @@ app.post('/api/images/award/:picture', secure, (req, res) => {
   })
 })
 
+/* getPicture */
+app.get('/api/images/:image', (req, res) => {
+  let imageId = req.params.image
+
+  client.getPicture(imageId, (err, picture) => {
+    if (err) return res.status(500).json(err)
+    res.status(200).json(picture)
+  })
+})
+
+/* getAllPictures */
+app.get('/api/images', (req, res) => {
+  console.log('hi')
+  client.getAllPictures((err, pictures) => {
+    if (err) return res.status(500).json(err)
+    res.status(200).json(pictures)
+  })
+})
+
 /* GAME CRUD */
 // ----------------------------------
 
@@ -450,6 +470,10 @@ app.post('/game/:skill', secure, (req, res) => {
   let username = req.user.username
   let publicId = req.user.publicId
 
+  if (body.username !== req.user.username) {
+    return res.status(400).json({error: 'invalid user, are u kidding me?'})
+  }
+
   let data = {
     pos: body.pos,
     skill: skill,
@@ -459,6 +483,16 @@ app.post('/game/:skill', secure, (req, res) => {
   userSocket.rt.skillActivate(data, (err, response) => {
     if (err) return res.status(400).json(err)
     res.status(200).json(response)
+  })
+})
+
+
+app.get('/game', (req, res) => {
+  Rt.getGrid((err, grid) => {
+    console.log('\n/game')
+    console.log(err)
+    if (err) return res.json(err)
+    res.json(grid)
   })
 })
 

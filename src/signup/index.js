@@ -5,8 +5,8 @@ let empty = require('empty-element')
 let modal = require('../modal')
 let page = require('page')
 let template = require('./template')
-
-page('/signup', auth, (ctx, next) => {
+let messages = require('../messages')
+page('/signup', auth, messages, (ctx, next) => {
   let modalContainer = document.getElementById('modal-container')
   empty(modalContainer).appendChild(modal(template))
 })

@@ -3,28 +3,38 @@ $color_gray: #C2C2C2;
 $color_black: #1C1C1C;
 $color_yellow: #EAEAEA;
 
+.tooltip {
+  position: relative;
+  background-color: $gray-dark;
+  visibility: hidden;
+  display: block;
+  color: white;
+  font-size: 1.2em;
+}
+
 .bat {
   position: absolute;
   width: 200px;
   height: 200px;
   background-color: #FFF;
-  cursor: pointer;
 }
 
 #menu{
   height: 100px;
-  width: 310px;
+  width: 350px;
   top: 20%;
   position: fixed;
   transform: translate(0, -50%);
+  z-index: 3;
 
   #logo{
     height: 130px;
     width: 250px;
-    background-color: #C4FFF2;
+    background-color: $white-modal;
     position: absolute;
     overflow: hidden;
     top: 20px;
+
 
     img {
       display: inline-block;
@@ -33,6 +43,21 @@ $color_yellow: #EAEAEA;
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
+    }
+
+    #logout {
+      position: absolute;
+      right: 15px;
+      top: 15px;
+      height: 35px;
+      font-size: 1.4em;
+
+      a {
+        &:hover {
+          color: $yellow-logo;
+        }
+      }
+
     }
   }
 
@@ -58,7 +83,7 @@ $color_yellow: #EAEAEA;
     position: relative;
     margin-left: -4px;
     top: 150px;
-    width: 190px;
+    width: 250px;
     height: 100px;
 
     a {
@@ -70,25 +95,43 @@ $color_yellow: #EAEAEA;
       position: absolute;
       height: 100px;
       width: 100%;
-      z-index: 0;
+      z-index: 1;
     }
     // box-shadow: 0 5px 0 rgba(#000, 0.2);
 
-    #sign_in {
+    #profile {
       display: inline-block;
-      background: url("/img/login_icon.svg") no-repeat center center;
-      background-size: 50%;
+      background: url("/img/profile.svg") no-repeat center center;
+      background-size: 108%;
       width: 48%;
-      left: -1%;
       height: 100%;
+      left: 5px;
       position: absolute;
-      z-index: 1;
+      z-index: 3;
+      // transition: .2s ease-in;
+
+      &:after {
+        content: 'profile';
+        left: 3px;
+        width: 40px;
+        bottom: 0px;
+        padding: 5px;
+        @extend .tooltip;
+      }
+
+      &:hover {
+        background: url("/img/profile-o.svg") no-repeat center center;
+        background-size: 108%;
+        &:after {
+          visibility: visible;
+        }
+      }
     }
     .line {
       width: 10px;
       height: 140%;
-      left: 51%;
-      z-index: 1;
+      left: 52%;
+      z-index: 3;
       position: absolute;
       margin-left: -8px;
       margin-right: -10px;
@@ -98,13 +141,30 @@ $color_yellow: #EAEAEA;
 
     #template {
       position: absolute;
-      z-index: 1;
+      z-index: 3;
       display: inline-block;
-      background: url("/img/template_icon.svg") no-repeat center center;
-      background-size: 50%;
+      background: url("/img/images.svg") no-repeat center center;
+      background-size: 110%;
       width: 48%;
       left: 51%;
       height: 100%;
+
+      &:after {
+        content: 'images';
+        left: 3px;
+        width: 43px;
+        bottom: 0px;
+        padding: 5px;
+        @extend .tooltip;
+      }
+
+      &:hover {
+        background: url("/img/images-o.svg") no-repeat center center;
+        background-size: 110%;
+        &:after {
+          visibility: visible;
+        }
+      }
     }
   }
 
@@ -115,13 +175,13 @@ $color_yellow: #EAEAEA;
   position: fixed;
   transform: translate(-50%, -50%);
   cursor: pointer;
-  z-index: 2;
+  z-index: 4;
 }
 
 #empty_screen {
   position: fixed;
   background-color: rgba($color_yellow, 0.98);
-  z-index: 0;
+  z-index: 3;
   left: 50%;
   top: 80px;
   transform: translate(-50%, -50%);
@@ -136,7 +196,7 @@ $color_yellow: #EAEAEA;
   left: 50%;
   top: 200px;
   transform: translate(-50%, -50%);
-  z-index: 3;
+  z-index: 4;
 
   #search_input {
     font-family: 'Quicksand', sans-serif;

@@ -1,14 +1,37 @@
 @charset "UTF-8";
 
+// reset
 @import 'reset';
+
+// materialize
 @import 'materialize/mixins';
 @import 'materialize/color';
 @import 'materialize/variables';
 @import 'materialize/global';
 @import 'materialize/grid';
+
+// font-awesome
+@import "fontAwesome/variables";
+@import "fontAwesome/mixins";
+@import "fontAwesome/path";
+@import "fontAwesome/core";
+@import "fontAwesome/larger";
+@import "fontAwesome/fixed-width";
+@import "fontAwesome/list";
+@import "fontAwesome/bordered-pulled";
+@import "fontAwesome/animated";
+@import "fontAwesome/rotated-flipped";
+@import "fontAwesome/stacked";
+@import "fontAwesome/icons";
+@import "fontAwesome/screen-reader";
+
+// Automata
 @import 'myColors';
 @import 'modal';
 @import 'menu';
+@import 'grid';
+@import 'messages';
+@import 'uploadImage';
 
 @font-face {
     font-family: 'cast';
@@ -21,6 +44,6 @@
 }
 
 body {
-  background-color: #E5E5E1;
+  background-color: $white-body;
   font-family: 'dense';
 }

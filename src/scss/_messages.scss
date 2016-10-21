@@ -1,0 +1,18 @@
+.visible-message {
+  transform: rotateX(0deg) !important;
+}
+
+#messages {
+  position: fixed;
+  font-size: 1.3em;
+  bottom: -35px;
+  width: 100%;
+  text-align: center;
+  background-color: $yellow-light;
+  color: $gray-dark;
+  padding-top: 7px;
+  height: 70px;
+  transform: rotateX(90deg);
+  transition: .2s ease-in;
+  z-index: 8;
+}

@@ -56,17 +56,33 @@ bio
 createdAt
 avatar
 masteries
+
 **Scores & prizes**
 skills
 points
 badges
 level
+
 **Comunications**
 alerts
 messages
+
 **helpers**
 images
 
+#Image camps
+**user**
+userId
+
+**form**
+name
+src
+description
+
+**Database**
+createdAt
+awards
+sponsors
 
 # Layers
 ## Main - layer 1

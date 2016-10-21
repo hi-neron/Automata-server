@@ -1,5 +1,4 @@
 'use strict'
-require('babel-polyfill')
 var page = require('page')
 page.base('/#!')
 require('./homepage')
