@@ -23,7 +23,7 @@ gulp.task('html', function () {
 })
 
 gulp.task('images', function () {
-  return gulp.src('./src/img/*.svg')
+  return gulp.src('./src/img/*.*')
     .pipe(newer('./public/img'))
     .pipe(gulp.dest('./public/img'))
     .pipe(browserSync.stream())

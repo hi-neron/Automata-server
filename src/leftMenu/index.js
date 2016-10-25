@@ -4,6 +4,7 @@ require('gsap')
 const noise = require('./noise.js')
 const empty = require('empty-element')
 const yo = require('yo-yo')
+const uploadImages = require('../menuUploadImages')
 
 let startMenu = function () {
   function getObject (x) {
@@ -201,7 +202,7 @@ let startMenu = function () {
   }).to(search_inputContainer, 0.3, {
     width: '50%',
     minWidth: 360
-  },'-=0.05').to('.cls-9', 0.3, {
+  },'-=0.05').to('.cls-9_search', 0.3, {
     stroke: '#FFCB00'
   }).to(search_line1, 0.1, {
     attr: {
@@ -304,7 +305,7 @@ let startMenu = function () {
       y2:"41.59"
     },
     stroke: '#FFCB00'
-  }).set('.cls-9', {
+  }).set('.cls-9_search', {
     stroke: '#FFCB00'
   })
   .set(search_line2, {
@@ -349,7 +350,7 @@ let startMenu = function () {
   }
 }
 
-function render (ctx) {
+function render () {
   return yo`
     <div>
       <aside id="profile"></aside>
@@ -358,7 +359,7 @@ function render (ctx) {
         <div id="logo">
           <img src="img/logo.svg" alt="">
           <a id="logout" href="/logout">
-            <a class="fa fa-close"></a>
+            <a class="close-logout"></a>
           </a>
         </div>
         <div class="trigger_menu">
@@ -399,14 +400,15 @@ function render (ctx) {
           </svg>
         </div>
         <div id="noise">
-          <a id="profile" class="over_noise" title="button">
+          <a id="profile-menu-trigger" class="over_noise">
           </a>
           <div class="line over_noise">
             <svg id="lineSvg" viewBox="0 0 10 130">
               <line x1="1" y1="2" x2="4" y2="127" stroke="#2b2b29" stroke-width="2"/>
             </svg>
           </div>
-          <a id="template" class="over_noise"></a>
+          <a id="images-menu-trigger" class="over_noise">
+          </a>
           <div id="back_noise">
             <div class="grained"></div>
           </div>
@@ -416,55 +418,55 @@ function render (ctx) {
         <svg id="m_glass" viewBox="0 0 82.31 82.28">
           <defs>
             <style>
-              .cls-1 {
+              .cls-1_search {
                 fill: #959590;
               }
 
-              .cls-2 {
-                fill: #c4c4c2;
+              .cls-2_search {
+                fill: #c5c5c0;
               }
 
-              .cls-3 {
+              .cls-3_search {
                 fill: #343430;
               }
 
-              .cls-4 {
+              .cls-4_search {
                 opacity: 0.22;
               }
 
-              .cls-5 {
+              .cls-5_search {
                 fill: #FFCB00;
               }
 
-              .cls-6 {
+              .cls-6_search {
                 fill: #FFCB00;
               }
 
-              .cls-7, .cls-8, .cls-9 {
+              .cls-7_search, .cls-8_search, .cls-9_search {
                 fill: none;
                 stroke-miterlimit: 10;
               }
 
-              .cls-7 {
+              .cls-7_search {
                 stroke: #FFCB00;
                 stroke-width: 7px;
               }
 
-              .cls-8 {
+              .cls-8_search {
                 /*stroke: #545327;*/
                 stroke: #FFCB00;
                 stroke-width: 5px;
               }
 
-              .cls-10 {
+              .cls-10_search {
                 fill: #363636;
               }
 
-              .cls-8, .cls-9 {
+              .cls-8_search, .cls-9_search {
                 stroke-linecap: square;
               }
 
-              .cls-9 {
+              .cls-9_search {
                 stroke: #FFCB00;
                 stroke-width: 4px;
               }
@@ -474,31 +476,31 @@ function render (ctx) {
           <g id='search_trigger_all'>
             <g id="search_eye">
               <g>
-                <path class="cls-1" d="M55.37,55.9h0L26.59,27.12h0A20.35,20.35,0,1,0,55.37,55.9Z"/>
-                <path class="cls-2" d="M55.37,55.9h0L26.59,27.12h0A20.35,20.35,0,1,1,55.37,55.9Z"/>
-                <ellipse class="cls-3" cx="26.87" cy="27.4" rx="3.93" ry="2.42" transform="translate(-11.51 27.03) rotate(-45)"/>
+                <path class="cls-1_search" d="M55.37,55.9h0L26.59,27.12h0A20.35,20.35,0,1,0,55.37,55.9Z"/>
+                <path class="cls-2_search" d="M55.37,55.9h0L26.59,27.12h0A20.35,20.35,0,1,1,55.37,55.9Z"/>
+                <ellipse class="cls-3_search" cx="26.87" cy="27.4" rx="3.93" ry="2.42" transform="translate(-11.51 27.03) rotate(-45)"/>
               </g>
             </g>
             <g id="search_body">
-              <path class="cls-4" d="M55.37,55.9h0a20.33,20.33,0,0,0-17-34.56V38.89H20.82A20.33,20.33,0,0,0,55.37,55.9Z"/>
+              <path class="cls-4_search" d="M55.37,55.9h0a20.33,20.33,0,0,0-17-34.56V38.89H20.82A20.33,20.33,0,0,0,55.37,55.9Z"/>
               <g>
-                <path id="search_darker" class="cls-6" d="M23.93,24.39h0A24.16,24.16,0,1,0,58.11,58.56h0Z"/>
+                <path id="search_darker" class="cls-6_search" d="M23.93,24.39h0A24.16,24.16,0,1,0,58.11,58.56h0Z"/>
               </g>
               <g>
-                <path id="search_lighter" class="cls-6" d="M58.07,58.6h0A24.16,24.16,0,1,0,23.89,24.42h0Z"/>
-                <path class="cls-6" d="M65.26,41.51a24.2,24.2,0,0,0-7.11-17.16L41,41.51,58.15,58.68h0A24.2,24.2,0,0,0,65.26,41.51Z"/>
+                <path id="search_lighter" class="cls-6_search" d="M58.07,58.6h0A24.16,24.16,0,1,0,23.89,24.42h0Z"/>
+                <path class="cls-6_search" d="M65.26,41.51a24.2,24.2,0,0,0-7.11-17.16L41,41.51,58.15,58.68h0A24.2,24.2,0,0,0,65.26,41.51Z"/>
               </g>
-              <path class="cls-6" id="search_darker_2" d="M41.06,65.71A24.2,24.2,0,0,1,23.89,58.6L41.06,41.43,58.22,58.6h0A24.2,24.2,0,0,1,41.06,65.71Z"/>
+              <path class="cls-6_search" id="search_darker_2" d="M41.06,65.71A24.2,24.2,0,0,1,23.89,58.6L41.06,41.43,58.22,58.6h0A24.2,24.2,0,0,1,41.06,65.71Z"/>
             </g>
-            <line id="search_handle" class="cls-7" x1="68.6" y1="69.13" x2="40.98" y2="41.51"/>
+            <line id="search_handle" class="cls-7_search" x1="68.6" y1="69.13" x2="40.98" y2="41.51"/>
             <g id="search_x">
-              <line id="search_line2" class="cls-8" x1="40.81" y1="41.59" x2="41.31" y2="41.59"/>
-              <line id="search_line1" class="cls-8" x1="41.06" y1="41.45" x2="41.06" y2="41.73"/>
+              <line id="search_line2" class="cls-8_search" x1="40.81" y1="41.59" x2="41.31" y2="41.59"/>
+              <line id="search_line1" class="cls-8_search" x1="41.06" y1="41.45" x2="41.06" y2="41.73"/>
             </g>
           </g>
           <g id="search_shine">
-            <path class="cls-9" d="M26.64,27.17a20.19,20.19,0,0,1,8-4.94"/>
-            <path class="cls-9" d="M21.1,37.51a20.07,20.07,0,0,1,1.08-3.61"/>
+            <path class="cls-9_search" d="M26.64,27.17a20.19,20.19,0,0,1,8-4.94"/>
+            <path class="cls-9_search" d="M21.1,37.51a20.07,20.07,0,0,1,1.08-3.61"/>
           </g>
         </svg>
       </div>
@@ -513,7 +515,29 @@ function render (ctx) {
 
 module.exports = function leftMenu (ctx, next) {
   let container = document.getElementById('left-container')
-  empty(container).appendChild(render(ctx));
+  empty(container).appendChild(render());
+  let user = ctx.auth.username
+  // Menu Triggers
+  let imagesMenuTrigger = document.getElementById('images-menu-trigger')
+  let profileMenuTrigger = document.getElementById('profile-menu-trigger')
+
+
+  imagesMenuTrigger.onclick = function () {
+    uploadImages(user, (err, data) => {
+      if (err) {
+        console.log(err)
+        return err
+      }
+      // Menu Container
+      let imageMenu = document.getElementById('images-menu-container')
+      imageMenu.classList.add('active-images-supervisor')
+    })
+  }
+
+  profileMenuTrigger.onclick = function () {
+    console.log('profile Menu Opened')
+  }
+
   startMenu()
   next();
 }

@@ -304,7 +304,7 @@ app.post('/api/images', secure, (req, res) => {
   // buscar el socket en la lista de usuarios conectados
   // utilizar el publicId para hacer la busqueda
 
-  let userSocket = _.find(usersSockets, {index: req.user.publicId})
+  let userSocket = _.find(usersSockets, {username: req.user.username})
 
   if (!userSocket) {
     return res.status(500).json({error: 'you need be logged with realtime too'})
@@ -313,28 +313,37 @@ app.post('/api/images', secure, (req, res) => {
   upload(req, res, (err) => {
     if (err) return res.status(500).json(err)
     let username = req.user.username
-    let description = req.body.description || ''
+    let name = req.body.name || ''
     let token = req.user.token
     let src
 
+    console.log(req.body)
+    console.log(req.file)
+
     try {
+      console.log('try')
       src = req.file.location
     } catch (e) {
-      return res.status(500).json({error: 'invalid file'})
+      return res.status(500).json({error: e})
     }
 
     let image = {
       userId: username,
       src: src,
-      description: description
+      name: name
     }
 
+    console.log('before create picture')
+
     client.createPicture(image, token, (err, data) => {
-      if (err) return res.send(err)
+      if (err) return res.json(err)
+
+      console.log(image)
 
       image.username = req.user.username
       let toSend = {}
 
+      console.log('before user socket')
       // activar la accion pushImage en el socket
       userSocket.rt.pushImage(image, (err, response) => {
         if (err) return res.status(400).json(err)
@@ -436,7 +445,6 @@ app.get('/api/images/:image', (req, res) => {
 
 /* getAllPictures */
 app.get('/api/images', (req, res) => {
-  console.log('hi')
   client.getAllPictures((err, pictures) => {
     if (err) return res.status(500).json(err)
     res.status(200).json(pictures)

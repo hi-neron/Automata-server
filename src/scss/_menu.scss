@@ -53,8 +53,15 @@ $color_yellow: #EAEAEA;
       font-size: 1.4em;
 
       a {
+        width: 35px;
+        height: 35px;
+        background: url('/img/close.svg') no-repeat center center;
+        background-size: 50%;
+        display: block;
+
         &:hover {
-          color: $yellow-logo;
+          background: url('/img/close-o-white.svg') no-repeat center center;
+          background-size: 50%;
         }
       }
 
@@ -99,7 +106,7 @@ $color_yellow: #EAEAEA;
     }
     // box-shadow: 0 5px 0 rgba(#000, 0.2);
 
-    #profile {
+    #profile-menu-trigger {
       display: inline-block;
       background: url("/img/profile.svg") no-repeat center center;
       background-size: 108%;
@@ -139,7 +146,7 @@ $color_yellow: #EAEAEA;
       display: inline-block;
     }
 
-    #template {
+    #images-menu-trigger{
       position: absolute;
       z-index: 3;
       display: inline-block;

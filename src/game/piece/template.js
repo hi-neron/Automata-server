@@ -1,7 +1,7 @@
 let yo = require('yo-yo')
 
 module.exports = function template (data) {
-  console.log(data)
+  console.log(data, 'piece')
   return yo`
     <div>${data}</div>
   `

@@ -109,7 +109,7 @@ textarea.materialize-textarea {
   font-family: 'dense';
 
   &:hover {
-    border-bottom: 0.14em solid $yellow-light !important;
+    border-bottom: 0.14em solid $yellow-logo-light !important;
   }
 
   // Disabled input style
@@ -127,7 +127,7 @@ textarea.materialize-textarea {
 
   // Focused input style
   &:focus:not([readonly]) {
-    border-bottom: 0.14em solid $yellow-light !important;
+    border-bottom: 0.14em solid $yellow-logo-light !important;
     margin-top: 10px;
   }
 
@@ -224,7 +224,7 @@ textarea.materialize-textarea {
   }
 
   input.active {
-    border-bottom: 0.14em solid $yellow-light !important;
+    border-bottom: 0.14em solid $yellow-logo-light;
     margin-top: 10px;
   }
 }

@@ -31,7 +31,7 @@
 @import 'menu';
 @import 'grid';
 @import 'messages';
-@import 'uploadImage';
+@import 'imagesMenu';
 
 @font-face {
     font-family: 'cast';
@@ -44,6 +44,6 @@
 }
 
 body {
-  background-color: $white-body;
+  background-color: $black-dark;
   font-family: 'dense';
 }

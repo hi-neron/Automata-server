@@ -1,5 +1,7 @@
 'user strict'
 
+// tanks materialize.js
+
 if (typeof (jQuery) === 'undefined') {
   var jQuery
   // Check if require is a defined function.
