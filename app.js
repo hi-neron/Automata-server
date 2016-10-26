@@ -338,9 +338,11 @@ app.post('/api/images', secure, (req, res) => {
     client.createPicture(image, token, (err, data) => {
       if (err) return res.json(err)
 
-      console.log(image)
+      console.log(data)
 
       image.username = req.user.username
+      image.publicId = data.publicId
+
       let toSend = {}
 
       console.log('before user socket')

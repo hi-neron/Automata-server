@@ -68,6 +68,7 @@ exports.serializeUser = function (user, done) {
     token: user.token,
     publicId: user.publicId,
     avatar: user.avatar,
+    skills: user.skills
   })
 }
 
@@ -102,10 +103,12 @@ exports.deserializeUser = function (user, done) {
   //   usr.token = user.token
   //   done(null, usr)
   // })
+
   // client.getUser(user.username, (err, usr) => {
   //   if (err) return done(err)
   //   usr.token = user.token
   // })
+
   done(null, user)
   // done(null, user)
 }

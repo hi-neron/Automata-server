@@ -5,7 +5,7 @@ $color_yellow: #EAEAEA;
 
 .tooltip {
   position: relative;
-  background-color: $gray-dark;
+  background-color: $tooltip-purple;
   visibility: hidden;
   display: block;
   color: white;
@@ -30,7 +30,7 @@ $color_yellow: #EAEAEA;
   #logo{
     height: 130px;
     width: 250px;
-    background-color: $white-modal;
+    background-color: $gray-add-body;
     position: absolute;
     overflow: hidden;
     top: 20px;
@@ -69,7 +69,7 @@ $color_yellow: #EAEAEA;
   }
 
   .trigger_menu {
-    background-color: $color_black;
+    background-color: $menu-trigger-background;
     width: 100px;
     height: 100px;
     cursor: pointer;
@@ -118,9 +118,9 @@ $color_yellow: #EAEAEA;
       // transition: .2s ease-in;
 
       &:after {
-        content: 'profile';
+        content: 'perfil';
         left: 3px;
-        width: 40px;
+        width: 35px;
         bottom: 0px;
         padding: 5px;
         @extend .tooltip;
@@ -157,9 +157,9 @@ $color_yellow: #EAEAEA;
       height: 100%;
 
       &:after {
-        content: 'images';
+        content: 'fragmentos';
         left: 3px;
-        width: 43px;
+        width: 63px;
         bottom: 0px;
         padding: 5px;
         @extend .tooltip;

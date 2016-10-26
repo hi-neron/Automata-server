@@ -7,10 +7,12 @@ const leftMenu = require('../leftMenu')
 const io = require('socket.io-client')
 const Game = require('../game')
 const empty = require('empty-element')
+const yo = require('yo-yo')
+const $ = require('jQuery')
 
 let socket = io.connect('//' + window.location.host)
 
-page('/', auth, signup, modalClose, leftMenu, (ctx, next) => {
+page('/', auth, signup, modalClose, leftMenu, mouseInfo, (ctx, next) => {
   // revisar si esta autenticado
   // LOADER
   // autenticado ?
@@ -23,7 +25,7 @@ page('/', auth, signup, modalClose, leftMenu, (ctx, next) => {
   //    signups
   //  la grilla
   let container = 'game-container'
-  let game = new Game (container, socket)
+  let game = new Game (container, ctx.auth, socket)
 
   if (ctx.auth.username) {
     next()
@@ -32,8 +34,24 @@ page('/', auth, signup, modalClose, leftMenu, (ctx, next) => {
   }
 })
 
+function mouseInfo (ctx, next) {
+  let mouse = yo`
+    <div id="mouse-indicator"></div>
+  `
+  let body = document.getElementsByTagName('body')[0]
+  body.appendChild(mouse)
+  let $mouse = $(mouse)
+
+  setTimeout(function() {
+    $mouse.remove()
+  }, 5100);
+  next()
+}
+
 function modalClose (ctx, next) {
   let modal = document.getElementById('modal-container')
-  empty(modal)
+  if (ctx.auth.username) {
+    modal.classList.add('activate-modal')
+  }
   next()
 }

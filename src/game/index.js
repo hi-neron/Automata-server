@@ -2,36 +2,91 @@
 
 const request = require('superagent')
 const Piece = require('./piece')
+const yo = require('yo-yo')
 
 class Game {
-  constructor (container, socket) {
-    this.imagesBoard = []
+  constructor (container, user, socket) {
     this.container = container || 'game-container'
+    this.skills = []
+    this.length = 0
     let drawImages = this.drawImages.bind(this)
 
-    this.getGrid((err, body) => {
-      if (err) return err
-      drawImages(body.grid)
+    socket.on('fail', (err) => {
+      console.log(err)
     })
 
-    socket.on('fail', (data) => {})
+    // se asigna a una variable global las lista de skills del usuario
+    let getGrid = this.getGrid.bind(this)
+    let addSkills = this.addSkills.bind(this)
+
+    socket.on('userSkills', (userSkills) => {
+      getGrid((err, body) => {
+        if (err) return err
+        addSkills(userSkills)
+        drawImages(body.grid)
+        // activar el scroll de seguimiento al mouse
+        Piece.viewportToCenter()
+        Piece.viewportMoveActivate()
+      })
+      this.skills = userSkills
+      console.log(userSkills)
+    })
+
     socket.on('newGrid', (data) => {})
     socket.on('newScore', (data) => {})
     socket.on('gridChanges', (data) => {})
   }
 
+  addSkills (skills) {
+    this.skills = skills
+    console.log(`geting this skills ${this.skills}`)
+  }
+
+  skillTemplateGenerator () {
+    return yo`
+    <div class="skills-list-container">
+      <ul>${this.skills.map((item) => {
+        return yo`<li class="skill-item">
+          <a name="${item}">${item}</a>
+        </li>`
+        })}
+      </ul>
+    </div>
+    `
+  }
+
   drawImages (grid) {
-    let size = 300;
-    let publicId = 'none still'
+    // la grilla es un array bi-dimensional
+    let size = 220;
+    let publicId = 'nothing yet'
+    let skillsTemplate = true
+
+    this.length = grid.length
+
+    let piece
+
+    this.imagesBoard = new Array(grid.length)
+
+    for (let y = 0; y < grid.length; y++) {
+      this.imagesBoard[y] = new Array(grid.length)
+    }
+
     for (let x = 0; x < grid.length; x++) {
       for (let y = 0; y < grid.length; y++ ) {
         // game, x, y, width, publicId, data
-        let piece = new Piece(this, x, y, size, publicId, grid[x][y])
-        this.imagesBoard.push(piece)
-        // console.log(grid[x][y])
+        piece = new Piece(this, x, y, size, publicId, grid[x][y])
+
+        if (y !== grid.length - 1 && x !== grid.length - 1) {
+          piece.skillTemplateOn(this.skillTemplateGenerator())
+        }
+
+        this.imagesBoard[x][y] = piece
       }
     }
-    // console.log(this.imagesBoard)
+    console.log(this.imagesBoard)
+  }
+
+  activateTemplate (cb) {
   }
 
   getGrid (cb) {

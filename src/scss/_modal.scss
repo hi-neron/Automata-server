@@ -19,6 +19,10 @@ a {
   z-index: 1;
 }
 
+.activate-modal {
+  visibility: hidden;
+}
+
 #modal-center {
   background-color: $white-modal;
   position: relative;

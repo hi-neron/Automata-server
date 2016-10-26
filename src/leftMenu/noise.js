@@ -60,8 +60,18 @@
         canvas.height = options.patternHeight;
         for (var w = 0; w < options.patternWidth; w += options.grainDensity) {
             for (var h = 0; h < options.patternHeight; h += options.grainDensity) {
-                var rgb = Math.random() * 256 | 0;
-                ctx.fillStyle = 'rgba(' + [rgb, rgb, rgb, options.grainOpacity].join() + ')';
+                let bright = 45
+
+                let cap = 256 - bright
+                var rgb = Math.random() * cap | 0;
+
+                rgb += bright
+
+                let r = rgb - 4
+                let g = rgb - 12
+                let b = rgb
+
+                ctx.fillStyle = 'rgba(' + [r, g, b, options.grainOpacity].join() + ')';
                 ctx.fillRect(w, h, options.grainWidth, options.grainHeight);
             }
         }

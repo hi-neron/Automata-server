@@ -203,7 +203,7 @@ let startMenu = function () {
     width: '50%',
     minWidth: 360
   },'-=0.05').to('.cls-9_search', 0.3, {
-    stroke: '#FFCB00'
+    stroke: '#FFFA75'
   }).to(search_line1, 0.1, {
     attr: {
       x1:'35.06',
@@ -304,9 +304,9 @@ let startMenu = function () {
       x2:"41.31",
       y2:"41.59"
     },
-    stroke: '#FFCB00'
+    stroke: '#FFFA75'
   }).set('.cls-9_search', {
-    stroke: '#FFCB00'
+    stroke: '#FFFA75'
   })
   .set(search_line2, {
     attr: {
@@ -315,7 +315,7 @@ let startMenu = function () {
       x2:"41.06",
       y2:"41.73"
     },
-    stroke: '#FFCB00'
+    stroke: '#FFFA75'
   }).to(search_trigger, 0.6, {
     left: '49',
     ease: Bounce.easeOut
@@ -404,7 +404,7 @@ function render () {
           </a>
           <div class="line over_noise">
             <svg id="lineSvg" viewBox="0 0 10 130">
-              <line x1="1" y1="2" x2="4" y2="127" stroke="#2b2b29" stroke-width="2"/>
+              <line x1="1" y1="2" x2="4" y2="127" stroke="#1D1A20" stroke-width="2"/>
             </svg>
           </div>
           <a id="images-menu-trigger" class="over_noise">
@@ -435,11 +435,11 @@ function render () {
               }
 
               .cls-5_search {
-                fill: #FFCB00;
+                fill: #FFFA75;
               }
 
               .cls-6_search {
-                fill: #FFCB00;
+                fill: #FFFA75;
               }
 
               .cls-7_search, .cls-8_search, .cls-9_search {
@@ -448,13 +448,13 @@ function render () {
               }
 
               .cls-7_search {
-                stroke: #FFCB00;
+                stroke: #FFFA75;
                 stroke-width: 7px;
               }
 
               .cls-8_search {
                 /*stroke: #545327;*/
-                stroke: #FFCB00;
+                stroke: #FFFA75;
                 stroke-width: 5px;
               }
 
@@ -467,7 +467,7 @@ function render () {
               }
 
               .cls-9_search {
-                stroke: #FFCB00;
+                stroke: #FFFA75;
                 stroke-width: 4px;
               }
             </style>
