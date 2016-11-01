@@ -458,18 +458,18 @@ app.get('/api/images', (req, res) => {
 
 // activar una skill
 // El usuario activa una skill
-
+// no se hace directamente con socket-io porque debe pasar por filtro de seguridad
 app.post('/game/:skill', secure, (req, res) => {
   // peticion POST al cliente RT:
   /*
     data: {
       pos: {x:, y:},
       skill: <skillname>,
-      username: <para implementar el modulo score>
     }
   */
 
-  let userSocket = _.find(usersSockets, {index: publicId})
+  let userSocket = _.find(usersSockets, {username: req.user.username})
+
   // activar la accion pushImage en el socket
   if (!userSocket) {
     return res.status(500).json({error: 'you need be logged with realtime too'})
@@ -479,6 +479,9 @@ app.post('/game/:skill', secure, (req, res) => {
   let skill = req.params.skill
   let username = req.user.username
   let publicId = req.user.publicId
+
+  console.log(body)
+  console.log(username)
 
   if (body.username !== req.user.username) {
     return res.status(400).json({error: 'invalid user, are u kidding me?'})

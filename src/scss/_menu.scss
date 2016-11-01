@@ -30,7 +30,7 @@ $color_yellow: #EAEAEA;
   #logo{
     height: 130px;
     width: 250px;
-    background-color: $gray-add-body;
+    background-color: $green-light;
     position: absolute;
     overflow: hidden;
     top: 20px;
@@ -178,7 +178,7 @@ $color_yellow: #EAEAEA;
 }
 
 #search_trigger {
-  width: 55px;
+  width: 50px;
   position: fixed;
   transform: translate(-50%, -50%);
   cursor: pointer;
@@ -187,7 +187,7 @@ $color_yellow: #EAEAEA;
 
 #empty_screen {
   position: fixed;
-  background-color: rgba($color_yellow, 0.98);
+  background-color: rgba($white-modal, 0.98);
   z-index: 3;
   left: 50%;
   top: 80px;
