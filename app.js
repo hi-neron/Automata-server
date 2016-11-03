@@ -480,9 +480,6 @@ app.post('/game/:skill', secure, (req, res) => {
   let username = req.user.username
   let publicId = req.user.publicId
 
-  console.log(body)
-  console.log(username)
-
   if (body.username !== req.user.username) {
     return res.status(400).json({error: 'invalid user, are u kidding me?'})
   }

@@ -9,6 +9,7 @@ const $grid = $('<div></div>')
 const $appendTo = $(appendTo)
 
 let imageTemplate = require('./imageTemplate')
+let skillTemplate = require('./skillTemplate')
 // let skillTemplate = require('./skillTemplate')
 
 $scrollBars.addClass('game-scrollbars')
@@ -118,18 +119,14 @@ $grid.on('mouseleave', '.skills-list-container', (e) => {
   skillTimeLine.reverse()
 })
 
-
-class Image {
-  constructor (game, x, y, size, publicId, data, skills, user) {
+class Skill {
+  constructor (x, y, size, skills, username) {
     this.x = x
     this.y = y
-    this.size = size || 70;
-    this.id = publicId
-    this.data = data
+    this.size = size
     this.skills = skills
-    this.user = user
-    this.game = game
-    this.$pieceContainer = $('<div></div>')
+    this.username = username
+    this.$skillContainer = $('<div></div>')
     this.init()
   }
 
@@ -138,71 +135,49 @@ class Image {
     let _thisY = this.y
     let _thisSize = this.size
 
-    this.$pieceContainer.css({
+    this.$skillContainer.css({
       position: 'absolute',
       top: _thisX * _thisSize + 'px',
       left: _thisY * _thisSize + 'px',
       width: _thisSize + 'px',
-      height: _thisSize + 'px',
-      borderBottom: '0.5px dotted rgba(200, 200, 200, 0.06)',
-      borderRight: '0.5px dotted rgba(200, 200, 200, 0.06)'
-    }).html(imageTemplate(this.data))
+      height: _thisSize + 'px'
+    }).html(skillTemplate(this.skills))
 
-    if (this.data) {
-      console.log('here')
-      this.$pieceContainer.css({
-        'box-shadow': '0 5px 0 rgba(0, 0, 0, 0.2)',
-        '-webkit-box-shadow': '0 10px 0 rgba(0, 0, 0, 0.2)',
-      })
-    }
-
-    let gridSize = this.size * this.game.length + 'px'
-
-    $grid.css({
-      width: gridSize,
-      height: gridSize,
-    })
-
-    $grid.append(this.$pieceContainer)
-  }
-
-  skillTemplateOn (skillTemplate) {
-    this.$pieceContainer.append(skillTemplate)
-    let $skillTemplate = $(skillTemplate)
-
-    this.$skillTemplate = $skillTemplate
+    $grid.append(this.$skillContainer)
 
     switch (this.skills.length) {
       case 1:
-        $skillTemplate.find('.skills-single').css({
+        this.$skillContainer.find('.skills-single').css({
           width: '100%',
           height: '100%'
         })
         break;
       case 2:
-        $skillTemplate.find('.skills-single').css({
+        this.$skillContainer.find('.skills-single').css({
           width: '50%',
           height: '50%'
         })
         break;
       default:
-        $skillTemplate.find('.skills-single').css({
+        this.$skillContainer.find('.skills-single').css({
           width: '33.3%',
           height: '33.3%'
         })
     }
 
     let getterPos = this.getterPos.bind(this)
-    let getUsername = this.getterUsername.bind(this)
+    let getterUsername = this.getterUsername.bind(this)
 
-    this.$skillTemplate.on('click', '.skills-single', (e) => {
+    this.$skillContainer.on('click', '.skills-single', (e) => {
       e.preventDefault()
+      skillTimeLine.reverse(0)
+
       let $skill = $(e.currentTarget)
       let skill = $skill[0].attributes['name'].value
       let dataToSend = {
         pos: getterPos(),
         skill: skill,
-        username: getUsername().username
+        username: getterUsername()
       }
 
       console.log(dataToSend)
@@ -217,28 +192,103 @@ class Image {
   }
 
   getterUsername () {
-    return this.user
+    return this.username
   }
 
   getterPos () {
+    console.log(this.x, this.y, '--getter pos')
     return {
       x: this.x,
       y: this.y
     }
   }
+}
 
-  drawMoveTo (x, y) {
-    console.log(this.x, this.y, x, y)
+class Image {
+  constructor (game, x, y, rotation, size, publicId, data, skills, user) {
     this.x = x
     this.y = y
+    this.size = size || 200;
+    this.id = publicId
+    this.data = data
+    this.skills = skills
+    this.rotation = rotation
+    this.user = user
+    this.game = game
+    this.$pieceContainer = $('<div></div>')
+    this.$shadow = $('<div></div>')
+    this.init()
+  }
+
+  init () {
+    let _thisX = this.x
+    let _thisY = this.y
+    let _thisSize = this.size
+
+    this.$pieceContainer.css({
+      position: 'absolute',
+      top: _thisX * _thisSize + 'px',
+      left: _thisY * _thisSize + 'px',
+      width: _thisSize + 'px',
+      height: _thisSize + 'px',
+      transition: 'all .3s cubic-bezier(0.230, 1.000, 0.320, 1.000)',
+      'z-index': 2
+    }).html(imageTemplate(this.data))
+
+    this.$shadow.css({
+      position: 'absolute',
+      top: _thisX * _thisSize + 'px',
+      left: _thisY * _thisSize + 'px',
+      width: _thisSize + 'px',
+      height: _thisSize + 'px',
+      transition: 'all .3s cubic-bezier(0.230, 1.000, 0.320, 1.000)',
+      borderBottom: '0.5px dotted rgba(150, 150, 150, 0.15)',
+      borderRight: '0.5px dotted rgba(150, 150, 150, 0.15)',
+      'z-index': 0
+    })
+
+
+
+    if (this.data) {
+      this.$shadow.addClass('haveShadow')
+    }
+
+    let gridSize = this.size * this.game.length + 'px'
+
+    $grid.css({
+      width: gridSize,
+      height: gridSize,
+    })
+
+    $grid.append(this.$shadow)
+    $grid.append(this.$pieceContainer)
+  }
+
+  static skillBoxCreator (x, y, size, skills, user) {
+    let username = user.username
+    return new Skill(x, y, size, skills, username)
+  }
+
+  // skillTemplateOn (skillTemplate) {
+  //   this.$pieceContainer.append(skillTemplate)
+  //   let $skillTemplate = $(skillTemplate)
+
+  drawMoveTo (newPos, rotation) {
+    this.x = newPos.x
+    this.y = newPos.y
 
     let _thisSize = this.size
     let _thisX = this.x
     let _thisY = this.y
 
     this.$pieceContainer.css({
-      top: _thisY * _thisSize + 'px',
-      left: _thisX * _thisSize + 'px'
+      top: _thisX * _thisSize + 'px',
+      left: _thisY * _thisSize + 'px'
+    })
+
+    this.$shadow.css({
+      top: _thisX * _thisSize + 'px',
+      left: _thisY * _thisSize + 'px'
     })
   }
 

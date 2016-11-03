@@ -60,15 +60,15 @@
         canvas.height = options.patternHeight;
         for (var w = 0; w < options.patternWidth; w += options.grainDensity) {
             for (var h = 0; h < options.patternHeight; h += options.grainDensity) {
-                let bright = 45
+                let bright = 0
 
                 let cap = 256 - bright
                 var rgb = Math.random() * cap | 0;
 
                 rgb += bright
 
-                let r = rgb - 4
-                let g = rgb - 12
+                let r = rgb
+                let g = rgb
                 let b = rgb
 
                 ctx.fillStyle = 'rgba(' + [r, g, b, options.grainOpacity].join() + ')';

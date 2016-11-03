@@ -12,6 +12,8 @@ class Game {
     this.skills = []
     this.length = 0
     this.user = user
+    this.size = 220;
+
     let drawImages = this.drawImages.bind(this)
 
     socket.on('fail', (err) => {
@@ -22,6 +24,8 @@ class Game {
     let getGrid = this.getGrid.bind(this)
     let addSkills = this.addSkills.bind(this)
     let getImagesBoard = this.getImagesBoard.bind(this)
+    let addChangesFromSkill = this.addChangesFromSkill.bind(this)
+    let drawImage = this.drawImage.bind(this)
 
     socket.on('userSkills', (userSkills) => {
       // peticion get a: /game
@@ -31,7 +35,7 @@ class Game {
         addSkills(userSkills)
 
         // dibuja las imagenes en el Dom
-        drawImages(body.grid.grid)
+        drawImages(body.grid)
         // las funciones de control de scroll se hacen en la clase Piece
         // porque allá se construyeron los contenedores:
         //    - Scroll de la grilla.
@@ -61,63 +65,75 @@ class Game {
       //  status
       //}
 
+      console.log('gridChanges')
+
       let myBoard = getImagesBoard()
-      let myChanges = data.changes
+      let newValues = data.changes
       let oldValues = []
 
       let startPointX = data.pos.x
       let startPointY = data.pos.y
 
-      let newX, newY
+      let toChange = []
+      let counter = 0
 
       for (let x = startPointX; x <= startPointX + 1; x++) {
         for (let y = startPointY; y <= startPointY + 1; y++) {
-
-          if (myBoard[x][y].data) {
-            for (let i = 0; i < myChanges.length; i++) {
-              if (myChanges[i]) {
-                if (myBoard[x][y].data.name === myChanges[i].name) {
-                  switch (i) {
-                    case 0:
-                      newX = x
-                      newY = y
-                      break;
-
-                    case 1:
-                      newX = x + 1
-                      newY = y
-                      break;
-
-                    case 2:
-                      newX = x
-                      newY = y + 1
-                      break;
-
-                    case 3:
-                      newX = x + 1
-                      newY = y + 1
-                      break;
-                  }
-
-                  console.log(myBoard[x][y].data.name, i, {x: x, y: y}, {x: newY, y: newX})
-
-                  // myBoard[x][y].drawMoveTo(newX, newY)
-                }
-              }
-            }
-          } else {
-            // console.log('null')
-          }
-
+          oldValues.push(myBoard[x][y])
         }
       }
 
-      // console.log(oldValues, counter)
-      // console.log(data)
+      let nullsUsed = [] // controla los nulos disponibles
+      let nulls = 0
 
-      // console.log(getImagesBoard())
-      // buscar la imagen en el tablero
-      // actualizer las cuatro imagenes que se modificaron
+      for(let i = 0; i < oldValues.length; i++ ){
+        if (!oldValues[i].data) {
+          nullsUsed.push(oldValues[i])
+        }
+      }
+
+      console.log('losnulos', nullsUsed)
+
+      toChange = newValues.map((camp) => {
+        if (!camp) {
+          let toReturn = nullsUsed[nulls]
+          nulls++
+          return toReturn
+        } else {
+          for(let i = 0; i < oldValues.length; i++ ){
+            if (oldValues[i].data){
+              console.log(camp.name, oldValues[i].data.name)
+              if (camp.name == oldValues[i].data.name) {
+                return oldValues[i]
+              }
+            }
+          }
+        }
+      })
+
+      console.log(oldValues, newValues, toChange)
+
+      addChangesFromSkill(data.pos, toChange)
+    })
+
+    // recive informacion de una nueva image agregada
+    socket.on('newImage', (newImage) => {
+      /*
+        newImage {
+          name:
+          pos: {x, y}
+          publicId: "xxxx"
+          rotation:
+          src:
+          userId
+          username;
+        }
+      */
+
+      drawImage(newImage, (piece) => {
+        console.log(piece.publicId, ' has been created')
+      })
+
     })
   }
 
@@ -130,45 +146,73 @@ class Game {
     return this.imagesBoard
   }
 
-  skillTemplateGenerator () {
-    return yo`
-    <div class="skills-list-container">
-      <div class="small-target"></div>
-      <div class="skills-list">
-        <div class="skill-particles" name="left"></div>
-        <div class="skill-particles" name="right"></div>
-          ${this.skills.map((item) => {
-          return yo`<div class="skills-single" name="${item}">
-        </div>`
-        })}
-      </div>
-    </div>
-    `
+  addChangesFromSkill (pos, changes) {
+    let startPointX = pos.x
+    let startPointY = pos.y
+
+    let counter = 0
+
+    for (let x = startPointX; x <= startPointX + 1; x++) {
+      for (let y = startPointY; y <= startPointY + 1; y++) {
+        this.imagesBoard[x][y] = changes[counter]
+
+        let newRotation = this.imagesBoard[x][y].rotation
+
+        this.imagesBoard[x][y].drawMoveTo({x, y}, newRotation)
+        counter++
+      }
+    }
+
+  }
+
+  drawImage (newImage, cb) {
+    let x = newImage.pos['x']
+    let y = newImage.pos['y']
+    let publicId = newImage.publicId
+    let rotation = newImage.rotation
+
+    let data = {
+      publicId: publicId,
+      src: newImage.src
+    }
+
+    let piece = new Piece (this, x, y, rotation, this.size, publicId, data, this.skills, this.user)
+    this.imagesBoard[x][y] = piece
+
+    // if (y !== this.imagesBoard[0].length - 1 && x !== this.imagesBoard[0].length - 1) {
+    //   skillBoard = Piece.skillBoxCreator(x, y, this.size, this.skills, this.user)
+    //   this.skillsBoard[x][y] = skillBoard
+    // }
+
+    cb(piece)
   }
 
   drawImages (grid) {
     // la grilla es un array bi-dimensional
-    let size = 280;
+    let rotation = 0
     let publicId = 'nothing yet'
     let skillsTemplate = true
 
     this.length = grid.length
 
-    let piece
+    let piece, skillBoard
 
     this.imagesBoard = new Array(grid.length)
+    this.skillsBoard = new Array(grid.length)
 
     for (let y = 0; y < grid.length; y++) {
       this.imagesBoard[y] = new Array(grid.length)
+      this.skillsBoard[y] = new Array(grid.length)
     }
 
     for (let x = 0; x < grid.length; x++) {
       for (let y = 0; y < grid.length; y++ ) {
         // game, x, y, width, publicId, data
-        piece = new Piece(this, x, y, size, publicId, grid[x][y], this.skills, this.user)
+        piece = new Piece(this, x, y, rotation, this.size, publicId, grid[x][y], this.skills, this.user)
 
         if (y !== grid.length - 1 && x !== grid.length - 1) {
-          piece.skillTemplateOn(this.skillTemplateGenerator())
+          skillBoard = Piece.skillBoxCreator(x, y, this.size, this.skills, this.user)
+          this.skillsBoard[x][y] = skillBoard
         }
 
         this.imagesBoard[x][y] = piece
