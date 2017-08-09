@@ -3,10 +3,9 @@ var page = require('page')
 
 global.computer = true
 
-if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-  computer = false
+if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+  global.computer = false // last change
 }
-
 
 page.base('/#!')
 require('./homepage')

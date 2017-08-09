@@ -208,19 +208,19 @@ app.post('/signup', (req, res) => {
 })
 
 /* login */
-app.post('/login', function(req, res, next) {
-  passport.authenticate('local', function(err, user, info) {
+app.post('/login', function (req, res, next) {
+  passport.authenticate('local', function (err, user, info) {
     if (err) return next(err)
     if (!user) {
       req.flash('status', 'Invalid username or password')
       return res.redirect('/#!/signin')
     } else {
-      req.logIn(user, function(err) {
+      req.logIn(user, function (err) {
         if (err) {
           req.flash('status', err)
           return res.redirect('/#!/signin')
         }
-        return res.redirect('/');
+        return res.redirect('/')
       })
     }
   })(req, res, next)
@@ -478,7 +478,7 @@ app.post('/game/:skill', secure, (req, res) => {
   let body = req.body
   let skill = req.params.skill
   let username = req.user.username
-  let publicId = req.user.publicId
+  // let publicId = req.user.publicId
 
   if (body.username !== req.user.username) {
     return res.status(400).json({error: 'invalid user, are u kidding me?'})
@@ -495,7 +495,6 @@ app.post('/game/:skill', secure, (req, res) => {
     res.status(200).json(response)
   })
 })
-
 
 app.get('/game', (req, res) => {
   Rt.getGrid((err, grid) => {
