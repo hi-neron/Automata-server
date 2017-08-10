@@ -8,7 +8,7 @@ const config = {
       auth: 'http://api.platzigram.com/auth'
     }
   },
-  redis: process.env.REDIS_URL || 'http://localhost:6379',
+  redis: process.env.REDIS_URL || 'http://127.0.0.1:6379',
   secret: process.env.AUTOMATA_PASS || 'aut*mata', // never use default,
   appName: process.env.AUTOMATA_NAME || 'Autómata',
   aws: {

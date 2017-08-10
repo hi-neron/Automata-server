@@ -8,10 +8,13 @@ const client = automata.newClient(config.client)
 
 exports.localStrategy = new LocalStrategy((username, password, done) => {
   client.authenticate(username, password, (err, token) => {
+  console.log('autenticando', 'token')
     if (err) {
+      console.log(err)
       return done(null, false, { message: 'username and password not found' })
     }
     client.getUser(username, (err, user) => {
+      console.log(err, user)
       if (err) {
         return done(null, false, { message: `an error ocurred: ${err.message}` })
       }

@@ -6,7 +6,7 @@ const bodyParser = require('body-parser')
 const config = require('./config')
 const cookieParser = require('cookie-parser')
 const express = require('express')
-const expressSession = require('express-session')
+const session = require('express-session')
 const path = require('path')
 const flash = require('connect-flash')
 
@@ -14,7 +14,7 @@ const flash = require('connect-flash')
 const _ = require('lodash')
 
 // passport
-const RedisStore = require('connect-redis')(expressSession)
+const RedisStore = require('connect-redis')(session)
 const redisUrl = require('redis-url')
 
 const sessionStore = new RedisStore(
@@ -69,12 +69,11 @@ app.use(function (err, req, res, next) {
   }
 })
 
-// archivos estaticos
-app.use(express.static(path.join(__dirname, 'public')))
 
 app.use(cookieParser())
-let sessionMiddleware = expressSession({
-  key: 'connect.sid',
+
+let sessionMiddleware = session({
+  key: 'express.sid',
   resave: false,
   saveUninitialized: false,
   secret: config.secret,
@@ -85,13 +84,16 @@ let sessionMiddleware = expressSession({
 app.use(sessionMiddleware)
 app.use(passport.initialize())
 app.use(passport.session())
-app.use(flash())
+
+// archivos estaticos
+app.use(express.static(path.join(__dirname, 'public')))
+
 // Templates
 app.set('view engine', 'ejs')
 
 passport.use(auth.localStrategy)
-passport.deserializeUser(auth.deserializeUser)
 passport.serializeUser(auth.serializeUser)
+passport.deserializeUser(auth.deserializeUser)
 
 // socket.io & realtime module
 var usersSockets = []
@@ -105,15 +107,13 @@ function onFail (data, message, error, accept) {
   if (error) {
     console.log(message, 'FAIL')
   }
-  console.log(message, 'FAIL')
   accept(new Error(message))
 }
 
 function ioFunc (io) {
   io.use(passportSIo.authorize({
     cookieParser: cookieParser,
-    key: 'connect.sid',
-    passport: passport,
+    key: 'express.sid',
     secret: config.secret,
     store: sessionStore,
     success: onSuccess,
@@ -172,7 +172,6 @@ function ioFunc (io) {
 }
 
 // Requests
-
 /**
  * createUser
  * body: {
@@ -182,18 +181,19 @@ function ioFunc (io) {
  * name:
  * }
 */
+// app.use(flash())
 
 app.get('/', (req, res) => {
   req.socket.emit('hiToo', 'hi')
-  res.render('index', {title: config.appName, message: req.flash('status')})
+  res.render('index', {title: config.appName, message: 'status'})
 })
 
 app.get('/signup', (req, res) => {
-  res.render('index', {title: config.appName + ' Signup', message: req.flash('status')})
+  res.render('index', {title: config.appName + ' Signup', message: 'status'})
 })
 
 app.get('/signin', (req, res) => {
-  res.render('index', {title: config.appName + ' Signin', message: req.flash('status')})
+  res.render('index', {title: config.appName + ' Signin', message: 'status'})
 })
 
 app.post('/signup', (req, res) => {
@@ -202,7 +202,7 @@ app.post('/signup', (req, res) => {
     if (err) {
       return res.render('index', {title: config.appName + ' Signup', message: err.error.error})
     }
-    req.flash('status', 'Log in with your new account')
+    // req.flash('status', 'Log in with your new account')
     res.redirect('/#!/signin')
   })
 })
@@ -210,14 +210,18 @@ app.post('/signup', (req, res) => {
 /* login */
 app.post('/login', function (req, res, next) {
   passport.authenticate('local', function (err, user, info) {
-    if (err) return next(err)
+    if (err) {
+      console.log(err)
+      return next(err)
+    }
     if (!user) {
-      req.flash('status', 'Invalid username or password')
+      // req.flash('status', 'Invalid username or password')
+      console.log('after flash')
       return res.redirect('/#!/signin')
     } else {
       req.logIn(user, function (err) {
         if (err) {
-          req.flash('status', err)
+          // req.flash('status', err)
           return res.redirect('/#!/signin')
         }
         return res.redirect('/')
@@ -374,6 +378,7 @@ app.get('/api/images/byuser/:username', (req, res) => {
     imageId: imageId
   }
 */
+
 app.get('/api/images/delete/:image', secure, (req, res) => {
   let publicId = req.params.image
   let token = req.user.token

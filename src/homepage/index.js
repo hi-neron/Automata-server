@@ -11,6 +11,9 @@ const yo = require('yo-yo')
 const $ = require('jQuery')
 
 let socket = io.connect('//' + window.location.host)
+socket.on('connect', () => {
+  console.log('conencted')
+})
 
 page('/', auth, signup, modalClose, leftMenu, mouseInfo, (ctx, next) => {
   // revisar si esta autenticado

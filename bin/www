@@ -11,6 +11,10 @@ server.listen(port)
 var io = require('socket.io')(server)
 require('../app').socket(io)
 
+io.on('connect', () => {
+  console.log('connected')
+})
+
 server.on('listening', function (){
   console.log(chalk.black.bgYellow(`Automata listening on port: ${port}`))
 })
