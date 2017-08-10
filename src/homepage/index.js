@@ -6,13 +6,13 @@ const signup = require('../signup')
 const leftMenu = require('../leftMenu')
 const io = require('socket.io-client')
 const Game = require('../game')
-const empty = require('empty-element')
 const yo = require('yo-yo')
 const $ = require('jQuery')
+const display = require('../display')
 
 let socket = io.connect('//' + window.location.host)
 
-page('/', auth, signup, modalClose, leftMenu, mouseInfo, (ctx, next) => {
+page('/', auth, signup, modalClose, display, leftMenu, mouseInfo, (ctx, next) => {
   // revisar si esta autenticado
   // LOADER
   // autenticado ?
@@ -28,6 +28,8 @@ page('/', auth, signup, modalClose, leftMenu, mouseInfo, (ctx, next) => {
   let game = new Game (container, ctx.auth, socket)
 
   if (ctx.auth.username) {
+    window.userId = ctx.auth.publicId
+    console.log('/ finished path')
     next()
   } else {
     page.redirect('/signup')

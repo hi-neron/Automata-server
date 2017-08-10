@@ -68,7 +68,10 @@ exports.serializeUser = function (user, done) {
     token: user.token,
     publicId: user.publicId,
     avatar: user.avatar,
-    skills: user.skills
+    skills: user.skills,
+    score: user.points,
+    level: user.level,
+    images: user.images,
   })
 }
 

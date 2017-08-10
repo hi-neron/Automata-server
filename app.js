@@ -56,6 +56,14 @@ let upload = multer({
   }),
   limits: {
     fileSize: 800000
+  },
+  fileFilter: function(req, file, cb) {
+    console.log(req)
+    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/gif' || file.mimetype === 'image/png') {
+      cb(null, true)
+    } else {
+      cb({error: 'invalid file'})
+    }
   }
 }).single('file')
 
@@ -102,10 +110,7 @@ function onSuccess (data, accept) {
 }
 
 function onFail (data, message, error, accept) {
-  if (error) {
-    console.log(message, 'FAIL')
-  }
-  console.log(message, 'FAIL')
+  console.log(message,'FAIL')
   accept(new Error(message))
 }
 
@@ -296,10 +301,10 @@ app.get('/api/users/mastery/:mastery', (req, res) => {
 
 // PICTURES <::::::::
 
+
 /* createPicture
 * token firmado con username
 */
-
 app.post('/api/images', secure, (req, res) => {
   // buscar el socket en la lista de usuarios conectados
   // utilizar el publicId para hacer la busqueda
@@ -317,15 +322,13 @@ app.post('/api/images', secure, (req, res) => {
     let token = req.user.token
     let src
 
-    console.log(req.body)
-    console.log(req.file)
-
     try {
-      console.log('try')
       src = req.file.location
     } catch (e) {
-      return res.status(500).json({error: e})
+      return res.status(500).json({error: 'Image not sent'})
     }
+
+    // console.log(req.file)
 
     let image = {
       userId: username,
@@ -338,12 +341,13 @@ app.post('/api/images', secure, (req, res) => {
     client.createPicture(image, token, (err, data) => {
       if (err) return res.json(err)
 
-      console.log(data)
 
       image.username = req.user.username
       image.publicId = data.publicId
 
-      let toSend = {}
+      let toSend = {
+        data: data
+      }
 
       console.log('before user socket')
       // activar la accion pushImage en el socket
@@ -416,9 +420,9 @@ app.get('/api/images/delete/:image', secure, (req, res) => {
 })
 
 /* addPictureAward */
-app.post('/api/images/award/:picture', secure, (req, res) => {
+app.get('/api/images/awards/:type/:picture', secure, (req, res) => {
   let sponsor = req.user.username
-  let type = req.body.type
+  let type = req.params.type
 
   let picture = req.params.picture
 
@@ -430,13 +434,35 @@ app.post('/api/images/award/:picture', secure, (req, res) => {
   }
 
   client.addPictureAward(picture, award, token, (err, picture) => {
-    if (err) return res.status(500).json(err)
+    if (err) {
+      console.log(err.error)
+      return res.json(err.error)
+    }
+
+    let data = {
+      image: picture,
+      award: award
+    }
+
     res.status(200).json(picture)
+
   })
 })
 
 /* getPicture */
 app.get('/api/images/:image', (req, res) => {
+  /*
+  {
+    awards:
+    createdAt:
+    id:
+    name:
+    publicId:
+    sponsors:
+    src:
+    userId:
+  }
+  */
   let imageId = req.params.image
 
   client.getPicture(imageId, (err, picture) => {
@@ -498,6 +524,7 @@ app.post('/game/:skill', secure, (req, res) => {
 
 
 app.get('/game', (req, res) => {
+  console.log('**app.js /game')
   Rt.getGrid((err, grid) => {
     console.log('\n/game')
     console.log(err)

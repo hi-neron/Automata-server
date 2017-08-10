@@ -33,10 +33,15 @@
 @import 'messages';
 @import 'imagesMenu';
 @import 'chat';
+@import 'display';
+@import 'singleCard';
+@import 'loader';
+
+@import url('https://fonts.googleapis.com/css?family=Lato:500|Old+Standard+TT:700');
 
 @font-face {
     font-family: 'cast';
-    src: url('/fonts/cast.otf');
+    src: url('/fonts/cast-iron.otf');
 }
 
 @font-face {
@@ -87,3 +92,5 @@ body {
 .mouse-disappear {
     opacity: 0 !important;
 }
+
+

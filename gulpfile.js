@@ -1,9 +1,10 @@
-var gulp = require('gulp')
-var browserSync = require('browser-sync').create()
-var sass = require('gulp-sass')
-var babel = require('gulp-babel')
-var browserify = require('gulp-browserify')
-var newer = require('gulp-newer')
+const gulp = require('gulp')
+const browserSync = require('browser-sync').create()
+const sass = require('gulp-sass')
+const babel = require('gulp-babel')
+const browserify = require('gulp-browserify')
+const newer = require('gulp-newer')
+const gulpAutoprefixer = require('gulp-autoprefixer')
 // Static server
 
 gulp.task('server', function () {

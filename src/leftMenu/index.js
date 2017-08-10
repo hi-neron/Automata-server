@@ -362,6 +362,9 @@ function render () {
             <a class="close-logout"></a>
           </a>
         </div>
+        <div id="dev_board">
+          <span class="dev_text">DEV</span>
+        </div>
         <div class="trigger_menu">
           <svg id="menuSvg" viewBox="48 2 85 76.67">
             <defs>
@@ -383,12 +386,12 @@ function render () {
                 <polygon class="cls-1_menu" points="98.28 51.62 80.65 51.62 78.2 53.43 75.83 51.62 58.65 51.62 58.65 23.93 98.28 23.93 98.28 51.62"/>
               </clipPath>
               <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%" gradientUnits="userSpaceOnUse" gradientTransform='translate(100, 100)'>
-                <stop offset="0%" stop-color="#dadada" />
-                <stop offset="30%" stop-color="#dadada" />
-                <stop offset="40%" stop-color="#aaaaaa" />
-                <stop offset="60%" stop-color="#aaaaaa" />
-                <stop offset="70%" stop-color="#dadada" />
-                <stop offset="100%" stop-color="#dadada" />
+                <stop offset="0%" stop-color="#BFFFDF" />
+                <stop offset="30%" stop-color="#BFFFDF" />
+                <stop offset="40%" stop-color="#84f2c2" />
+                <stop offset="60%" stop-color="#84f2c2" />
+                <stop offset="70%" stop-color="#BFFFDF" />
+                <stop offset="100%" stop-color="#BFFFDF" />
               </linearGradient>
             </defs>
             <title>automata</title>
@@ -404,6 +407,7 @@ function render () {
           </a>
           <div class="line over_noise">
             <svg id="lineSvg" viewBox="0 0 10 130">
+              <line x1="0.5" y1="14" x2="3.5" y2="117" stroke="#FFFFFF" stroke-width="3"/>
               <line x1="1" y1="2" x2="4" y2="127" stroke="#1D1A20" stroke-width="2"/>
             </svg>
           </div>

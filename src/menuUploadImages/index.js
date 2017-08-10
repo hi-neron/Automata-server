@@ -65,22 +65,24 @@ function dummyAnimationStart ($template) {
 
 // renderizar la informacion de la imagenes
 function renderImages (images, next) {
+  let $OldImages = $('<div id="old-images"></div>')
+  let $lastestImages = $('<div id="lastest-images"></div>')
   let $template = $('<div id="supervisor-images-user"></div>')
+
   for (let i = 0; i < images.length; i++) {
     console.log(images[i])
-    $template.append(imageTemplate(images[i]))
-  }
-  // aqui se renderizaran una a una las imagenes
-  if (images.length === 0) {
-    next(null, $template)
+    $OldImages.append(imageTemplate(images[i]))
   }
 
-  next(null, $template)
+  $template.append($OldImages)
+  $template.append($lastestImages)
+  // aqui se renderizaran una a una las imagenes
+  next(null, $template, images.length)
 }
 
 // agrega al template el formulario de subida
-function addUploadForm ($template, next) {
-  $template.append(uploadForm)
+function addUploadForm ($template, images, next) {
+  $template.append(uploadForm(images))
 
   dummyAnimationStart($template)
   next(null, $template)

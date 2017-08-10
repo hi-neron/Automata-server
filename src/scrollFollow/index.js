@@ -13,18 +13,6 @@ var move = false
 var canAnimate = false
 
 console.log('scrollFollow')
-// $(window).load(function () {
-//   setTimeout(() => {
-//     scrollWidth = $scrollGrid[0].clientWidth
-//     scrollHeight = $scrollGrid[0].clientHeight
-//     $scrollGrid[0].scrollTop = ($scrollGrid[0].scrollHeight - scrollHeight) / 2
-//     $scrollGrid[0].scrollLeft = ($scrollGrid[0].scrollWidth - scrollWidth) / 2
-//   }, 100)
-//   setTimeout(() => {
-//     toViewPort()
-//     canAnimate = true
-//   }, 2000)
-// })
 
 function toViewPort () {
   let boost = 14

@@ -32,7 +32,7 @@ module.exports = function (skills) {
               }
 
               .cls-skillBox-5 {
-                fill: #7d7d7d;
+                fill: #4d4d5d;
               }
 
               .cls-skillBox-6 {
@@ -42,11 +42,11 @@ module.exports = function (skills) {
               }
 
               .cls-skillBox-7 {
-                fill: #eb3f67;
+                fill: #61FFAE;
               }
 
               .cls-skillBox-8 {
-                fill: #ff4170;
+                fill: #61FFAE;
               }
 
               .cls-skillBox-9 {

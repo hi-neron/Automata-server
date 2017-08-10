@@ -1,11 +1,21 @@
-@import url(https://fonts.googleapis.com/css?family=Quicksand);
+@mixin shimmer-grad($color) {
+  background: rgba($color,0);
+  background: -moz-linear-gradient(-25deg, rgba($color,0) 0%, rgba($color,0) 35%, rgba($color,1) 35%, rgba($color,1) 50%, rgba($color,0) 51%, rgba($color,0) 58%, rgba($color,1) 58%, rgba($color,1) 59%, rgba($color,0) 60%, rgba($color,0) 75%, rgba($color,1) 75%, rgba($color,1) 81%, rgba($color,0) 81%, rgba($color,0) 100%);
+  background: -webkit-gradient(left top, right bottom, color-stop(0%, rgba($color,0)), color-stop(35%, rgba($color,0)), color-stop(35%, rgba($color,1)), color-stop(50%, rgba($color,1)), color-stop(51%, rgba($color,0)), color-stop(58%, rgba($color,0)), color-stop(58%, rgba($color,1)), color-stop(59%, rgba($color,1)), color-stop(60%, rgba($color,0)), color-stop(75%, rgba($color,0)), color-stop(75%, rgba($color,1)), color-stop(81%, rgba($color,1)), color-stop(81%, rgba($color,0)), color-stop(100%, rgba($color,0)));
+  background: -webkit-linear-gradient(-25deg, rgba($color,0) 0%, rgba($color,0) 35%, rgba($color,1) 35%, rgba($color,1) 50%, rgba($color,0) 51%, rgba($color,0) 58%, rgba($color,1) 58%, rgba($color,1) 59%, rgba($color,0) 60%, rgba($color,0) 75%, rgba($color,1) 75%, rgba($color,1) 81%, rgba($color,0) 81%, rgba($color,0) 100%);
+  background: -o-linear-gradient(-25deg, rgba($color,0) 0%, rgba($color,0) 35%, rgba($color,1) 35%, rgba($color,1) 50%, rgba($color,0) 51%, rgba($color,0) 58%, rgba($color,1) 58%, rgba($color,1) 59%, rgba($color,0) 60%, rgba($color,0) 75%, rgba($color,1) 75%, rgba($color,1) 81%, rgba($color,0) 81%, rgba($color,0) 100%);
+  background: -ms-linear-gradient(-25deg, rgba($color,0) 0%, rgba($color,0) 35%, rgba($color,1) 35%, rgba($color,1) 50%, rgba($color,0) 51%, rgba($color,0) 58%, rgba($color,1) 58%, rgba($color,1) 59%, rgba($color,0) 60%, rgba($color,0) 75%, rgba($color,1) 75%, rgba($color,1) 81%, rgba($color,0) 81%, rgba($color,0) 100%);
+  background: linear-gradient(110deg, rgba($color,0) 0%, rgba($color,0) 35%, rgba($color,1) 35%, rgba($color,1) 50%, rgba($color,0) 51%, rgba($color,0) 58%, rgba($color,1) 58%, rgba($color,1) 59%, rgba($color,0) 60%, rgba($color,0) 75%, rgba($color,1) 75%, rgba($color,1) 81%, rgba($color,0) 81%, rgba($color,0) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c4f2f2', endColorstr='#c4f2f2', GradientType=1 );
+}
+
 $color_gray: #C2C2C2;
 $color_black: #1C1C1C;
 $color_yellow: #EAEAEA;
 
 .tooltip {
   position: relative;
-  background-color: $tooltip-purple;
+  background-color: $display-black;
   visibility: hidden;
   display: block;
   color: white;
@@ -30,7 +40,7 @@ $color_yellow: #EAEAEA;
   #logo{
     height: 130px;
     width: 250px;
-    background-color: $green-light;
+    background-color: $logo-background;
     position: absolute;
     overflow: hidden;
     top: 20px;
@@ -68,6 +78,19 @@ $color_yellow: #EAEAEA;
     }
   }
 
+  #dev_board {
+    position: absolute;
+    background-color: deeppink;
+    color: white;
+    font-size: 2rem;
+    font-weight: 900;
+    width: 60px;
+    padding: 4px 0 3px 7px;
+    bottom: -50px;
+    left: 250px;
+    cursor: pointer;
+  }
+
   .trigger_menu {
     background-color: $menu-trigger-background;
     width: 100px;
@@ -76,7 +99,18 @@ $color_yellow: #EAEAEA;
     display: inline-block;
     position: relative;
     top: 150px;
-    // box-shadow: 0 5px 0 rgba(#000, 0.2);
+    border-right: 2px solid rgba(white, 0.25);
+    box-shadow: 0px 3px 0px rgba(#000, 0.3);
+    border-radius: 0 3px 3px 0;
+
+    &:after {
+      content: '';
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      opacity: 0.08;
+      @include shimmer-grad($color-grad);
+    }
 
     #menuSvg {
       position: absolute;
@@ -151,7 +185,7 @@ $color_yellow: #EAEAEA;
       z-index: 3;
       display: inline-block;
       background: url("/img/images.svg") no-repeat center center;
-      background-size: 110%;
+      background-size: 105%;
       width: 48%;
       left: 51%;
       height: 100%;
@@ -167,7 +201,7 @@ $color_yellow: #EAEAEA;
 
       &:hover {
         background: url("/img/images-o.svg") no-repeat center center;
-        background-size: 110%;
+        background-size: 105%;
         &:after {
           visibility: visible;
         }
@@ -183,6 +217,7 @@ $color_yellow: #EAEAEA;
   transform: translate(-50%, -50%);
   cursor: pointer;
   z-index: 4;
+  
 }
 
 #empty_screen {
@@ -206,7 +241,7 @@ $color_yellow: #EAEAEA;
   z-index: 4;
 
   #search_input {
-    font-family: 'Quicksand', sans-serif;
+    font-family: 'dense', sans-serif;
     width: 80%;
     height: 60px;
     position: relative;

@@ -81,3 +81,9 @@ textarea, button {
     }
   }
 }
+
+svg {
+  &:focus {
+    outline: transparent;
+  }
+}

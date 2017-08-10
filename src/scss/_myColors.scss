@@ -1,8 +1,13 @@
 $shadow-dark: rgba(54, 54, 50, 0.60);
+$shadow-normal: rgba(54, 54, 54, 0.30);
 $shadow: rgba(54, 54, 50, 0.10);
 $shadow-light: rgba(54, 54, 50, 0.06);
-$gray-dark:             #1A1A1A;
+$gray-dark:             #1a1a1a;
+$gray-dark-2:             #393939;
+$gray-dark-low:         #4A7E64;
+$gray-dark-low2:         #3a4a4a;
 $gray-light:            #7b7b79;
+$blue-light:              #BFFFDF;
 $green-light:           #D3F3BE;
 $gray-add-body:         #C8E0B9;
 $gray-add-body-dark:    #B8D0A9;
@@ -18,13 +23,31 @@ $yellow-logo-light:     #FFFA5A;
 $yellow-dark-border:    #FFDA40;
 $yellow-max:            #FFAA00;
 $black-dark:            #1C1C1C;
-$purple-text-supervisor:#4D4559;
-$purple-mid:            #2A262E;
-$supervisor-body:       #F1F5ED;
-$red-alert:             #FF6845;
+
+
+// menuImagesUpload
+$upload-body-title:         $gray-dark;
+$upload-body-border-top:    $gray-dark-2;
+$purple-mid:               #2A262E;
+$supervisor-body:          #F1F5ED;
+$red-alert:                #ff486b;
+$background-awards:         $blue-light;
+
+// to replace
+$purple-text-supervisor :    $gray-dark-2;
 
 // by place
-$upload-color-1:        $purple-text-supervisor;
-$game-background: #e0e1e0;
+$upload-color-1:        $gray-dark;
+$game-background: #cbcbcb;
 $menu-trigger-background: $gray-dark;
 $tooltip-purple: $purple-mid;
+
+// logo
+$logo-background: $supervisor-body;
+
+// display
+$display-black: $menu-trigger-background;
+$display-letters: #BFFFDF;
+$display-letters-outer: #61FFAE;
+$metal-top: #918181;
+$color-grad: $display-letters;

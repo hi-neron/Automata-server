@@ -4,21 +4,17 @@ const request = require('superagent')
 const Piece = require('./piece')
 const yo = require('yo-yo')
 
-
-
 class Game {
   constructor (container, user, socket) {
     this.container = container || 'game-container'
     this.skills = []
     this.length = 0
     this.user = user
-    this.size = 220;
+    this.size = 240;
+
+    console.log('start game')
 
     let drawImages = this.drawImages.bind(this)
-
-    socket.on('fail', (err) => {
-      console.log('socketIo-Fail', err)
-    })
 
     // se asigna a una variable global las lista de skills del usuario
     let getGrid = this.getGrid.bind(this)
@@ -27,9 +23,16 @@ class Game {
     let addChangesFromSkill = this.addChangesFromSkill.bind(this)
     let drawImage = this.drawImage.bind(this)
 
+
+    socket.on('fail', (err) => {
+      console.log('socketIo-Fail', err)
+    })
+
     socket.on('userSkills', (userSkills) => {
       // peticion get a: /game
+      console.log(`user skills: ${userSkills}`)
       getGrid((err, body) => {
+        console.log(`getGrid: ${body}`)
         if (err) return err
         // Agrega las skills al objeto Game
         addSkills(userSkills)
@@ -52,6 +55,14 @@ class Game {
 
     socket.on('newGrid', (data) => {})
     socket.on('newScore', (data) => {
+      let eventScore = new CustomEvent('scoreUpdate', {
+        detail: {
+          data: data
+        }
+      })
+
+      let scoreVar = document.getElementById('score-var')
+      scoreVar.dispatchEvent(eventScore)
       // console.log(data, ' new score')
     })
 
@@ -92,8 +103,6 @@ class Game {
         }
       }
 
-      console.log('losnulos', nullsUsed)
-
       toChange = newValues.map((camp) => {
         if (!camp) {
           let toReturn = nullsUsed[nulls]
@@ -102,8 +111,7 @@ class Game {
         } else {
           for(let i = 0; i < oldValues.length; i++ ){
             if (oldValues[i].data){
-              console.log(camp.name, oldValues[i].data.name)
-              if (camp.name == oldValues[i].data.name) {
+              if (camp.publicId == oldValues[i].data.publicId) {
                 return oldValues[i]
               }
             }
@@ -170,19 +178,21 @@ class Game {
     let y = newImage.pos['y']
     let publicId = newImage.publicId
     let rotation = newImage.rotation
+    let name = newImage.name
+    let username = this.user.username
+    let userId = this.user.publicId
 
     let data = {
       publicId: publicId,
-      src: newImage.src
+      src: newImage.src,
+      name: name,
+      rotation: rotation,
+      userId: userId,
+      username: username
     }
 
     let piece = new Piece (this, x, y, rotation, this.size, publicId, data, this.skills, this.user)
     this.imagesBoard[x][y] = piece
-
-    // if (y !== this.imagesBoard[0].length - 1 && x !== this.imagesBoard[0].length - 1) {
-    //   skillBoard = Piece.skillBoxCreator(x, y, this.size, this.skills, this.user)
-    //   this.skillsBoard[x][y] = skillBoard
-    // }
 
     cb(piece)
   }
@@ -192,6 +202,8 @@ class Game {
     let rotation = 0
     let publicId = 'nothing yet'
     let skillsTemplate = true
+
+    console.log(grid)
 
     this.length = grid.length
 
@@ -209,7 +221,6 @@ class Game {
       for (let y = 0; y < grid.length; y++ ) {
         // game, x, y, width, publicId, data
         piece = new Piece(this, x, y, rotation, this.size, publicId, grid[x][y], this.skills, this.user)
-
         if (y !== grid.length - 1 && x !== grid.length - 1) {
           skillBoard = Piece.skillBoxCreator(x, y, this.size, this.skills, this.user)
           this.skillsBoard[x][y] = skillBoard
@@ -218,9 +229,6 @@ class Game {
         this.imagesBoard[x][y] = piece
       }
     }
-  }
-
-  activateTemplate (cb) {
   }
 
   getGrid (cb) {
@@ -236,7 +244,7 @@ class Game {
   }
 
   // grid lvl up
-  updateGrid () {}
+  upgradeGrid () {}
 
   // construir una grilla
   // aumentar la grilla
