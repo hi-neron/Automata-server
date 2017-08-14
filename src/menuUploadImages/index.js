@@ -98,9 +98,9 @@ module.exports = function(username, cb) {
         .end((err, res) => {
           if (err) {
             console.log(err)
-            cb(err)
+            return cb(err)
           }
-          cb(null, res.body)
+          return cb(null, res.body)
         })
     },
     renderImages,

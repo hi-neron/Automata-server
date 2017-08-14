@@ -3,9 +3,10 @@
 const config = {
   client: {
     endpoints: {
-      pictures: 'http://api.platzigram.com/picture',
-      users: 'http://api.platzigram.com/user',
-      auth: 'http://api.platzigram.com/auth'
+      pictures: 'http://api.automata.com/pictures',
+      users: 'http://api.automata.com/users',
+      auth: 'http://api.automata.com/auth',
+      contributions: 'http://api.automata.com/contributions'
     }
   },
   redis: process.env.REDIS_URL || 'http://localhost:6379',
@@ -23,7 +24,8 @@ if (process.env.NODE_ENV !== 'production') {
   config.client.endpoints = {
     pictures: 'http://localhost:9000',
     users: 'http://localhost:9001',
-    auth: 'http://localhost:9002'
+    auth: 'http://localhost:9002',
+    contributions: 'http://localhost:9003'
   }
 
   // config.auth.facebook.callbackURL = 'http://platzigram.test:5050/auth/facebook/callback'

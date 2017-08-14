@@ -1,13 +1,14 @@
 const LocalStrategy = require('passport-local').Strategy
 // const FacebookStrategy = require('passport-facebook').Strategy
-const automata = require('automata-client')
+const Cli = require('automata-client')
 // const jwt = require('jsonwebtoken')
 const config = require('../config')
 
-const client = automata.newClient(config.client)
+const client = Cli.newClient(config.client)
 
 exports.localStrategy = new LocalStrategy((username, password, done) => {
   client.authenticate(username, password, (err, token) => {
+
     if (err) {
       return done(null, false, { message: 'username and password not found' })
     }
@@ -63,6 +64,7 @@ exports.facebookStrategy = new FacebookStrategy({
 */
 
 exports.serializeUser = function (user, done) {
+  console.log('serializa user')
   done(null, {
     username: user.username,
     token: user.token,
@@ -76,6 +78,7 @@ exports.serializeUser = function (user, done) {
 }
 
 exports.deserializeUser = function (user, done) {
+  console.log('deserializa user')
   // client.getUser(user.username, (err, usr) => {
   //   // tener en cuanta para optimizar, deserializar, devolver el usario y agregar el token
   //   // sin llamar a la BD

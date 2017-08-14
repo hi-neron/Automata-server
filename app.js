@@ -58,7 +58,6 @@ let upload = multer({
     fileSize: 800000
   },
   fileFilter: function(req, file, cb) {
-    console.log(req)
     if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/gif' || file.mimetype === 'image/png') {
       cb(null, true)
     } else {
@@ -127,7 +126,7 @@ function ioFunc (io) {
 
   io.on('connection', (socket) => {
     // se busca el perfil logeado
-    console.log(socket.request.user)
+    console.log(socket.request.user, '>> socketIo session')
 
     let user = {
       publicId: socket.request.user.publicId,
@@ -301,7 +300,6 @@ app.get('/api/users/mastery/:mastery', (req, res) => {
 
 // PICTURES <::::::::
 
-
 /* createPicture
 * token firmado con username
 */
@@ -336,8 +334,6 @@ app.post('/api/images', secure, (req, res) => {
       name: name
     }
 
-    console.log('before create picture')
-
     client.createPicture(image, token, (err, data) => {
       if (err) return res.json(err)
 
@@ -349,7 +345,8 @@ app.post('/api/images', secure, (req, res) => {
         data: data
       }
 
-      console.log('before user socket')
+      console.log(image)
+
       // activar la accion pushImage en el socket
       userSocket.rt.pushImage(image, (err, response) => {
         if (err) return res.status(400).json(err)
@@ -365,7 +362,6 @@ app.post('/api/images', secure, (req, res) => {
 /* getPicturesByUser */
 app.get('/api/images/byuser/:username', (req, res) => {
   let username = req.params.username
-
   client.getPicturesByUser(username, (err, pictures) => {
     if (err) return res.status(500).json(err)
     res.status(200).json(pictures)
@@ -532,6 +528,42 @@ app.get('/game', (req, res) => {
     res.json(grid)
   })
 })
+
+// CONTRIBUTIONS
+
+// get last ten contribs
+app.get('/api/contributions/last/:group', (req, res) => {
+  let group = req.params.group
+  client.getTenContribs(group, (err, contribs) => {
+    console.log(err)
+    if (err) return res.status(500).json(err)
+    res.status(200).json(contribs)
+  })
+})
+
+// create contribution
+app.post('/api/contributions', secure, (req, res) => {
+  // buscar el socket en la lista de usuarios conectados
+  // utilizar el publicId para hacer la busqueda
+
+  let userSocket = _.find(usersSockets, {username: req.user.username})
+
+  if (!userSocket) {
+    return res.status(500).json({error: 'you need be logged with realtime too'})
+  }
+
+  let username = req.user.username
+  let contribution = req.body
+  let token = req.user.token
+
+  client.createContrib(contribution, username, token, (err, data) => {
+    if (err) return res.status(500).json(err)
+    data.message = 'gracias por su contribucion'
+    res.status(200).json(data)
+  })
+})
+
+// CHAT *soon*
 
 // secure middleware
 function secure (req, res, next) {

@@ -4,9 +4,9 @@ const sass = require('gulp-sass')
 const babel = require('gulp-babel')
 const browserify = require('gulp-browserify')
 const newer = require('gulp-newer')
-const gulpAutoprefixer = require('gulp-autoprefixer')
-// Static server
+// const gulpAutoprefixer = require('gulp-autoprefixer')
 
+// Static server
 gulp.task('server', function () {
   browserSync.init({
     proxy: 'localhost:9050'
@@ -15,6 +15,7 @@ gulp.task('server', function () {
   gulp.watch('src/scss/**/*.scss', ['sass'])
   gulp.watch('src/**/*.js', ['babel'])
   gulp.watch('src/img/*', ['images'])
+  gulp.watch('src/fonts/*', ['fonts'])
 })
 
 gulp.task('html', function () {
@@ -27,6 +28,13 @@ gulp.task('images', function () {
   return gulp.src('./src/img/*.*')
     .pipe(newer('./public/img'))
     .pipe(gulp.dest('./public/img'))
+    .pipe(browserSync.stream())
+})
+
+gulp.task('fonts', function () {
+  return gulp.src('./src/fonts/*.*')
+    .pipe(newer('./public/fonts'))
+    .pipe(gulp.dest('./public/fonts'))
     .pipe(browserSync.stream())
 })
 
@@ -48,4 +56,4 @@ gulp.task('sass', function () {
     .pipe(browserSync.stream())
 })
 
-gulp.task('default', ['server', 'sass', 'babel', 'html', 'images'])
+gulp.task('default', ['server', 'sass', 'babel', 'html', 'images', 'fonts'])

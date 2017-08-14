@@ -36,6 +36,7 @@
 @import 'display';
 @import 'singleCard';
 @import 'loader';
+@import 'devBoard';
 
 @import url('https://fonts.googleapis.com/css?family=Lato:500|Old+Standard+TT:700');
 
@@ -47,6 +48,21 @@
 @font-face {
     font-family: 'dense';
     src: url('/fonts/dense.otf');
+}
+
+@font-face {
+    font-family: 'lepb';
+    src: url('/fonts/lep-black.otf');
+}
+
+@font-face {
+    font-family: 'lepm';
+    src: url('/fonts/lep-medium.otf');
+}
+
+@font-face {
+    font-family: 'square';
+    src: url('/fonts/square.ttf');
 }
 
 body {

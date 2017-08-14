@@ -562,8 +562,6 @@ class Image {
       'z-index': 0
     })
 
-
-
     if (this.data) {
       this.$shadow.addClass('haveShadow')
     }

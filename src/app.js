@@ -10,7 +10,6 @@ if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(naviga
 $('body').mousedown(function(e){if(e.button==1)return false});
 
 page.base('/#!')
-console.log('app.js')
 require('./homepage')
 require('./signin')
 require('./signup')

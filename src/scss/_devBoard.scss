@@ -1,0 +1,327 @@
+$size: 960px;
+
+$left: 260px;
+$right: $size - $left;
+
+#devboard-container {
+  position: fixed;
+  background-color: $game-background;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  z-index: 10;
+
+  .clearfix {
+    height: 100%;
+    width: 100%;
+    min-width: $size;
+
+    .devBoard-left {
+      vertical-align: top;
+      display: inline-block;
+      min-width: 220px;
+      width: 100%;
+      max-width: $left;
+      height: 100%;
+
+      .devboard-wrapper {
+        height: 100%;
+        width: 100%;
+
+
+        .brandContainer {
+          height: 240px;
+          margin: 20px;
+          padding: 20px;
+          position: relative;
+
+          #dev-logo {
+            position: absolute;
+            width: 220px;
+            height: 230px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            border: 1px dashed black;
+
+            .dev-logo-image {
+              width: 100%;
+            }
+          }
+          .dev-logo-message {
+            background-color: $red-alert;
+            position: absolute;
+            left: 50%;
+            bottom: 30px;
+            margin-left: -60px;
+            display: block;
+            width: 120px;
+            height: 38px;
+            padding-top: 2px;
+            color: white;
+            font-size: 2.2rem;
+          }
+        }
+
+        .devBoard-item {
+          border-radius: 2px;
+          background-color: ghostwhite;
+          border: 1px solid $gray-dark;
+          padding: 15px;
+          margin: 0 15px 20px 15px;
+          box-shadow: 0 4px 0 $gray-dark, 0 5px 2px rgba(0,0,0,0.2);
+        }
+
+        .mom {
+          height: 280px;
+          position: relative;
+
+          .image-container {
+            height: 125px;
+            width: 125px;
+            background-color: $gray-dark;
+            display: inline-block;
+            border-radius: 50%;
+            margin-top: 8px;
+            margin-bottom: 25px;
+            position: relative;
+            overflow: hidden;
+            $image-size: 150px;
+
+            img {
+              width: $image-size;
+              height: $image-size;
+              position: absolute;
+              left: 50%;
+              bottom: 50%;
+              margin-left: -1 * ($image-size / 2);
+              margin-bottom: -1 * ($image-size / 2);
+            }
+          }
+
+          .genre {
+            font-family: 'square';
+            font-size: 1.3rem;
+            position: relative;
+
+            .genre-message-woman {
+              position: absolute;
+              color: $red-alert;
+              left: 20px;
+              top: -20px;
+            }
+
+            .genre-message-bad {
+              &:after {
+                content: '';
+                width: 80px;
+                height: 4px;
+                left: 15px;
+                top: 6px;
+                transform: rotateZ(6deg);
+                background-color: $gray-dark;
+                box-shadow: 0 -1px 0 white;
+                position: absolute;
+              }
+            }
+          }
+
+          .mom-divisor {
+            font-family: 'lepb';
+            font-size: 2.2rem;
+            margin-top: -6px;
+            text-shadow: 0 -3px 0px white;
+            position: absolute;
+            left: 50%;
+            transform: translate(-50%, 0);
+            letter-spacing: 0.05rem;
+          }
+
+          .user-name {
+            margin-top: 33px;
+            font-family: 'lepm';
+            font-size: 1.1rem;
+          }
+        }
+
+        .in-process {
+          padding: 0 !important;
+          background-color: $red-alert;
+          position: relative;
+
+          .in-process-title {
+            font-family: 'square';
+            font-size: 1.5rem;
+            padding: 16px 0 12px 0;
+            border-bottom: 1px solid $gray-dark;
+            width: 100%;
+            margin-bottom: 15px;
+            color: white;
+          }
+
+          .in-process-alert {
+            position: absolute;
+            right: 10px;
+            font-family: 'lepm';
+            font-size: 1.2rem;
+            top: 10px;
+            color: white;
+          }
+
+          .contribs-in-process {
+            text-align: left;
+            font-family: 'lepm';
+
+            .contrib{
+              margin: 0 0 15px 0;
+              color: $gray-dark;
+            }
+
+            .contrib:nth-last-child(1) {
+              margin: 0 0 0 0;
+            }
+
+            .contrib-in-process {
+              padding-bottom: 10px;
+              border-bottom: 1px dotted $gray-dark;
+
+              .title {
+                padding: 0 15px 0 15px;
+                font-family: 'square';
+                margin-bottom: 3px;
+                font-size: 1rem;
+                line-height: 1.2rem;
+                max-height: 40px;
+                overflow: hidden;
+
+                a {
+                  &:hover{
+                    color: #ffa07a !important;
+                  }
+                }
+              }
+
+              .data {
+                overflow: hidden;
+                padding: 0 15px 0 15px;
+                font-family: 'lepm';
+                line-height: 1.15rem;
+                font-size: 0.8rem;
+                width: 90%;
+
+                .contrib-inProcess-tag {
+                  border: 2px solid $gray-dark;
+                  display: inline-block;
+                  padding: 1px 3px 1px 3px;
+                  margin-right: 5px;
+                  border-radius: 2px;
+                  // background-color: rgba(255,255,255,0.1);
+                  transition: 0.1s;
+                  margin-bottom: 5px;
+
+                  a {
+                    display: inline-block;
+                    font-family: 'square';
+                    color: $gray-dark;
+                  }
+
+                  &:hover {
+                    background-color: rgba(#000, 0.5);
+                    a {
+                      color: $red-alert;
+                    }
+                  }
+
+                }
+              }
+
+              .author {
+                padding-right: 20px;
+                font-family: 'square';
+                text-align: right;
+                margin-top: 10px;
+
+                .contrib-author {
+                  width: 100%;
+                  font-size: 1rem;
+
+                  .author {
+                    color: white;
+                    letter-spacing: 0.06rem;
+                    font-size: 0.6rem;
+                    vertical-align: top;
+                    margin-right: -15px;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+    }
+
+    .devBoard-right {
+      display: inline-block;
+      height: 100%;
+      min-width: $right;
+      .devboard-wrapper {
+        width: 100%;
+
+        .devboard-right-tags {
+          margin-top: 50px;
+          width: 100%;
+          height: 100px;
+          .tags {}
+        }
+
+        .devboard-right-content {
+          width: 100%;
+          padding-left: 10px;
+
+          .devboard-right-content-items {
+            width: $right / 2 - 40px;
+            border-radius: 2px;
+            // background-color: ghostwhite;
+            border: 1px solid $gray-dark;
+            box-shadow: 0 4px 0 $gray-dark, 0 5px 2px rgba(0,0,0,0.2);
+          }
+
+          .contrib-create-form-wrapper {
+            border: 2px solid $gray-dark;
+            box-shadow: 0 6px 0 $gray-dark, 0 6px 2px rgba(0,0,0,0.2);
+            padding: 15px;
+            background-color: $yellow-light;
+            height: 220px;
+            text-align: left;
+
+            .devboard-form-title {
+              font-family: 'lepb';
+              font-size: 2.5rem;
+            }
+
+            .contrib-create-form {
+              .title-contrib-form {
+                label[for=title] {}
+                input[name=title] {}
+              }
+
+              .comment-contrib-form {
+                label[for=comment] {}
+                input[name=comment] {}
+              }
+
+              .submit-contrib-form {
+                button[type=submit] {
+                  .submit-contrib {}
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+}
+

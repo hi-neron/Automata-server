@@ -10,7 +10,7 @@ class Game {
     this.skills = []
     this.length = 0
     this.user = user
-    this.size = 240;
+    this.size = 300;
 
     console.log('start game')
 
@@ -25,7 +25,7 @@ class Game {
 
 
     socket.on('fail', (err) => {
-      console.log('socketIo-Fail', err)
+      console.log('socket.io ha fallado', err)
     })
 
     socket.on('userSkills', (userSkills) => {
@@ -203,8 +203,6 @@ class Game {
     let publicId = 'nothing yet'
     let skillsTemplate = true
 
-    console.log(grid)
-
     this.length = grid.length
 
     let piece, skillBoard
@@ -216,6 +214,8 @@ class Game {
       this.imagesBoard[y] = new Array(grid.length)
       this.skillsBoard[y] = new Array(grid.length)
     }
+
+    console.log(grid)
 
     for (let x = 0; x < grid.length; x++) {
       for (let y = 0; y < grid.length; y++ ) {
