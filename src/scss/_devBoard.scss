@@ -3,6 +3,10 @@ $size: 960px;
 $left: 260px;
 $right: $size - $left;
 
+.red-text-counter {
+  color: $red-alert !important;
+}
+
 #devboard-container {
   position: fixed;
   background-color: $game-background;
@@ -291,37 +295,116 @@ $right: $size - $left;
             border: 2px solid $gray-dark;
             box-shadow: 0 6px 0 $gray-dark, 0 6px 2px rgba(0,0,0,0.2);
             padding: 15px;
-            background-color: $yellow-light;
-            height: 220px;
+            background-color: $yellow-zero;
+            height: 258px;
             text-align: left;
+            position: relative;
 
             .devboard-form-title {
               font-family: 'lepb';
               font-size: 2.5rem;
             }
 
-            .contrib-create-form {
+            #contrib-create-form {
+
+              .type-contrib-form {
+                margin-top: 10px;
+                margin-bottom: 3px;
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                position: relative;
+
+                input[type="radio"]{
+                  opacity: 0;
+                  width: 70px;
+                  position: absolute;
+                  height: 30px;
+                  cursor: pointer;
+                  bottom: -8px;
+                }
+
+                input[type="radio"] + span {
+                  // margin-right: 42px;
+                  color: $gray-dark;
+                  font-size: 0.9rem;
+                  font-family: 'lepb';
+                  padding: 2px 5px 2px 5px;
+                  transition: all 0.2s;
+                }
+
+                input[type="radio"]:checked + span {
+                  background-color: $game-background;
+                  border-radius: 2px;
+                }
+
+                input[type="radio"]:focus + span {
+                  color: $red-alert;
+                }
+
+                span[for="bug"] {
+                  color: $red-alert !important;
+                }
+              }
+
               .title-contrib-form {
-                label[for=title] {}
-                input[name=title] {}
+                input[name=title] {
+                  border: 2px solid $gray-dark !important;
+                  border-radius: 2px;
+                  padding: 5px 4px 5px 4px;
+                  width: 100%;
+                  margin-top: 10px;
+                  background-color: transparent;
+                  font-family: 'lepm';
+                  font-size: 0.8rem;
+                }
               }
 
               .comment-contrib-form {
-                label[for=comment] {}
-                input[name=comment] {}
+                textarea[name=info] {
+                  border-radius: 2px;
+                  width: 100%;
+                  resize: none;
+                  background-color: transparent;
+                  border: 2px solid $gray-dark;
+                  // padding: 5px;
+                  height: 70px;
+                  font-family: 'lepm';
+                  font-size: 0.8rem;
+                  margin-top: 11px;
+                }
               }
 
               .submit-contrib-form {
                 button[type=submit] {
-                  .submit-contrib {}
+                  border: none;
+                  color: $yellow-zero;
+                  font-family: 'square';
+                  font-size: 1.1rem;
+                  background-color: $red-alert;
+                  padding: 3px 5px 1px 5px;
+                  border-radius: 2px;
+                  margin-top: 8px;
+                  cursor: pointer;
+
+                  &:hover {
+                  background-color: $game-background;
+                  color: $gray-dark;
+                  }
                 }
               }
+            }
+
+            #contrib-create-form-counter {
+              position: absolute;
+              right: 16px;
+              bottom: 25px;
+              font-family: 'square';
+              font-size: 0.9rem;
             }
           }
         }
       }
     }
   }
-
 }
-

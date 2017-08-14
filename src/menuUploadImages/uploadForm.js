@@ -8,6 +8,7 @@ const dummy = require('./dummy')
 function onsubmit(ev) {
   ev.preventDefault();
   let data = new FormData(this);
+  console.log(data, ev, this)
   request
     .post('/api/images')
     .send(data)

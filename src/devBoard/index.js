@@ -244,27 +244,52 @@ class devBoard {
       `
     }
 
-    let mainForm = yo`
-      <div class="contrib-create-form-wrapper devboard-right-content-items">
-        <h2 class="devboard-form-title">
-          NEW
-        </h2>
-        <form enctype="multipart/form-data" class="contrib-create-form" onsubmit=${this.submitContrib}>
-          <div class="type-contrib-form radio">
-            <input type="radio" name="type" id="type-contrib-message-form">
-            <label for="message"> MENSAJE </label>
+    let limit = 240
+    let counterTemplate = yo`
+      <div id="contrib-create-form-counter">
+        ${limit}
+      </div>
+    `
+    let containerTextarea = yo`
+      <textarea placeholder="Escribe mensaje aqui" name="info" id="comment-contrib-textarea-form" maxlength="${limit}"></textarea>
+    `
+    containerTextarea.onkeyup = function () {
+      let result = limit - this.value.length
 
-            <input type="radio" name="type" id="type-contrib-idea-form">
-            <label for="idea"> IDEA </label>
+      if (result <= 15) {
+        counterTemplate.classList.add('red-text-counter')
+      } else {
+        counterTemplate.classList.remove('red-text-counter')
+      }
 
-            <input type="radio" name="type" id="type-contrib-bug-form">
-            <label for="bug"> BUG </label>
+      counterTemplate.innerHTML = result
+    }
+
+    let form = yo`
+        <form enctype="multipart/form-data" id="contrib-create-form">
+          <div class="type-contrib-form">
+            <div class="type-contrib-aporte-form">
+              <input type="radio" name="type" checked="checked">
+              <span for="aporte">APORTE</span>
+            </div>
+            <div class="type-contrib-message-form">
+              <input type="radio" name="type" id="type-contrib-message-form">
+              <span for="message">MENSAJE</span>
+            </div>
+            <div class="type-contrib-advert-form">
+              <input type="radio" name="type" id="type-contrib-advert-form" title="advert">
+              <span for="advert">ANUNCIO</span>
+            </div>
+            <div class="type-contrib-bug-form">
+              <input type="radio" name="type" id="type-contrib-bug-form" title="bug">
+              <span for="bug">BUG!</span>
+            </div>
           </div>
           <div class="title-contrib-form">
               <input type="text" placeholder="titulo" name="title"/>
           </div>
           <div class="comment-contrib-form">
-              <textarea placeholder="titulo" id="comment-contrib-textarea-form"/>
+              ${containerTextarea}
           </div>
           <div class="submit-contrib-form">
             <button type="submit" action="#">
@@ -272,6 +297,27 @@ class devBoard {
             </button>
           </div>
         </form>
+    `
+
+    form.onsubmit = (ev) => {
+      ev.preventDefault()
+      let data = new FormData(this)
+      request
+        .post('/api/contributions')
+        .send(data)
+        .end(function (err, res) {
+          if (err) console.log(err)
+          console.log(res.body)
+        })
+    }
+
+    let mainForm = yo`
+      <div class="contrib-create-form-wrapper devboard-right-content-items">
+        <h2 class="devboard-form-title">
+          NEW
+        </h2>
+        ${form}
+        ${counterTemplate}
       </div>
     `
 
@@ -310,8 +356,10 @@ class devBoard {
           cb(null, res.body)
         })
   }
-  submitContrib () {
 
+  submitContrib (ev) {
+    ev.preventDefault();
+    let data = new FormData(this);
   }
 }
 

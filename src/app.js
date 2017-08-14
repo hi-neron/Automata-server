@@ -13,7 +13,7 @@ page.base('/#!')
 require('./homepage')
 require('./signin')
 require('./signup')
-require('./forms')
+// require('./forms') // formularios de materialize... ya son engorrosos 
 require('./leftMenu')
 
 // axios

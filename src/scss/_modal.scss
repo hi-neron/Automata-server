@@ -71,7 +71,7 @@ a {
   }
 }
 
-
+$placeholder-text-color: $gray-dark;
 
 ::-webkit-input-placeholder {
   color: $placeholder-text-color;
@@ -91,101 +91,101 @@ a {
 
 /* Text inputs */
 
-input:not([type]),
-input[type=text],
-input[type=password],
-input[type=email],
-textarea.materialize-textarea {
+// input:not([type]),
+// input[type=text],
+// input[type=password],
+// input[type=email],
+// textarea.materialize-textarea {
 
-  // General Styles
-  border: none;
-  border-bottom: 0.14em solid $white-modal;
-  border-radius: 0;
-  outline: none;
-  height: $input-height;
-  width: 70%;
-  font-size: 2em;
-  margin-top: -15px;
-  box-shadow: none;
-  box-sizing: content-box;
-  transition: $input-transition;
-  text-align: center;
-  font-family: 'dense';
+//   // General Styles
+//   border: none;
+//   border-bottom: 0.14em solid $white-modal;
+//   border-radius: 0;
+//   outline: none;
+//   height: $input-height;
+//   width: 70%;
+//   font-size: 2em;
+//   margin-top: -15px;
+//   box-shadow: none;
+//   box-sizing: content-box;
+//   transition: $input-transition;
+//   text-align: center;
+//   font-family: 'dense';
 
-  &:hover {
-    border-bottom: 0.14em solid $yellow-logo-light !important;
-  }
+//   &:hover {
+//     border-bottom: 0.14em solid $yellow-logo-light !important;
+//   }
 
-  // Disabled input style
-  &:disabled,
-  &[readonly="readonly"] {
-    color: $input-disabled-color;
-    border-bottom: $input-disabled-border;
-  }
+//   // Disabled input style
+//   &:disabled,
+//   &[readonly="readonly"] {
+//     color: $input-disabled-color;
+//     border-bottom: $input-disabled-border;
+//   }
 
-  // Disabled label style
-  &:disabled+label,
-  &[readonly="readonly"]+label {
-    color: red;
-  }
+//   // Disabled label style
+//   &:disabled+label,
+//   &[readonly="readonly"]+label {
+//     color: red;
+//   }
 
-  // Focused input style
-  &:focus:not([readonly]) {
-    border-bottom: 0.14em solid $yellow-logo-light !important;
-    margin-top: 10px;
-  }
+//   // Focused input style
+//   &:focus:not([readonly]) {
+//     border-bottom: 0.14em solid $yellow-logo-light !important;
+//     margin-top: 10px;
+//   }
 
-  // Focused label style
-  &:focus:not([readonly])+label {
-    color: $shadow-light;
-  }
+//   // Focused label style
+//   &:focus:not([readonly])+label {
+//     color: $shadow-light;
+//   }
 
-  // Valid Input Style
-  &.valid,
-  &:focus.valid {
-    border-bottom: 1px solid $input-success-color;
-    box-shadow: 0 1px 0 0 $input-success-color;
-  }
+//   // Valid Input Style
+//   &.valid,
+//   &:focus.valid {
+//     border-bottom: 1px solid $input-success-color;
+//     box-shadow: 0 1px 0 0 $input-success-color;
+//   }
 
-  // Custom Success Message
-  &.valid + label:after,
-  &:focus.valid + label:after {
-    content: attr(data-success);
-    color: $input-success-color;
-    opacity: 1;
-  }
+//   // Custom Success Message
+//   &.valid + label:after,
+//   &:focus.valid + label:after {
+//     content: attr(data-success);
+//     color: $input-success-color;
+//     opacity: 1;
+//   }
 
-  // Invalid Input Style
-  &.invalid,
-  &:focus.invalid {
-    border-bottom: $input-invalid-border;
-    box-shadow: 0 1px 0 0 $input-error-color;
-  }
+//   // Invalid Input Style
+//   &.invalid,
+//   &:focus.invalid {
+//     border-bottom: $input-invalid-border;
+//     box-shadow: 0 1px 0 0 $input-error-color;
+//   }
 
-  // Custom Error message
-  &.invalid + label:after,
-  &:focus.invalid + label:after {
-    content: attr(data-error);
-    color: $input-error-color;
-    opacity: 1;
-  }
+//   // Custom Error message
+//   &.invalid + label:after,
+//   &:focus.invalid + label:after {
+//     content: attr(data-error);
+//     color: $input-error-color;
+//     opacity: 1;
+//   }
 
-  // Full width label when using validate for error messages
-  &.validate + label {
-    width: 100%;
-    pointer-events: none;
-  }
+//   // Full width label when using validate for error messages
+//   &.validate + label {
+//     width: 100%;
+//     pointer-events: none;
+//   }
 
-  // Form Message Shared Styles
-  & + label:after {
-    display: block;
-    content: "";
-    position: absolute;
-    top: 60px;
-    opacity: 0;
-    transition: .2s opacity ease-out, .2s color ease-out;
-  }
-}
+//   // Form Message Shared Styles
+//   & + label:after {
+//     display: block;
+//     content: "";
+//     position: absolute;
+//     top: 60px;
+//     opacity: 0;
+//     transition: .2s opacity ease-out, .2s color ease-out;
+//   }
+// }
 
 .signup-button {
   background: url('/img/sun.svg');

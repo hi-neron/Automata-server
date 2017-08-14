@@ -556,6 +556,8 @@ app.post('/api/contributions', secure, (req, res) => {
   let contribution = req.body
   let token = req.user.token
 
+  console.log('this contrib', contribution)
+
   client.createContrib(contribution, username, token, (err, data) => {
     if (err) return res.status(500).json(err)
     data.message = 'gracias por su contribucion'
