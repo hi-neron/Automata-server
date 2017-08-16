@@ -2,34 +2,39 @@
 const request = require('superagent')
 const yo = require('yo-yo')
 const _ = require('lodash')
+const $ = require('jquery')
+const Masonnry = require('masonry-layout')
 
 let devBoardContainer = document.getElementById('devboard-container')
+let ecran = yo`<div class='ecran-gray'></div>`
+devBoardContainer.appendChild(ecran)
+
 
 class devBoard {
   constructor (user, socket) {
     // construye una plantilla basica
     this.inside = yo`<div class="clearfix"></div>`
+    this.tagBoard = yo`<div class="devboard-right-tags"></div>`
+    this.tags = []
+
     devBoardContainer.append(this.inside)
 
     // se piden todas las contribuciones
-    this.getcontribs(0, (err, contribs) => {
-      if (err) console.log(`ha ocurrido un error:${err}`)
-      this.getMOM((err, mOM) => {
-        if (err) console.log(`ha ocurrido un error obteniendo el MOM: ${err}`)
+    this.getMOM((err, mOM) => {
+      if (err) console.log(`ha ocurrido un error obteniendo el MOM: ${err}`)
 
-        // Crea una plantilla para mostrar, crear, y
-        // pedir todas las contribuciones, para hacer esto se divide en:
+      // Crea una plantilla para mostrar, crear, y
+      // pedir todas las contribuciones, para hacer esto se divide en:
 
-        // lado izquierdo (contiene la marca, el hombre del mes y las contribuciones
-        // en proceso).
-        // pdta1: Se comporta de forma distinta en pantallas pequeñas
-        // pdta2: se tiene en cuenta si es dev o no, para renderizar el formulario
-        this.buildLeft(user, mOM, this.getCIP())
+      // lado izquierdo (contiene la marca, el hombre del mes y las contribuciones
+      // en proceso).
+      // pdta1: Se comporta de forma distinta en pantallas pequeñas
+      // pdta2: se tiene en cuenta si es dev o no, para renderizar el formulario
+      this.buildLeft(user, mOM, this.getCIP())
 
-        // lado derecho, contiene los tags, el formulario de contribuciones, las contribuciones.
-        // pdta: se tiene en cuenta si es dev o no, para renderizar el formulario
-        this.buildRight(user, contribs)
-      })
+      // lado derecho, contiene los tags, el formulario de contribuciones, las contribuciones.
+      // pdta: se tiene en cuenta si es dev o no, para renderizar el formulario
+      this.buildRight(user)
     })
   }
 
@@ -229,14 +234,20 @@ class devBoard {
   buildRight (user, contribs) {
     let right = yo`<div class="devboard devBoard-right"></div>`
     let wrapper = yo`<div class="devboard-wrapper"></div>`
-
-    // tags
-    let tags = yo`<div class="devboard-right-tags"></div>`
+    let tagContainer = yo`<div class="tag-devboard-container"></div>`
 
     // contenido
     let content = yo`<div class="devboard-right-content"></div>`
 
-    // formulario de creacion de contribuciones
+    // masonry init: ajusta el layout de forma vertical
+    let msnry = new Masonnry (content, {
+      itemSelector: '.grid-item',
+      columWidth: 270,
+      transitionDuration: '0.2s',
+      isInitLayout: false,
+    })
+
+    // FORMULARIO DE CONTRIBUCIONES --------
     let adminForm
 
     if (user.admin) {
@@ -266,50 +277,38 @@ class devBoard {
     }
 
     let form = yo`
-        <form enctype="multipart/form-data" id="contrib-create-form">
+        <form id="contrib-create-form">
           <div class="type-contrib-form">
             <div class="type-contrib-aporte-form">
-              <input type="radio" name="type" checked="checked">
+              <input type="radio" name="type" value="contribution" id="type-contrib-contribution-form" checked="checked">
               <span for="aporte">APORTE</span>
             </div>
             <div class="type-contrib-message-form">
-              <input type="radio" name="type" id="type-contrib-message-form">
+              <input type="radio" name="type" value="message" id="type-contrib-message-form">
               <span for="message">MENSAJE</span>
             </div>
             <div class="type-contrib-advert-form">
-              <input type="radio" name="type" id="type-contrib-advert-form" title="advert">
+              <input type="radio" name="type" value="advertise" id="type-contrib-advert-form" title="advert">
               <span for="advert">ANUNCIO</span>
             </div>
             <div class="type-contrib-bug-form">
-              <input type="radio" name="type" id="type-contrib-bug-form" title="bug">
+              <input type="radio" name="type" value="bug" id="type-contrib-bug-form" title="bug">
               <span for="bug">BUG!</span>
             </div>
           </div>
           <div class="title-contrib-form">
-              <input type="text" placeholder="titulo" name="title"/>
+              <input type="text" placeholder="titulo" name="title" autocomplete="off" maxlength="140"/>
           </div>
           <div class="comment-contrib-form">
               ${containerTextarea}
           </div>
           <div class="submit-contrib-form">
-            <button type="submit" action="#">
+            <button type="submit">
               <div class="submit-contrib">listo</div>
             </button>
           </div>
         </form>
     `
-
-    form.onsubmit = (ev) => {
-      ev.preventDefault()
-      let data = new FormData(this)
-      request
-        .post('/api/contributions')
-        .send(data)
-        .end(function (err, res) {
-          if (err) console.log(err)
-          console.log(res.body)
-        })
-    }
 
     let mainForm = yo`
       <div class="contrib-create-form-wrapper devboard-right-content-items">
@@ -321,9 +320,43 @@ class devBoard {
       </div>
     `
 
+    msnry.stamp(mainForm)
+
+    form.onsubmit = (ev) => {
+      ev.preventDefault()
+      let myForm = ev.target
+      let $myForm = $(myForm)
+
+      let data = $myForm.serializeArray()
+      let dataToSend = {}
+
+      // se construye el body de la peticion
+      // {
+      //  title
+      //  type
+      //  info
+      // }
+      for (let i = 0; i < data.length; i++) {
+        dataToSend[data[i].name] = data[i].value
+      }
+
+      // se incluye el metodo de renderizar una sola contribucion al contexto
+      let renderContrib = this.renderContrib.bind(this)
+
+      request
+        .post('/api/contributions')
+        .send(dataToSend)
+        .end(function (err, res) {
+          if (err) return(err)
+          let newContrib = res.body
+          let newContribRendered = renderContrib(user, newContrib)
+          content.appendChild(newContribRendered)
+          msnry.prepended(newContribRendered)
+        })
+    }
+
     // todas las contribuciones que aparecen en
-    // la direccion de la api getTenContribs
-    // se genera un formulario para crear una nueva contribucion
+
     // se pide una contribucion por id
     // se pide una contribucion por titulo
     // se edita una contribucion
@@ -332,15 +365,202 @@ class devBoard {
     // se elimina una contribucion
     // se agrega un mensaje a la contribucion
     // se elimina un mensaje a la contribucion
+
+    // se agrega el formulario
     content.appendChild(mainForm)
 
+    let $content = $(content)
+
+    $content.on('click', '.one-contrib-container', (ev) => {
+      let $this = $(ev.currentTarget)
+      let $containerToMove =  $this.find('.one-contrib-content')
+      let myHeightToSave = $this.height()
+
+      let width = $containerToMove.width()
+      let height = $containerToMove.height()
+
+      let $ecran = $(ecran)
+      $ecran.toggleClass('ecran-display')
+
+      $("<style/>", {text: `.get-devboard-contrib {
+          position: fixed !important;
+          left: 50% !important;
+          top: 40% !important;
+          margin-left: -${width / 2}px;
+          margin-top: -${height / 2}px;
+          z-index: 12 !important;
+      }`}).appendTo('head');
+
+
+      $containerToMove.toggleClass('opacity-zero')
+      setTimeout(function() {
+        $containerToMove.toggleClass('get-devboard-contrib')
+        setTimeout(function() {
+          $containerToMove.toggleClass('opacity-zero')
+        }, 100);
+      }, 100);
+
+      $this.css('height', myHeightToSave)
+    })
+
+    this.buildContribList(user, content, msnry, (err, content) => {
+      if (err) console.log(err)
+      tagContainer.appendChild(this.tagBoard)
+      wrapper.appendChild(tagContainer)
+      wrapper.appendChild(content)
+      setTimeout(function() {
+        msnry.layout()
+      }, 50);
+    })
+
+    // se agregan todas las contribuciones
+
     // se agregan los elementos a la envoltura
-    wrapper.appendChild(tags)
-    wrapper.appendChild(content)
 
     right.appendChild(wrapper)
     this.inside.append(right)
   }
+
+  buildContribList (user, container, msnry, cb) {
+    this.getcontribs(0, (err, res) => {
+      if (err) return cb(err)
+      let contribs = res.contributions
+
+      for (let i = 0; i < contribs.length; i++) {
+        let oneContrib = contribs[i]
+        let renderedContrib = this.renderContrib(user, oneContrib)
+        msnry.addItems(renderedContrib)
+        container.appendChild(renderedContrib)
+      }
+
+      cb(null, container, contribs)
+    })
+  }
+
+  // obtiene
+  addTagToBoard(contrib) {
+    let contribTags = contrib.tags
+
+    for (let i = 0; i < contribTags.length; i++) {
+      if (!this.tags.includes(contribTags[i])) {
+        let tagTemplate = yo`
+            <a href="" class="contrib-tag">
+              ${contribTags[i]}
+            </a>
+        `
+        this.tagBoard.appendChild(tagTemplate)
+        this.tags.push(contribTags[i])
+      }
+    }
+
+  }
+
+  // contruye un template para una sola contribución
+  renderContrib (user, contrib) {
+    let date = new Date(contrib.dateAdded)
+
+    this.addTagToBoard(contrib)
+
+    let month
+    switch (date.getMonth()) {
+      case 0:
+        month = 'enero'
+        break;
+      case 1:
+        month = 'febrero'
+        break;
+      case 2:
+        month = 'marzo'
+        break;
+      case 3:
+        month = 'abril'
+        break;
+      case 4:
+        month = 'mayo'
+        break;
+      case 5:
+        month = 'junio'
+        break;
+      case 6:
+        month = 'julio'
+        break;
+      case 7:
+        month = 'agosto'
+        break;
+      case 8:
+        month = 'septiembre'
+        break;
+      case 9:
+        month = 'octubre'
+        break;
+      case 10:
+        month = 'noviembre'
+        break;
+      case 11:
+        month = 'diciembre'
+        break;
+    }
+
+    let myHour = date.getHours()
+
+    let newHour =  myHour < 12 ? myHour: myHour - 12
+    let meridian = myHour < 12 ? 'am': 'pm'
+
+    let dateString = yo`<span class="date">${month} ${date.getDate()}, ${date.getFullYear()} / ${newHour} ${meridian}</span>`
+
+    let containerMessage = yo`
+    <textarea name="message" class="message-onecontrib-textarea-form" maxlength="140"></textarea>
+    `
+    let messagesForm = yo`
+      <form action="">
+          <div class="comment-contrib-form">
+              ${containerMessage}
+          </div>
+          <div class="submit-onecontrib-messages-form">
+            <button type="submit">
+              <div class="submit-onecontrib">añadir</div>
+            </button>
+          </div>
+      </form>`
+
+      let contribTemplate = yo`
+      <div class="one-contrib-container devboard-right-content-items grid-item">
+        <div class="one-contrib-content-back">
+          <div class="one-contrib-content-back-body">
+            <div class="one-contrib-content-back-eye"></div>
+          </div>
+        </div>
+        <div class="one-contrib-content">
+          <div class="one-contrib-header">
+            <div class="one-contrib-left">
+              <div class="one-contrib-avatar-container">
+                <img src="${contrib.user.avatar}" alt="" class="one-contrib-user-image">
+              </div>
+            </div>
+            <div class="one-contrib-right">
+              <div class="one-contrib-username">${contrib.user.username}</div>
+              <span>${dateString}</span>
+              <div class="one-contrib-info">${contrib.data.data || contrib.data.info}</div>
+            </div>
+          </div>
+          <div class="one-contrib-messages">
+            <div class="one-contrib-messages-form">
+              ${messagesForm}
+            </div>
+          </div>
+          <div class="one-contrib-dev-reply"></div>
+        </div>
+      </div>
+    `
+    messagesForm.onsubmit = (ev) => {
+      ev.preventDefault()
+    }
+
+    return contribTemplate
+  }
+
+  // obtiene los tags de las contribuciones
+  getTags () {}
 
   // get info
   getcontribs (group, cb) {
@@ -352,7 +572,6 @@ class devBoard {
           if (err) {
             return cb(err)
           }
-          console.log('getContribs')
           cb(null, res.body)
         })
   }

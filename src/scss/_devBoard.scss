@@ -1,10 +1,32 @@
 $size: 960px;
 
-$left: 260px;
+$left: 270px;
 $right: $size - $left;
+
+$border: 1px solid rgba($gray-dark, 0.3);
+$border-form: 1px solid rgba($gray-dark, 0.5);
+$shadow: 0 4px 0 $gray-dark, 0 5px 2px rgba(0,0,0,0.2);
 
 .red-text-counter {
   color: $red-alert !important;
+}
+
+.ecran-display {
+  display:  block !important;
+}
+
+.ecran-gray {
+  display: none;
+  width: 100%;
+  background-color: rgba($game-background, 0.8);
+  height: 100%;
+  position: fixed;
+  z-index: 10;
+}
+
+.opacity-zero {
+  opacity: 0;
+  transform: rotateX(90deg);
 }
 
 #devboard-container {
@@ -70,10 +92,10 @@ $right: $size - $left;
         .devBoard-item {
           border-radius: 2px;
           background-color: ghostwhite;
-          border: 1px solid $gray-dark;
+          border: $border;
           padding: 15px;
           margin: 0 15px 20px 15px;
-          box-shadow: 0 4px 0 $gray-dark, 0 5px 2px rgba(0,0,0,0.2);
+          box-shadow: $shadow;
         }
 
         .mom {
@@ -116,12 +138,14 @@ $right: $size - $left;
             }
 
             .genre-message-bad {
+              position: relative;
+
               &:after {
                 content: '';
                 width: 80px;
-                height: 4px;
-                left: 15px;
-                top: 6px;
+                height: 3px;
+                left: -4px;
+                top: 9px;
                 transform: rotateZ(6deg);
                 background-color: $gray-dark;
                 box-shadow: 0 -1px 0 white;
@@ -230,7 +254,8 @@ $right: $size - $left;
                   }
 
                   &:hover {
-                    background-color: rgba(#000, 0.5);
+                    background-color: $game-background;
+                    border: 2px solid $game-background;
                     a {
                       color: $red-alert;
                     }
@@ -262,43 +287,72 @@ $right: $size - $left;
           }
         }
       }
-
     }
 
     .devBoard-right {
       display: inline-block;
-      height: 100%;
       min-width: $right;
+
       .devboard-wrapper {
         width: 100%;
 
-        .devboard-right-tags {
-          margin-top: 50px;
-          width: 100%;
+        .tag-devboard-container {
           height: 100px;
-          .tags {}
+          width: 100%;
+          position: relative;
+
+          .devboard-right-tags {
+            position: absolute;
+            bottom: 0;
+            right: 10px;;
+            text-align: right;
+            white-space: no;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+
+            .contrib-tag {
+              display: inline-block;
+              background-color: $gray-dark;
+              color: $game-background;
+              font-family: 'square';
+              font-size: 1.1rem;
+              padding: 5px 6px 3px 6px;
+              border-radius: 2px;
+              margin-left: 8px;
+              border: 3px solid $gray-dark;
+              transition: 0.2s ease-out;
+
+              &:hover {
+                background-color: transparent;
+                // border: 3px solid $red-alert;
+                color: $gray-dark;
+              }
+
+            }
+          }
         }
 
         .devboard-right-content {
-          width: 100%;
-          padding-left: 10px;
+          width: $right;
+          height: 100%;
 
           .devboard-right-content-items {
-            width: $right / 2 - 40px;
+            width: $right / 2 - 20;
             border-radius: 2px;
-            // background-color: ghostwhite;
-            border: 1px solid $gray-dark;
-            box-shadow: 0 4px 0 $gray-dark, 0 5px 2px rgba(0,0,0,0.2);
+            margin-left: 15px;
+            margin-top: 20px;
           }
 
           .contrib-create-form-wrapper {
-            border: 2px solid $gray-dark;
-            box-shadow: 0 6px 0 $gray-dark, 0 6px 2px rgba(0,0,0,0.2);
+            border: $border-form;
             padding: 15px;
             background-color: $yellow-zero;
             height: 258px;
             text-align: left;
             position: relative;
+            float: left;
+            box-shadow: $shadow;
 
             .devboard-form-title {
               font-family: 'lepb';
@@ -401,6 +455,105 @@ $right: $size - $left;
               bottom: 25px;
               font-family: 'square';
               font-size: 0.9rem;
+            }
+          }
+
+          // .grid-item {
+          //   margin-bottom: 0;
+          // }
+
+          .one-contrib-container {
+            position: relative;
+            color: $gray-dark;
+            background-color: rgba($gray-dark, 0.1);
+
+            .one-contrib-content {
+              width: $right / 2 - 20;
+              background-color: ghostwhite;
+              border: $border;
+              box-shadow: $shadow;
+              transition: 0.1s;
+              transition: all 100ms cubic-bezier(0.350, -0.255, 0.585, 1.460); /* custom */
+
+              .one-contrib-header {
+                text-align: left;
+
+                .one-contrib-left {
+                  float: left;
+                  width: 70px;
+                  height: 100px;
+                  position: relative;
+
+                  .one-contrib-avatar-container {
+                    padding: 10px;
+                    width: 45px;
+                    height: 45px;
+                    background-color: $gray-dark;
+                    position: absolute;
+                    left: 50%;
+                    top: 12px;
+                    transform: translate(-50%, 0);
+
+                    .one-contrib-user-image {
+                    }
+                  }
+                }
+
+                .one-contrib-right {
+                  width: $right / 2 - 125px;
+                  display: inline-block;
+                  margin-top: 12px;
+
+                  .one-contrib-username {
+                    font-family: 'lepb';
+                    text-transform: uppercase;
+                    font-size: 1.2rem;
+                    margin-bottom: 3px;
+                  }
+                  .one-contrib-title {
+                    margin-top: 10px;
+                    font-family: 'square';
+                    font-size: 1.2rem;
+                  }
+                  .one-contrib-info {
+                    margin-top: 10px;
+                    font-family: 'lepm';
+                    font-size: 0.8rem;
+                    line-height: 1rem;
+                    margin-bottom: 15px;
+                  }
+                }
+              }
+              .one-contrib-messages {
+                .one-contrib-messages-form {
+                  width: 100%;
+                  overflow: hidden;
+                  height: 0;
+
+                  .comment-contrib-form {
+                    textarea[name=message] {
+                      border-radius: 2px;
+                      width: 90%;
+                      resize: none;
+                      background-color: transparent;
+                      border: 2px solid $gray-dark;
+                      // padding: 5px;
+                      // height: 70px;
+                      font-family: 'lepm';
+                      font-size: 0.8rem;
+                      margin-top: 11px;
+                    }
+
+                  }
+                }
+              }
+              .one-contrib-dev-reply {}
+              .one-contrib-dev-reply-form {}
+
+              &:hover {
+                background-color: white;
+                cursor: pointer;
+              }
             }
           }
         }
