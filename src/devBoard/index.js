@@ -3,9 +3,15 @@ const request = require('superagent')
 const yo = require('yo-yo')
 const _ = require('lodash')
 const $ = require('jquery')
+const templateMaker =  require('./utils/maker')
+
+// Posiciona los objetos verticalmente
 const Masonnry = require('masonry-layout')
 
+// contenedor principal
 let devBoardContainer = document.getElementById('devboard-container')
+
+// pantalla oscura
 let ecran = yo`<div class='ecran-gray'></div>`
 devBoardContainer.appendChild(ecran)
 
@@ -131,12 +137,7 @@ class devBoard {
     let left = yo`<div class="devBoard-left devboard"></div>`
 
     // BRAND
-    let brand = yo`<div class="brandContainer">
-      <div id="dev-logo">
-        <img class='dev-logo-image' src="" alt="">
-      </div>
-        <h1 class="dev-logo-message">DEV BOARD</h1>
-    </div>`
+    let brand = templateMaker.drawBrand()
 
     // MAN OF THE MONTH
     // Simplemente un setter y getter
@@ -146,79 +147,11 @@ class devBoard {
       console.log('Pendiente: crear un fromulario para dar el hombre del mes: MoM')
     }
 
-    let title = MoM.genre === 'male' ? 'DON': 'MISS'
-
-    let phrase = yo`
-    <div class="genre">
-      <span class="genre-message"></span>hombre del mes
-    </div>`
-
-    if (MoM.genre==='female') {
-      phrase = yo`
-      <div class="genre">
-        <span class="genre-message-woman">mujer</span>
-        <span class="genre-message-bad">hombre</span>
-        del mes
-      </div>`
-    }
-
-    let manOfMonth = yo`
-    <div class="devBoard-item mom">
-      <div class="image-container">
-        <img src="" alt="">
-      </div>
-      ${phrase}
-      <div class="mom-divisor">${title}</div>
-      <div class="user-name">▴ ${MoM.username} ▴</div>
-    </div>`
+    let manOfMonth = templateMaker.drawManOfMonth(MoM)
 
     // IN PROCESS CONTRIBUTIONS
-
     // se crea un listado de las contribuciones que estan en proceso
-
-    let templateContribsInProcess = yo`<div class="contribs-in-process"></div>`
-
-    for (let i = 0; i < contribsInProcess.length; i++) {
-      let tags = yo`<div class="contribs-process"></div>`
-
-      for (let x = 0; x < contribsInProcess[i].tags.length && x < 3; x++) {
-        tags.appendChild(
-          yo`
-            <div class="contrib-inProcess-tag">
-              <a href="#">${contribsInProcess[i].tags[x]}</a>
-            </div>
-          `
-        )
-      }
-
-      templateContribsInProcess.appendChild( yo`
-        <div class="contrib-in-process contrib">
-          <div class="title">
-            <a href="/${contribsInProcess[i].publicId}">
-              ${contribsInProcess[i].title}
-            </a>
-          </div>
-          <div class="data">
-            ${tags}
-          </div>
-          <div class="author">
-            <a href="${contribsInProcess[i].user.userId}" class="contrib-author">
-              <span class="author">author</span>${contribsInProcess[i].user.username}
-            </a>
-          </div>
-        </div>
-      `)
-    }
-
-    let inProcess = yo`
-    <div class="devBoard-item in-process">
-      <h2 class="in-process-title">
-        EN PROCESO
-      </h2>
-      <div class="in-process-alert">!</div>
-      ${templateContribsInProcess}
-    </div>
-    `
+    let inProcess = templateMaker.drawInProcess(contribsInProcess)
 
     // se añanden los contenidos al wrapper
     wrapper.appendChild(brand)
@@ -244,71 +177,12 @@ class devBoard {
       itemSelector: '.grid-item',
       columWidth: 270,
       transitionDuration: '0.2s',
-      isInitLayout: false,
+      isInitLayout: false
     })
 
-    // FORMULARIO DE CONTRIBUCIONES --------
-    let adminForm
-
-    if (user.admin) {
-      adminForm = yo`
-      `
-    }
-
-    let limit = 240
-    let counterTemplate = yo`
-      <div id="contrib-create-form-counter">
-        ${limit}
-      </div>
-    `
-    let containerTextarea = yo`
-      <textarea placeholder="Escribe mensaje aqui" name="info" id="comment-contrib-textarea-form" maxlength="${limit}"></textarea>
-    `
-    containerTextarea.onkeyup = function () {
-      let result = limit - this.value.length
-
-      if (result <= 15) {
-        counterTemplate.classList.add('red-text-counter')
-      } else {
-        counterTemplate.classList.remove('red-text-counter')
-      }
-
-      counterTemplate.innerHTML = result
-    }
-
-    let form = yo`
-        <form id="contrib-create-form">
-          <div class="type-contrib-form">
-            <div class="type-contrib-aporte-form">
-              <input type="radio" name="type" value="contribution" id="type-contrib-contribution-form" checked="checked">
-              <span for="aporte">APORTE</span>
-            </div>
-            <div class="type-contrib-message-form">
-              <input type="radio" name="type" value="message" id="type-contrib-message-form">
-              <span for="message">MENSAJE</span>
-            </div>
-            <div class="type-contrib-advert-form">
-              <input type="radio" name="type" value="advertise" id="type-contrib-advert-form" title="advert">
-              <span for="advert">ANUNCIO</span>
-            </div>
-            <div class="type-contrib-bug-form">
-              <input type="radio" name="type" value="bug" id="type-contrib-bug-form" title="bug">
-              <span for="bug">BUG!</span>
-            </div>
-          </div>
-          <div class="title-contrib-form">
-              <input type="text" placeholder="titulo" name="title" autocomplete="off" maxlength="140"/>
-          </div>
-          <div class="comment-contrib-form">
-              ${containerTextarea}
-          </div>
-          <div class="submit-contrib-form">
-            <button type="submit">
-              <div class="submit-contrib">listo</div>
-            </button>
-          </div>
-        </form>
-    `
+    // FORMULARIO DE CONTRIBUCIONES -------
+    let form = templateMaker.drawContribsForm(user).form
+    let counterTemplate = templateMaker.drawContribsForm(user).counterTemplate
 
     let mainForm = yo`
       <div class="contrib-create-form-wrapper devboard-right-content-items">
@@ -322,6 +196,7 @@ class devBoard {
 
     msnry.stamp(mainForm)
 
+    // evento cuando se hace submit del formulario
     form.onsubmit = (ev) => {
       ev.preventDefault()
       let myForm = ev.target
@@ -355,25 +230,20 @@ class devBoard {
         })
     }
 
-    // todas las contribuciones que aparecen en
-
-    // se pide una contribucion por id
-    // se pide una contribucion por titulo
-    // se edita una contribucion
-    // se lee si el usuario es dev
-    // se agrega una respuesta de dev
-    // se elimina una contribucion
-    // se agrega un mensaje a la contribucion
-    // se elimina un mensaje a la contribucion
-
     // se agrega el formulario
     content.appendChild(mainForm)
 
     let $content = $(content)
 
-    $content.on('click', '.one-contrib-container', (ev) => {
-      let $this = $(ev.currentTarget)
+    $content.on('click', '.one-contrib-container .one-contrib-wrapper .one-contrib-content .one-contrib-likes .one-contrib-likes-container-button-arrow', (ev) => {
+      let $masIcon = $(ev.currentTarget)
+      console.log($masIcon)
+      let $this = $masIcon.closest('.one-contrib-container')
+
       let $containerToMove =  $this.find('.one-contrib-content')
+      let $back =  $this.find('.one-contrib-content-back')
+      let $eyes =  $back.find('.one-contrib-content-back-eyes')
+
       let myHeightToSave = $this.height()
 
       let width = $containerToMove.width()
@@ -381,28 +251,40 @@ class devBoard {
 
       let $ecran = $(ecran)
       $ecran.toggleClass('ecran-display')
+      $back.toggleClass('back-display')
 
       $("<style/>", {text: `.get-devboard-contrib {
-          position: fixed !important;
-          left: 50% !important;
-          top: 40% !important;
-          margin-left: -${width / 2}px;
-          margin-top: -${height / 2}px;
-          z-index: 12 !important;
+        position: fixed !important;
+        left: 50% !important;
+        top: 40% !important;
+        margin-left: -${width / 2}px;
+        margin-top: -${height / 2}px;
+        z-index: 12 !important;
       }`}).appendTo('head');
 
+      if($eyes.hasClass('show-eyes')){
+        $eyes.removeClass('show-eyes')
+      }
 
       $containerToMove.toggleClass('opacity-zero')
       setTimeout(function() {
         $containerToMove.toggleClass('get-devboard-contrib')
         setTimeout(function() {
           $containerToMove.toggleClass('opacity-zero')
+
+          if(!$eyes.hasClass('show-eyes')){
+            setTimeout(function() {
+              $eyes.addClass('show-eyes')
+            }, 200);
+          }
+
         }, 100);
       }, 100);
 
       $this.css('height', myHeightToSave)
     })
 
+    // se agregan todas las contribuciones
     this.buildContribList(user, content, msnry, (err, content) => {
       if (err) console.log(err)
       tagContainer.appendChild(this.tagBoard)
@@ -413,10 +295,7 @@ class devBoard {
       }, 50);
     })
 
-    // se agregan todas las contribuciones
-
     // se agregan los elementos a la envoltura
-
     right.appendChild(wrapper)
     this.inside.append(right)
   }
@@ -525,30 +404,60 @@ class devBoard {
 
       let contribTemplate = yo`
       <div class="one-contrib-container devboard-right-content-items grid-item">
-        <div class="one-contrib-content-back">
-          <div class="one-contrib-content-back-body">
-            <div class="one-contrib-content-back-eye"></div>
-          </div>
-        </div>
-        <div class="one-contrib-content">
-          <div class="one-contrib-header">
-            <div class="one-contrib-left">
-              <div class="one-contrib-avatar-container">
-                <img src="${contrib.user.avatar}" alt="" class="one-contrib-user-image">
-              </div>
+        <div class="one-contrib-wrapper">
+          <div class="one-contrib-content-back">
+            <div class="one-contrib-content-back-eyes">
+              <div class="one-contrib-content-back-eyes-pupil"></div>
             </div>
-            <div class="one-contrib-right">
-              <div class="one-contrib-username">${contrib.user.username}</div>
-              <span>${dateString}</span>
+          </div>
+          <div class="one-contrib-content">
+            <div class="one-contrib-header">
+              <div class="one-contrib-left">
+                <div class="one-contrib-avatar-container">
+                  <img src="${contrib.user.avatar}" alt="" class="one-contrib-user-image">
+                </div>
+              </div>
+              <div class="one-contrib-right">
+                <div class="one-contrib-username">${contrib.user.username}</div>
+                  <span>${dateString}</span>
+                </div>
               <div class="one-contrib-info">${contrib.data.data || contrib.data.info}</div>
             </div>
-          </div>
-          <div class="one-contrib-messages">
-            <div class="one-contrib-messages-form">
-              ${messagesForm}
+            <div class="one-contrib-likes">
+              <div class="one-contrib-likes-container">
+                <div class="one-contrib-likes-container-button-arrow">
+                </div>
+                <div class="one-contrib-likes-container-button">
+                  <div class="demon-body">
+                    <div class="demon-head">
+                    <div class="demon-ears"></div>
+                    <div class="demon-horn"></div>
+                    <div class="demon-tongue"></div>
+                    <div class="demon-face">
+                      <div class="demon-plus1">1</div>
+                    </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="one-contrib-likes-container-names"></div>
+              </div>
+            </div>
+            <div class="one-contrib-hidden-content">
+              <div class="one-contrib-messages">
+                <div class="one-contrib-messages-form">
+                  ${messagesForm}
+                </div>
+              </div>
+
+              <div class="one-contrib-messages">
+                <div class="one-contrib-messages-form">
+                  ${messagesForm}
+                </div>
+              </div>
+              <div class="one-contrib-dev-reply">
+              </div>
             </div>
           </div>
-          <div class="one-contrib-dev-reply"></div>
         </div>
       </div>
     `
@@ -575,11 +484,15 @@ class devBoard {
           cb(null, res.body)
         })
   }
-
-  submitContrib (ev) {
-    ev.preventDefault();
-    let data = new FormData(this);
-  }
 }
 
 module.exports = devBoard
+
+// se pide una contribucion por id
+// se pide una contribucion por titulo
+// se edita una contribucion
+// se lee si el usuario es dev
+// se agrega una respuesta de dev
+// se elimina una contribucion
+// se agrega un mensaje a la contribucion
+// se elimina un mensaje a la contribucion
