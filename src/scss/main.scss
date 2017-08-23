@@ -38,7 +38,7 @@
 @import 'loader';
 @import 'devBoard';
 
-@import url('https://fonts.googleapis.com/css?family=Lato:500|Old+Standard+TT:700');
+@import url('https://fonts.googleapis.com/css?family=Dosis|Hind|Lora:400,400i,700|Signika|Slabo+27px');
 
 @font-face {
     font-family: 'cast';
@@ -58,6 +58,11 @@
 @font-face {
     font-family: 'lepm';
     src: url('/fonts/lep-medium.otf');
+}
+
+@font-face {
+    font-family: 'lepl';
+    src: url('/fonts/lepl.otf');
 }
 
 @font-face {

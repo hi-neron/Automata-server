@@ -3,7 +3,8 @@ const request = require('superagent')
 const yo = require('yo-yo')
 const _ = require('lodash')
 const $ = require('jquery')
-const templateMaker =  require('./utils/maker')
+const empty = require('empty-element')
+const createTemplate = require('./utils/maker')
 
 // Posiciona los objetos verticalmente
 const Masonnry = require('masonry-layout')
@@ -22,6 +23,7 @@ class devBoard {
     this.inside = yo`<div class="clearfix"></div>`
     this.tagBoard = yo`<div class="devboard-right-tags"></div>`
     this.tags = []
+    this.user = user
 
     devBoardContainer.append(this.inside)
 
@@ -137,7 +139,7 @@ class devBoard {
     let left = yo`<div class="devBoard-left devboard"></div>`
 
     // BRAND
-    let brand = templateMaker.drawBrand()
+    let brand = createTemplate.drawBrand()
 
     // MAN OF THE MONTH
     // Simplemente un setter y getter
@@ -147,11 +149,11 @@ class devBoard {
       console.log('Pendiente: crear un fromulario para dar el hombre del mes: MoM')
     }
 
-    let manOfMonth = templateMaker.drawManOfMonth(MoM)
+    let manOfMonth = createTemplate.drawManOfMonth(MoM)
 
     // IN PROCESS CONTRIBUTIONS
     // se crea un listado de las contribuciones que estan en proceso
-    let inProcess = templateMaker.drawInProcess(contribsInProcess)
+    let inProcess = createTemplate.drawInProcess(contribsInProcess)
 
     // se añanden los contenidos al wrapper
     wrapper.appendChild(brand)
@@ -181,8 +183,9 @@ class devBoard {
     })
 
     // FORMULARIO DE CONTRIBUCIONES -------
-    let form = templateMaker.drawContribsForm(user).form
-    let counterTemplate = templateMaker.drawContribsForm(user).counterTemplate
+    let formTemplate = createTemplate.drawContribsForm(user)
+    let form = formTemplate.form
+    let counterTemplate = formTemplate.counter
 
     let mainForm = yo`
       <div class="contrib-create-form-wrapper devboard-right-content-items">
@@ -227,6 +230,7 @@ class devBoard {
           let newContribRendered = renderContrib(user, newContrib)
           content.appendChild(newContribRendered)
           msnry.prepended(newContribRendered)
+          myForm.reset()
         })
     }
 
@@ -316,7 +320,7 @@ class devBoard {
     })
   }
 
-  // obtiene
+  // extrae los tags, y los dibuja
   addTagToBoard(contrib) {
     let contribTags = contrib.tags
 
@@ -331,64 +335,20 @@ class devBoard {
         this.tags.push(contribTags[i])
       }
     }
-
   }
 
   // contruye un template para una sola contribución
   renderContrib (user, contrib) {
-    let date = new Date(contrib.dateAdded)
-
+    // agrega los tags de la contribucion, al tablero de tags
+    // en la parte superior
     this.addTagToBoard(contrib)
 
-    let month
-    switch (date.getMonth()) {
-      case 0:
-        month = 'enero'
-        break;
-      case 1:
-        month = 'febrero'
-        break;
-      case 2:
-        month = 'marzo'
-        break;
-      case 3:
-        month = 'abril'
-        break;
-      case 4:
-        month = 'mayo'
-        break;
-      case 5:
-        month = 'junio'
-        break;
-      case 6:
-        month = 'julio'
-        break;
-      case 7:
-        month = 'agosto'
-        break;
-      case 8:
-        month = 'septiembre'
-        break;
-      case 9:
-        month = 'octubre'
-        break;
-      case 10:
-        month = 'noviembre'
-        break;
-      case 11:
-        month = 'diciembre'
-        break;
-    }
-
-    let myHour = date.getHours()
-
-    let newHour =  myHour < 12 ? myHour: myHour - 12
-    let meridian = myHour < 12 ? 'am': 'pm'
-
-    let dateString = yo`<span class="date">${month} ${date.getDate()}, ${date.getFullYear()} / ${newHour} ${meridian}</span>`
-
+    // construye el mensaje de la fecha
+    let dateString = createTemplate.drawDate(contrib.dateAdded)
+    
+    // se construyen las contribuciones
     let containerMessage = yo`
-    <textarea name="message" class="message-onecontrib-textarea-form" maxlength="140"></textarea>
+      <textarea name="message" class="message-onecontrib-textarea-form" maxlength="140"></textarea>
     `
     let messagesForm = yo`
       <form action="">
@@ -400,9 +360,14 @@ class devBoard {
               <div class="submit-onecontrib">añadir</div>
             </button>
           </div>
-      </form>`
+      </form>
+    `
 
-      let contribTemplate = yo`
+    let likeButton = createTemplate.drawLikesDevil()
+
+    let contribRate = createTemplate.renderRate(contrib.rate, this.user.username)
+
+    let contribTemplate = yo`
       <div class="one-contrib-container devboard-right-content-items grid-item">
         <div class="one-contrib-wrapper">
           <div class="one-contrib-content-back">
@@ -410,7 +375,7 @@ class devBoard {
               <div class="one-contrib-content-back-eyes-pupil"></div>
             </div>
           </div>
-          <div class="one-contrib-content">
+          <div class="one-contrib-content" contrib="${contrib.publicId}">
             <div class="one-contrib-header">
               <div class="one-contrib-left">
                 <div class="one-contrib-avatar-container">
@@ -427,28 +392,13 @@ class devBoard {
               <div class="one-contrib-likes-container">
                 <div class="one-contrib-likes-container-button-arrow">
                 </div>
-                <div class="one-contrib-likes-container-button">
-                  <div class="demon-body">
-                    <div class="demon-head">
-                    <div class="demon-ears"></div>
-                    <div class="demon-horn"></div>
-                    <div class="demon-tongue"></div>
-                    <div class="demon-face">
-                      <div class="demon-plus1">1</div>
-                    </div>
-                    </div>
-                  </div>
+                ${likeButton}
+                <div class="one-contrib-likes-container-names">
+                  ${contribRate}
                 </div>
-                <div class="one-contrib-likes-container-names"></div>
               </div>
             </div>
             <div class="one-contrib-hidden-content">
-              <div class="one-contrib-messages">
-                <div class="one-contrib-messages-form">
-                  ${messagesForm}
-                </div>
-              </div>
-
               <div class="one-contrib-messages">
                 <div class="one-contrib-messages-form">
                   ${messagesForm}
@@ -465,11 +415,41 @@ class devBoard {
       ev.preventDefault()
     }
 
+    let $likeButton = $(likeButton)
+
+    let rateContrib = this.rateContrib.bind(this)
+
+
+    $likeButton.on('click', (ev) => {
+      ev.preventDefault()
+      let $newRateContainer = $(ev.target).closest('.one-contrib-likes-container').find('.one-contrib-likes-container-names')
+      let $head = $(ev.target).closest('.one-contrib-content')
+      let id = $head.attr('contrib')
+
+      rateContrib(id, (err, contribRated) => {
+        if (err) return console.log(err)
+        let newRateRender = createTemplate.renderRate(contribRated.rate, this.user.username)
+        $newRateContainer.empty().append(newRateRender)
+        // $newRateContainer
+      })
+    })
+
     return contribTemplate
   }
 
-  // obtiene los tags de las contribuciones
-  getTags () {}
+  // rate contrib
+  rateContrib (id, cb) {
+    request
+    .get(`/api/contributions/rate/${id}`)
+    .set('Accept', 'application/json')
+    .end((err, res) => {
+      if (err) {
+        return cb(err)
+      }
+      cb(null, res.body)
+    })
+
+  }
 
   // get info
   getcontribs (group, cb) {

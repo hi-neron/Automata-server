@@ -688,6 +688,7 @@ $shadow: 0 4px 0 $gray-dark, 0 5px 2px rgba(0,0,0,0.2);
                       }
 
                       &:hover {
+                        cursor: pointer;
                         &:after {
 
                           color: red !important;
@@ -773,7 +774,7 @@ $shadow: 0 4px 0 $gray-dark, 0 5px 2px rgba(0,0,0,0.2);
                             position: absolute;
                             left: 50%;
                             margin-left: -14px;
-                            top: 10px;
+                            top: 14px;
                             width: 28px;
                             height: 8px;
                             border-radius: 0px 0px 20px 20px;
@@ -798,50 +799,83 @@ $shadow: 0 4px 0 $gray-dark, 0 5px 2px rgba(0,0,0,0.2);
                             margin-left: -1px;
                             box-shadow: 0 4px 0 rgba($gray-dark, 0.7) inset;
                           }
-
                         }
 
                         &:hover {
-                          .demon-face {
-                            background-color: $red-alert !important;
+                          cursor: pointer;
+                          .demon-head {
+                            .demon-face {
+                              background-color: $red-alert !important;
 
-                            &:before {
-                              opacity: 1;
-                            }
+                              .demon-plus1 {
+                                &:after {
+                                  opacity: 1;
+                                }
+                                &:before {
+                                  content: '+';
+                                }
+                              }
 
-                            .demon-plus1 {
-                              &:after {
+                              &:before {
                                 opacity: 1;
                               }
-                              &:before {
-                                content: '+';
+
+                              &:after {
+                                background-color: white;
                               }
                             }
 
-                            &:after {
-                              background-color: white;
+                            .demon-ears {
+                              background-color: $red-alert !important;
+                              &:after {
+                                top: -16px;
+                                color: $red-alert;
+                              }
                             }
-                          }
-                          .demon-ears {
-                            background-color: $red-alert !important;
-                            &:after {
-                              color: $red-alert;
-                            }
-                          }
-  
-                          .demon-tongue {
+
+                            .demon-tongue {
                               bottom: -6px;
                               animation: tongue .1s ease-out infinite alternate;
                             }
+                          
                           }
+                        }
                       }
                     }
 
                     .one-contrib-likes-container-names {
-                      background-color: greenyellow;
                       height: 45px;
-                      max-width: 60%;
+                      width: 220px;
                       display: inline-block;
+                      vertical-align: top;
+                      position: relative;
+
+                      .one-contrib-likes-container-names-list {
+                        font-family: 'lepl';
+                        font-size: 0.65rem;
+                        position: absolute;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        line-height: 0.9rem;
+
+                        .one-contrib-likes-container-item {
+                          // margin: 1px;
+                          text-align: center;
+
+                          .name {
+                            padding: 2px 3px 2px 2px;
+                            border-radius: 1px;
+                            background-color: $gray-dark;
+                            // margin-right: -2px;
+                            margin-right: -1px;
+                            color: $game-background;
+
+                            &:hover {
+                              cursor: pointer;
+                            }
+                          }
+                        }
+                      }
                     }
                   }
                 }
@@ -875,12 +909,9 @@ $shadow: 0 4px 0 $gray-dark, 0 5px 2px rgba(0,0,0,0.2);
 
                 &:hover {
                   border: 1px solid rgba($gray-dark, .7);
-                  cursor: pointer;
                 }
               }
-
             }
-
           }
         }
       }

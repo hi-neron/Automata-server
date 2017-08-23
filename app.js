@@ -565,6 +565,22 @@ app.post('/api/contributions', secure, (req, res) => {
   })
 })
 
+// contrib rate
+app.get('/api/contributions/rate/:contribution', secure, (req, res) => {
+  let scoringUsername = req.user.username
+  let contribId = req.params.contribution
+
+  let token = req.user.token
+
+  client.rateContrib(contribId, scoringUsername, token, (err, newContrib) => {
+    if (err) {
+      console.log(err.error)
+      return res.json(err.error)
+    }
+    res.status(200).json(newContrib)
+  })
+})
+
 // CHAT *soon*
 
 // secure middleware

@@ -1,5 +1,20 @@
 const yo = require('yo-yo')
 
+function drawRateName (left, item, right) {
+  let conectorLeft = yo`<span class="conector">${left || ''}</span>`
+  let conectorRight = yo`<span class="conector">${right || ''}</span>`
+  let itemToDraw = yo`<span class="name">${item || ''}</span>`
+
+
+  return yo`
+  <span class="one-contrib-likes-container-item">
+    ${left ? conectorLeft: ''}
+    ${item ? itemToDraw: ''}
+    ${right ? conectorRight: ''}
+  </span>
+  `
+}
+
 module.exports = {
   drawBrand: () => {
     // se construye la template donde ira el logo
@@ -153,8 +168,141 @@ module.exports = {
     `
     return {
       form: form,
-      counterTemplate: counterTemplate
+      counter: counterTemplate
     }
-  }
+  },
 
+  drawLikesDevil: () => {
+    return yo`
+    <div class="one-contrib-likes-container-button">
+      <div class="demon-body">
+        <div class="demon-head">
+        <div class="demon-ears"></div>
+        <div class="demon-horn"></div>
+        <div class="demon-tongue"></div>
+        <div class="demon-face">
+          <div class="demon-plus1">1</div>
+        </div>
+        </div>
+      </div>
+    </div>
+    `
+  },
+
+  drawDate: (contribDate) => {
+    let date = new Date(contribDate)
+
+    let month
+    switch (date.getMonth()) {
+      case 0:
+        month = 'enero'
+        break;
+      case 1:
+        month = 'febrero'
+        break;
+      case 2:
+        month = 'marzo'
+        break;
+      case 3:
+        month = 'abril'
+        break;
+      case 4:
+        month = 'mayo'
+        break;
+      case 5:
+        month = 'junio'
+        break;
+      case 6:
+        month = 'julio'
+        break;
+      case 7:
+        month = 'agosto'
+        break;
+      case 8:
+        month = 'septiembre'
+        break;
+      case 9:
+        month = 'octubre'
+        break;
+      case 10:
+        month = 'noviembre'
+        break;
+      case 11:
+        month = 'diciembre'
+        break;
+    }
+
+    let myHour = date.getHours()
+
+    let newHour =  myHour < 12 ? myHour: myHour - 12
+    let meridian = myHour < 12 ? 'am': 'pm'
+
+    let dateString = yo`<span class="date">${month} ${date.getDate()}, ${date.getFullYear()} / ${newHour} ${meridian}</span>`
+
+    return dateString
+  },
+
+  renderRate: (rate, username) => {
+    let users = rate.length
+
+    if (users > 0){
+      let rateTemplate = yo`<div class="one-contrib-likes-container-names-list"></div>`
+      let item, itemToDraw
+      let user = false
+      let guion = ','
+
+      function removeItemMe(arr, i) {
+        if ( i !== -1 ) {
+            arr.splice( i, 1 );
+        }
+        console.log(arr)
+        return arr
+      }
+
+      let index = rate.indexOf(username)
+
+      if (index != -1) {
+        if (users === 2) {
+          itemToDraw = drawRateName('Sumercé', null, null)
+        } else {
+          itemToDraw = users > 1 ? drawRateName('Sumercé,', null, null) : drawRateName('Sumercé', null, null)
+        }
+        rateTemplate.prepend(itemToDraw)
+        rate = removeItemMe(rate, index)
+        user = true
+      }
+      let counter = 0
+
+      for (let i = 0; i < rate.length; i++) {
+        item = rate[i]
+        let limit = 4
+        if (i < limit) {
+          if (rate.length === 1){
+            itemToDraw = user ? drawRateName('y ', item, null): drawRateName(null, item, null)
+          } else {
+            if (i === 0) {
+              itemToDraw = drawRateName(null, item, null)
+            } else {
+              itemToDraw = i === rate.length - 1 && i < limit? drawRateName('y ', item, null) : drawRateName(guion, item, null)
+            }
+          }
+          rateTemplate.appendChild(itemToDraw)
+        } else {
+          counter++
+        }
+      }
+      if (counter > 0) {
+        let q = counter === 1? 'uno mas': `${counter} mas`
+        let counterContainer = yo`<span class="counter-plus">y ${q}</span>`
+        rateTemplate.appendChild(counterContainer)
+      }
+
+      let finalRes = users > 1 ? 'apoyan estó': 'apoyá estó'
+      let finalMessage = yo`<span class="counter-plus">${finalRes}</span>`
+      rateTemplate.appendChild(finalMessage)
+
+      return rateTemplate
+    }
+    return null
+  }
 }
