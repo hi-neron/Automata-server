@@ -556,12 +556,39 @@ app.post('/api/contributions', secure, (req, res) => {
   let contribution = req.body
   let token = req.user.token
 
-  console.log('this contrib', contribution)
-
   client.createContrib(contribution, username, token, (err, data) => {
     if (err) return res.status(500).json(err)
     data.message = 'gracias por su contribucion'
     res.status(200).json(data)
+  })
+})
+
+// dev response
+app.post('/api/contributions/devres/:id', secure, (req, res) => {
+  // buscar el socket en la lista de usuarios conectados
+  // utilizar el publicId para hacer la busqueda
+
+  let userSocket = _.find(usersSockets, {username: req.user.username})
+
+  if (!userSocket) {
+    return res.status(500).json({error: 'you need be logged with realtime too'})
+  }
+
+  let username = req.user.username
+  let contribId = req.params.id
+  let devResponse = req.body
+  let token = req.user.token
+
+  client.devRes(contribId, username, devResponse, token, (err, data) => {
+    if (err) return res.status(500).json(err)
+
+    let message = `gracias por su respuesta don ${username}`
+
+    let response = {
+      message: message,
+      data: data
+    }
+    res.status(200).json(response)
   })
 })
 

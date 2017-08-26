@@ -297,7 +297,7 @@ module.exports = {
         rateTemplate.appendChild(counterContainer)
       }
 
-      let finalRes = users > 1 ? 'apoyan estó': 'apoyá estó'
+      let finalRes = users > 1 ? ' apoyan estó': 'apoyá estó'
       let finalMessage = yo`<span class="counter-plus">${finalRes}</span>`
       rateTemplate.appendChild(finalMessage)
 

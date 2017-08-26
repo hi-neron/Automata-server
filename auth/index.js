@@ -64,7 +64,7 @@ exports.facebookStrategy = new FacebookStrategy({
 */
 
 exports.serializeUser = function (user, done) {
-  console.log('serializa user')
+  console.log(user)
   done(null, {
     username: user.username,
     token: user.token,
@@ -74,6 +74,7 @@ exports.serializeUser = function (user, done) {
     score: user.points,
     level: user.level,
     images: user.images,
+    admin: user.admin
   })
 }
 

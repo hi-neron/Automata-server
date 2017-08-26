@@ -494,7 +494,7 @@ $shadow: 0 4px 0 $gray-dark, 0 5px 2px rgba(0,0,0,0.2);
                   color: $yellow-zero;
                   font-family: 'square';
                   font-size: 1.1rem;
-                  background-color: $red-alert;
+                  background-color: $gray-dark;
                   padding: 3px 5px 1px 5px;
                   border-radius: 2px;
                   margin-top: 8px;
@@ -653,7 +653,7 @@ $shadow: 0 4px 0 $gray-dark, 0 5px 2px rgba(0,0,0,0.2);
                     padding: 13px 13px 0px 13px;
                     font-family: 'lepm';
                     font-size: 0.8rem;
-                    line-height: 1rem;
+                    line-height: 1.14rem;
                   }
                 }
 
@@ -856,7 +856,7 @@ $shadow: 0 4px 0 $gray-dark, 0 5px 2px rgba(0,0,0,0.2);
                         position: absolute;
                         top: 50%;
                         transform: translateY(-50%);
-                        line-height: 0.9rem;
+                        line-height: 1rem;
 
                         .one-contrib-likes-container-item {
                           // margin: 1px;
@@ -864,7 +864,7 @@ $shadow: 0 4px 0 $gray-dark, 0 5px 2px rgba(0,0,0,0.2);
 
                           .name {
                             padding: 2px 3px 2px 2px;
-                            border-radius: 1px;
+                            border-radius: 2px;
                             background-color: $gray-dark;
                             // margin-right: -2px;
                             margin-right: -1px;
@@ -880,12 +880,13 @@ $shadow: 0 4px 0 $gray-dark, 0 5px 2px rgba(0,0,0,0.2);
                   }
                 }
                 .one-contrib-hidden-content {
+                  width: 100%;
+
                   .one-contrib-messages {
                     .one-contrib-messages-form {
                       width: 100%;
                       overflow: hidden;
                       height: 0;
-  
                       .comment-contrib-form {
                         textarea[name=message] {
                           border-radius: 2px;
@@ -903,8 +904,123 @@ $shadow: 0 4px 0 $gray-dark, 0 5px 2px rgba(0,0,0,0.2);
                       }
                     }
                   }
-                  .one-contrib-dev-reply {}
-                  .one-contrib-dev-reply-form {}
+
+                  .one-contrib-dev-res-form {
+                    width: 100%;
+                    height: 127px;
+
+                    .one-contrib-dev-form {
+                      border: 2px solid $gray-dark;
+                      margin: 7px;
+                      margin-top: 13px;
+                      vertical-align: middle;
+                      display: inline-block;
+                      width: 91%;
+                      // overflow: hidden;
+                      height: 100px;
+                      border-radius: 3px;
+                      
+                      .one-contrib-dev-textarea-container {
+                        display: inline-block;
+                        width: 85%;
+                        height: 100%;
+                        
+                        .one-contrib-dev-textarea {
+                          border-radius: 2px;
+                          width: 100%;
+                          border: none;
+                          resize: none;
+                          height: 100%;
+                          font-family: 'lepm';
+                          font-size: 0.8rem;
+                          line-height: 1.2rem;
+                          background-color: $game-background;
+                          padding: 5px;
+                        }
+                      }
+
+                      .one-contrib-dev-buttons {
+                        display: inline-block;
+                        width: 15%;
+                        height: 100px;
+                        vertical-align: top;
+                        margin-left: -3px;
+
+                        .one-contrib-dev-input-false {
+                          height: 48px;
+                          width: 100%;
+                          background: $yellow-zero url('/img/false-s.png') no-repeat 45% 50%;
+                          background-size: 25px;
+                        }
+
+                        .button {
+                          border: none;
+                          &:hover{
+                            cursor: pointer;
+                          }
+                        }
+
+                        .one-contrib-dev-input-true {
+                          width: 100%;
+                          height: 48px;
+                          background: $green-true url('/img/true-s.png') no-repeat 45% 45%;
+                          background-size: 25px;
+                          input {
+                            color: transparent;
+                            width: 100%;
+                            height: 100%;
+                            &:hover{
+                              cursor: pointer;
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+
+                  .one-contrib-dev-panel {
+                    width: 100%;
+                    display: inline-block;
+
+                    .one-contrib-dev-response {
+                      height: 100%;
+                      position: relative;
+                      margin: 20px;
+                      text-align: left;
+                      
+                      .one-contrib-dev-response-left {
+                        display: inline-block;
+                        width: 100%;
+
+                        .one-contrib-dev-left-title {
+                          font-family: 'lepb';
+                          font-size: 1.8rem;
+                          width: 100%;
+                          
+                          .one-contrib-dev-hand {
+                            height: 30px;
+                            display: inline-block;
+                            position: relative;
+                            margin-left: 2px;
+                            
+                            img {
+                              width: 30px;
+                              vertical-align: top;
+                              margin-top: 1px;
+                            }
+                          }
+                        }
+                        
+                        .one-contrib-dev-left-content {
+                          margin-top: 10px;
+                          font-family: 'lepm';
+                          font-size: .9rem;
+                          line-height: 1.14rem;
+                        }
+                      }
+                    }
+                  }
+
                 }
 
                 &:hover {

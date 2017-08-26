@@ -362,11 +362,53 @@ class devBoard {
           </div>
       </form>
     `
-
+    // dibuja el boton de "likes" o soporte
     let likeButton = createTemplate.drawLikesDevil()
 
+    // dibuja las etiquetas de los aportantes
     let contribRate = createTemplate.renderRate(contrib.rate, this.user.username)
 
+    // el dev panel tiene dos partes
+    // la respuesta del dev, y en caso de que el user sea admin, el formulario
+
+    // FORMULARIO DEV
+    // formulario para dar una opinión dev a la contribución
+    // El dev form se dibuja si es un usuario dev
+    let devForm = yo`
+      <div class="one-contrib-dev-res-form">
+        <form class="one-contrib-dev-form">
+          <div class="one-contrib-dev-textarea-container">
+            <textarea name="message" placeholder="Puedes escribir algo aquí, ¿o no?" class="one-contrib-dev-textarea" maxlength="140"></textarea>
+          </div>
+          <div class="one-contrib-dev-buttons">
+            <button class="one-contrib-dev-input-true button" value="true">
+            </button>
+            <button class="one-contrib-dev-input-false button" value="false">
+            </button>
+          </div>
+        </form>
+      </div>
+    `
+
+    // PANEL DE RESPUESTA DEV
+    // el dev panel se dibuja si existe una respuesta del dev
+    let devResponse = this.drawDevResponse(contrib)
+
+    let hiddenContent = yo`
+    <div class="one-contrib-hidden-content">
+      <div class="one-contrib-messages">
+        <div class="one-contrib-messages-form">
+          ${messagesForm}
+        </div>
+      </div>
+      <div class="one-contrib-dev-res">
+        ${devResponse}
+        ${this.user.admin ? devForm : ''}
+      </div>
+    </div>
+    `
+
+    // TEMPLATE PRINCIPAL
     let contribTemplate = yo`
       <div class="one-contrib-container devboard-right-content-items grid-item">
         <div class="one-contrib-wrapper">
@@ -398,15 +440,7 @@ class devBoard {
                 </div>
               </div>
             </div>
-            <div class="one-contrib-hidden-content">
-              <div class="one-contrib-messages">
-                <div class="one-contrib-messages-form">
-                  ${messagesForm}
-                </div>
-              </div>
-              <div class="one-contrib-dev-reply">
-              </div>
-            </div>
+            ${hiddenContent}
           </div>
         </div>
       </div>
@@ -415,10 +449,41 @@ class devBoard {
       ev.preventDefault()
     }
 
+    let $devForm = $(devForm)
+    let devAddApproval = this.devResponse.bind(this)
+    let drawDevResponse = this.drawDevResponse.bind(this)
+
+    $devForm.on('click', '.one-contrib-dev-buttons .button', (ev) => {
+      ev.preventDefault()
+      let $head = $(ev.target).closest('.one-contrib-content')
+      let id = $head.attr('contrib')
+
+      let $textArea = $devForm.find('.one-contrib-dev-textarea')
+      let message = $textArea[0].value
+
+      let $this = $(ev.currentTarget)
+      let action = $this.attr('value')
+
+      let $devResponse = $(devResponse)
+
+      let data = {
+        approval: action,
+        message: message
+      }
+
+      devAddApproval(id, data, (err, res) => {
+        if (err) return console.log('este es un mensaje de error a optimizar', err)
+        let changes = {
+          dev: res.body.data
+        }
+        $textArea.val('')
+        $devResponse.empty().append(drawDevResponse(changes))
+      })
+    })
+
+    // EVENTOS DEL FEATURE <RATE>
     let $likeButton = $(likeButton)
-
     let rateContrib = this.rateContrib.bind(this)
-
 
     $likeButton.on('click', (ev) => {
       ev.preventDefault()
@@ -435,6 +500,43 @@ class devBoard {
     })
 
     return contribTemplate
+  }
+
+  drawDevResponse (contrib) {
+    let redAlert = '#FF2B4A'
+    let greenOk = '#1EFFDC'
+
+    let devMessageTemplate = yo`
+    <div class="one-contrib-dev-left-content">
+      ${contrib.dev.message}
+    </div>
+    `
+    return yo`
+      <div class="one-contrib-dev-panel" style="background:${contrib.dev.approval ? greenOk : redAlert}">
+        <div class="one-contrib-dev-response">
+          <div class="one-contrib-dev-response-left">
+            <div class="one-contrib-dev-left-title">
+              ${contrib.dev.approval ? 'POSIBLE': 'IMPOSIBLE'}
+              <div class="one-contrib-dev-hand">
+                <img src="img/${contrib.dev.approval ? 'true' : 'false'}.png" alt="${contrib.dev.approval}">
+              </div>
+            </div>
+            ${contrib.dev.message ? devMessageTemplate : ''}
+          </div>
+        </div>
+      </div>
+    `
+  }
+
+  // send dev response
+  devResponse (id, req, cb) {
+    request
+    .post(`/api/contributions/devres/${id}`)
+    .send(req)
+    .end(function (err, res) {
+      if (err) return cb(err)
+      cb(null, res)
+    })
   }
 
   // rate contrib
