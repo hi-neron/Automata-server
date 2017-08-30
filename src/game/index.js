@@ -10,7 +10,7 @@ class Game {
     this.skills = []
     this.length = 0
     this.user = user
-    this.size = 300;
+    this.size = 240;
 
     console.log('start game')
 

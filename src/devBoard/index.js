@@ -5,6 +5,7 @@ const _ = require('lodash')
 const $ = require('jquery')
 const empty = require('empty-element')
 const createTemplate = require('./utils/maker')
+const autosize = require('autosize')
 
 // Posiciona los objetos verticalmente
 const Masonnry = require('masonry-layout')
@@ -237,11 +238,10 @@ class devBoard {
     // se agrega el formulario
     content.appendChild(mainForm)
 
+    // Muestra y esconde de nuevo el contenido oculto.
     let $content = $(content)
-
     $content.on('click', '.one-contrib-container .one-contrib-wrapper .one-contrib-content .one-contrib-likes .one-contrib-likes-container-button-arrow', (ev) => {
       let $masIcon = $(ev.currentTarget)
-      console.log($masIcon)
       let $this = $masIcon.closest('.one-contrib-container')
 
       let $containerToMove =  $this.find('.one-contrib-content')
@@ -250,7 +250,7 @@ class devBoard {
 
       let myHeightToSave = $this.height()
 
-      let width = $containerToMove.width()
+      let width = $containerToMove.width() + 100;
       let height = $containerToMove.height()
 
       let $ecran = $(ecran)
@@ -261,6 +261,7 @@ class devBoard {
         position: fixed !important;
         left: 50% !important;
         top: 40% !important;
+        width: ${width}px !important;
         margin-left: -${width / 2}px;
         margin-top: -${height / 2}px;
         z-index: 12 !important;
@@ -346,26 +347,12 @@ class devBoard {
     // construye el mensaje de la fecha
     let dateString = createTemplate.drawDate(contrib.dateAdded)
     
-    // se construyen las contribuciones
-    let containerMessage = yo`
-      <textarea name="message" class="message-onecontrib-textarea-form" maxlength="140"></textarea>
-    `
-    let messagesForm = yo`
-      <form action="">
-          <div class="comment-contrib-form">
-              ${containerMessage}
-          </div>
-          <div class="submit-onecontrib-messages-form">
-            <button type="submit">
-              <div class="submit-onecontrib">añadir</div>
-            </button>
-          </div>
-      </form>
-    `
-    // dibuja el boton de "likes" o soporte
+    // SE CONSTRUYEN LAS CONTRIBUCIONES -----------
+
+    // dibuja el boton de rate
     let likeButton = createTemplate.drawLikesDevil()
 
-    // dibuja las etiquetas de los aportantes
+    // dibuja las etiquetas de los que dan un rate
     let contribRate = createTemplate.renderRate(contrib.rate, this.user.username)
 
     // el dev panel tiene dos partes
@@ -374,30 +361,70 @@ class devBoard {
     // FORMULARIO DEV
     // formulario para dar una opinión dev a la contribución
     // El dev form se dibuja si es un usuario dev
-    let devForm = yo`
-      <div class="one-contrib-dev-res-form">
-        <form class="one-contrib-dev-form">
-          <div class="one-contrib-dev-textarea-container">
-            <textarea name="message" placeholder="Puedes escribir algo aquí, ¿o no?" class="one-contrib-dev-textarea" maxlength="140"></textarea>
-          </div>
-          <div class="one-contrib-dev-buttons">
-            <button class="one-contrib-dev-input-true button" value="true">
-            </button>
-            <button class="one-contrib-dev-input-false button" value="false">
-            </button>
-          </div>
-        </form>
-      </div>
-    `
+    let devForm = createTemplate.drawDevForm()
 
     // PANEL DE RESPUESTA DEV
     // el dev panel se dibuja si existe una respuesta del dev
     let devResponse = this.drawDevResponse(contrib)
 
+    // MENSAJES DE USUARIO
+    // texarea donde se sube el mensaje
+    // <textarea name="message" class="one-contrib-messages-text-form" maxlength="340" value="">
+    // </textarea>
+
+    let userMessageForm = yo`
+    <p class="one-contrib-messages-text-editable" contenteditable="true">
+    </p>`
+
+    let containerMessage = yo`
+      <div class="one-contrib-messages-text-form">
+        ${userMessageForm}
+        <input type="submit" class="one-contrib-messages-submit" value="enviar">
+      </div>
+    `
+    userMessageForm.addEventListener("paste", function(e) {
+      // cancel paste
+      e.preventDefault();
+
+      // get text representation of clipboard
+      var text = e.clipboardData.getData("text/plain");
+
+      // insert text manually
+      document.execCommand("insertHTML", false, text);
+  });
+
+    // formulario de subida de mensajes de usuario
+    let messagesForm = yo`
+      <form action="" class="one-contrib-messages-form">
+          <div class="one-contrib-messages-uimage-container">
+            <img src="${this.user.avatar}" alt="" class="one-contrib-messages-uimage">
+          </div>
+          <div class="one-contrib-messages-text-form-container">
+            ${containerMessage}
+          </div>
+      </form>
+    `
+
+    // EVENT: subir mensaje.
+    let $messagesForm = $(messagesForm)
+    $messagesForm.on('submit', (ev) => {
+      ev.preventDefault()
+    })
+
+    // template de mensajes de usuario
+    let contribMessages = yo`
+      <div class="one-contrib-messages-single">
+      </div>
+    `
+
+    // template del contenido escondido
     let hiddenContent = yo`
     <div class="one-contrib-hidden-content">
-      <div class="one-contrib-messages">
-        <div class="one-contrib-messages-form">
+      <div class="one-contrib-messages-container">
+        <div class="one-contrib-messages-content">
+          ${contribMessages}
+        </div>
+        <div class="one-contrib-messages-form-container">
           ${messagesForm}
         </div>
       </div>
@@ -445,14 +472,32 @@ class devBoard {
         </div>
       </div>
     `
+
+    let addUserMessage = this.addUserMessage.bind(this)
+
     messagesForm.onsubmit = (ev) => {
       ev.preventDefault()
+      let $head = $(ev.target).closest('.one-contrib-content')
+      let id = $head.attr('contrib')
+
+      let $this = $(ev.currentTarget)
+      let textToSend = $this.find('.one-contrib-messages-text-editable').html()
+
+      let data = {
+        textToSend: textToSend
+      }
+
+      addUserMessage(id, data, (err, data) => {
+        if (err) console.log(err)
+        console.log(data)
+      })
     }
 
     let $devForm = $(devForm)
+    // callback que agrega la respuesta del desarrollador a la contribucion
     let devAddApproval = this.devResponse.bind(this)
+    // dibuja la contribucion
     let drawDevResponse = this.drawDevResponse.bind(this)
-
     $devForm.on('click', '.one-contrib-dev-buttons .button', (ev) => {
       ev.preventDefault()
       let $head = $(ev.target).closest('.one-contrib-content')
@@ -539,6 +584,16 @@ class devBoard {
     })
   }
 
+  addUserMessage (id, req, cb) {
+    request
+    .post(`/api/contributions/addMessage/${id}`)
+    .send(req)
+    .end(function (err, res) {
+      if (err) return cb(err)
+      cb(null, res)
+    })
+  }
+
   // rate contrib
   rateContrib (id, cb) {
     request
@@ -570,11 +625,12 @@ class devBoard {
 
 module.exports = devBoard
 
-// se pide una contribucion por id
-// se pide una contribucion por titulo
-// se edita una contribucion
-// se lee si el usuario es dev
-// se agrega una respuesta de dev
-// se elimina una contribucion
-// se agrega un mensaje a la contribucion
-// se elimina un mensaje a la contribucion
+// 💀 se agrega un mensaje a la contribucion
+// 💀 se elimina un mensaje a la contribucion
+// 💀 se pide una contribucion por tags
+// 💀 se edita una contribucion
+// 💀 se elimina una contribucion
+// 🍷 se piden las contribuciones por id
+// 🍷 se pide una contribucion por id
+// 🍷 se lee si el usuario es dev
+// 🍷 se agrega una respuesta de dev

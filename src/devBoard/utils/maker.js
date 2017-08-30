@@ -242,6 +242,24 @@ module.exports = {
     return dateString
   },
 
+  drawDevForm: () => {
+    return yo`
+      <div class="one-contrib-dev-res-form">
+      <form class="one-contrib-dev-form">
+        <div class="one-contrib-dev-textarea-container">
+          <textarea name="message" placeholder="Puedes escribir algo aquí, ¿o no?" class="one-contrib-dev-textarea" maxlength="140"></textarea>
+        </div>
+        <div class="one-contrib-dev-buttons">
+          <button class="one-contrib-dev-input-true button" value="true">
+          </button>
+          <button class="one-contrib-dev-input-false button" value="false">
+          </button>
+        </div>
+      </form>
+    </div>
+    `
+  },
+
   renderRate: (rate, username) => {
     let users = rate.length
 

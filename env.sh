@@ -7,3 +7,8 @@
 export BUCKET="automata-images"
 export AWS_ACCESS_KEY="AKIAJR3P3WZXXIN5NOQQ"
 export AWS_SECRET_KEY="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"
+
+# Access Key ID:
+# AKIAIWHNSNLW7ILGHB2A
+# Secret Access Key:
+# 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

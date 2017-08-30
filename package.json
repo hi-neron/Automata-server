@@ -44,6 +44,7 @@
   },
   "dependencies": {
     "async": "^2.1.1",
+    "autosize": "^4.0.0",
     "aws-sdk": "^2.6.6",
     "babel-polyfill": "^6.16.0",
     "bluebird": "^3.4.6",

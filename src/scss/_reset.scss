@@ -63,10 +63,10 @@ input {
   border-style: hidden;
 }
 
-input[type=text], input[type=date], input[type=file] {
+input[type=text], input[type=date], input[type=file], p[contenteditable=true],
+input[type=submit] {
   &:focus {
     outline: transparent;
-    border-bottom: 2px solid $color_black !important;
   }
 }
 

@@ -34,7 +34,7 @@ const ext = require('file-extension')
 // servidor
 const app = express()
 
-// Arma las peticiones a los microservicios
+// Peticiones a los microservicios
 const client = automata.newClient(config.client)
 
 let s3 = new aws.S3({
@@ -588,6 +588,39 @@ app.post('/api/contributions/devres/:id', secure, (req, res) => {
       message: message,
       data: data
     }
+    res.status(200).json(response)
+  })
+})
+
+// add Message
+app.post('/api/contributions/addMessage/:id', secure, (req, res) => {
+  // buscar el socket en la lista de usuarios conectados
+  // utilizar el publicId para hacer la busqueda
+  let userSocket = _.find(usersSockets, {username: req.user.username})
+  if (!userSocket) {
+    return res.status(500).json({error: 'you need be logged with realtime too'})
+  }
+
+  // Message info
+  // message.info = data
+  // message.date = new Date()
+  // message.id = uuid.v4()
+  // message.user = {
+  //   username: dbUser.username,
+  //   image: dbUser.avatar,
+  //   admin: dbUser.admin
+  // }
+
+  let id = req.params.id
+
+  let data = {
+    data: req.body,
+    id: id
+  }
+
+  userSocket.rt.newUserMessage(id, data, (err, response) => {
+    if(err) return res.status(500).json(err)
+    console.log(response)
     res.status(200).json(response)
   })
 })

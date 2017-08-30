@@ -78,8 +78,11 @@ $shadow: 0 4px 0 $gray-dark, 0 5px 2px rgba(0,0,0,0.2);
     height: 100%;
     width: 100%;
     min-width: $size;
+    position: relative;
+    overflow-y: scroll;
 
     .devBoard-left {
+      position: relative;
       vertical-align: top;
       display: inline-block;
       min-width: 220px;
@@ -89,8 +92,8 @@ $shadow: 0 4px 0 $gray-dark, 0 5px 2px rgba(0,0,0,0.2);
 
       .devboard-wrapper {
         height: 100%;
-        width: 100%;
-
+        width: $left;
+        position: fixed;
 
         .brandContainer {
           height: 240px;
@@ -531,7 +534,6 @@ $shadow: 0 4px 0 $gray-dark, 0 5px 2px rgba(0,0,0,0.2);
             border-radius: 3px;
             background: linear-gradient(0deg, rgb(48, 10, 19) 0%, rgba($gray-dark, 1) 70%); /* w3c */                  
             background-size: 100% 120%;
-
             
             .one-contrib-wrapper {
               position: relative;
@@ -879,28 +881,78 @@ $shadow: 0 4px 0 $gray-dark, 0 5px 2px rgba(0,0,0,0.2);
                     }
                   }
                 }
+
                 .one-contrib-hidden-content {
                   width: 100%;
+                  overflow: hidden;
+                  height: 0;
 
-                  .one-contrib-messages {
-                    .one-contrib-messages-form {
+                  .one-contrib-messages-container {
+                    width: 100%;
+                    .one-contrib-messages-content {
+                    }
+
+                    .one-contrib-messages-form-container {
                       width: 100%;
-                      overflow: hidden;
-                      height: 0;
-                      .comment-contrib-form {
-                        textarea[name=message] {
-                          border-radius: 2px;
-                          width: 90%;
-                          resize: none;
-                          background-color: transparent;
-                          border: 2px solid $gray-dark;
-                          // padding: 5px;
-                          // height: 70px;
-                          font-family: 'lepm';
-                          font-size: 0.8rem;
-                          margin-top: 11px;
+                      margin-bottom: 13px;
+
+                      .one-contrib-messages-form {
+                        border: none;
+                        
+                        .one-contrib-messages-uimage-container {
+                          vertical-align: top;
+                          width: 32px;
+                          height: 32px;
+                          background-color: salmon;
+                          display: inline-block;
+                          margin-right: 10px;
+                          margin-top: 1px;
                         }
-  
+
+                        .one-contrib-messages-text-form-container {
+                          display: inline-block;
+                          position: relative;
+                          width: 78%;
+                          text-align: left;
+
+                          .one-contrib-messages-text-form {
+                            border: 2px solid $gray-dark;
+                            background-color: $game-background;
+                            width: 100%;
+                            min-height: 32px;
+                            display: inline-block;
+                            // overflow: hidden;
+                            font-family: 'lepm';
+                            font-size: 0.8rem;
+                            line-height: 1.1rem;
+                            border-radius: 2px;
+                            position: relative;
+
+                            .one-contrib-messages-text-editable {
+                              padding: 5px 10px 5px 10px;
+                              text-align: left;
+                              display: inline-block;
+                              min-width: 185px;
+                              max-width: 100%;
+                            }
+
+                            .one-contrib-messages-submit{
+                              height: 30px;
+                              width: 60px;
+                              // background-color: $game-background-dark;
+                              color: $gray-dark;
+                              float: right;
+                              font-family: 'lepb';
+                              font-size: 0.9rem;
+                              text-align: center;
+                              &:hover {
+                                cursor: pointer;
+                              }
+                            }
+                          }
+
+
+                        }
                       }
                     }
                   }
@@ -981,6 +1033,9 @@ $shadow: 0 4px 0 $gray-dark, 0 5px 2px rgba(0,0,0,0.2);
                   .one-contrib-dev-panel {
                     width: 100%;
                     display: inline-block;
+                    border-top: 1px dotted #717171;
+                    margin-top: 5px;
+
 
                     .one-contrib-dev-response {
                       height: 100%;
