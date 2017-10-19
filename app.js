@@ -611,17 +611,21 @@ app.post('/api/contributions/addMessage/:id', secure, (req, res) => {
   //   admin: dbUser.admin
   // }
 
+  let token = req.user.token
   let id = req.params.id
+  let username = req.user.username
+  let message = req.body
 
-  let data = {
-    data: req.body,
-    id: id
-  }
+  client.addContribMessage(id, username, message, token, (err, addedMessage) => {
+    if (err) res.json({error: err})
 
-  userSocket.rt.newUserMessage(id, data, (err, response) => {
-    if(err) return res.status(500).json(err)
-    console.log(response)
-    res.status(200).json(response)
+    res.status(200).json(addedMessage)
+
+    // userSocket.rt.newUserMessage(id, data, (err, response) => {
+    //   if(err) return res.status(500).json(err)
+    //   console.log(response)
+    //   res.status(200).json(response)
+    // })
   })
 })
 

@@ -209,7 +209,7 @@ $shadow: 0 4px 0 $gray-dark, 0 5px 2px rgba(0,0,0,0.2);
             margin-top: 33px;
             font-family: 'lepm';
             font-size: 1.1rem;
-            
+
             span {
               position: relative;
 
@@ -362,16 +362,16 @@ $shadow: 0 4px 0 $gray-dark, 0 5px 2px rgba(0,0,0,0.2);
           height: 100px;
           width: 100%;
           position: relative;
+          white-space: no;
+          overflow: hidden;
 
           .devboard-right-tags {
             position: absolute;
             bottom: 0;
             right: 10px;;
             text-align: right;
-            white-space: no;
             overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            height: 80px;
 
             .contrib-tag {
               display: inline-block;
@@ -382,6 +382,7 @@ $shadow: 0 4px 0 $gray-dark, 0 5px 2px rgba(0,0,0,0.2);
               padding: 5px 6px 3px 6px;
               border-radius: 2px;
               margin-left: 8px;
+              margin-top: 8px;
               border: 3px solid $gray-dark;
               transition: 0.2s ease-out;
 
@@ -532,9 +533,9 @@ $shadow: 0 4px 0 $gray-dark, 0 5px 2px rgba(0,0,0,0.2);
             color: $gray-dark;
             background-color: $gray-dark;
             border-radius: 3px;
-            background: linear-gradient(0deg, rgb(48, 10, 19) 0%, rgba($gray-dark, 1) 70%); /* w3c */                  
+            background: linear-gradient(0deg, rgb(48, 10, 19) 0%, rgba($gray-dark, 1) 70%); /* w3c */
             background-size: 100% 120%;
-            
+
             .one-contrib-wrapper {
               position: relative;
               width: 100%;
@@ -557,7 +558,7 @@ $shadow: 0 4px 0 $gray-dark, 0 5px 2px rgba(0,0,0,0.2);
                   width: 30px;
                   margin-left: -15px;
                   margin-top: -15px;
-                  background: radial-gradient(ellipse at center, rgba(255,59,85,1) 0%, rgba(156,31,73,1) 100%); /* w3c */                  
+                  background: radial-gradient(ellipse at center, rgba(255,59,85,1) 0%, rgba(156,31,73,1) 100%); /* w3c */
                   border-radius: 50%;
                   left: 50%;
                   top: 45%;
@@ -599,487 +600,625 @@ $shadow: 0 4px 0 $gray-dark, 0 5px 2px rgba(0,0,0,0.2);
 
               .one-contrib-content {
                 width: $right / 2 - 20;
-                background-color: ghostwhite;
-                border-radius: 2px;
-                border: $border;
-                box-shadow: $shadow;
-                z-index: 2;
-                transition: 0.1s;
-                transition: all 100ms cubic-bezier(0.350, -0.255, 0.585, 1.460); /* custom */
 
-                .one-contrib-header {
-                  text-align: left;
+                .one-contrib-content-scroll {
+                  background-color: ghostwhite;
+                  border-radius: 2px;
+                  box-shadow: $shadow;
+                  z-index: 2;
+                  transition: 0.1s;
+                  transition: all 100ms cubic-bezier(0.350, -0.255, 0.585, 1.460); /* custom */
 
-                  .one-contrib-left {
-                    float: left;
-                    width: 70px;
-                    height: 40px;
-                    position: relative;
-
-                    .one-contrib-avatar-container {
-                      padding: 10px;
-                      width: 45px;
-                      height: 45px;
-                      background-color: $gray-dark;
-                      position: absolute;
-                      left: 50%;
-                      top: 12px;
-                      transform: translate(-50%, 0);
-
-                      .one-contrib-user-image {
-                      }
-                    }
-                  }
-
-                  .one-contrib-right {
-                    width: $right / 2 - 125px;
-                    display: inline-block;
-                    margin-top: 12px;
-
-                    .one-contrib-username {
-                      font-family: 'lepb';
-                      text-transform: uppercase;
-                      font-size: 1.2rem;
-                      margin-bottom: 3px;
-                    }
-                    .one-contrib-title {
-                      margin-top: 10px;
-                      font-family: 'square';
-                      font-size: 1.2rem;
-                    }
-                  }
-
-                  .one-contrib-info {
-                    margin-top: 5px;
-                    width: 100%;
-                    padding: 13px 13px 0px 13px;
-                    font-family: 'lepm';
-                    font-size: 0.8rem;
-                    line-height: 1.14rem;
-                  }
-                }
-
-                .one-contrib-likes {
-                  width: 100%;
-                  height: 47px;
-                  font-family: 'lepb';
-                  text-align: center;
-                  font-size: .8rem;
-
-                  .one-contrib-likes-container {
-                    width: 100%;
-                    margin-top: 4px;
+                  .one-contrib-header {
                     text-align: left;
 
-                    .one-contrib-likes-container-button-arrow {
-                      width: 40px;
-                      height: 46px;
-                      margin-left: -4px;
-                      display: inline-block;
+                    .one-contrib-left {
+                      float: left;
+                      width: 70px;
+                      height: 40px;
                       position: relative;
 
-                      &:after {
-                        content: '+';
+                      .one-contrib-avatar-container {
+                        padding: 10px;
+                        width: 45px;
+                        height: 45px;
+                        background-color: $gray-dark;
+                        border-radius: 2px;
                         position: absolute;
-                        width: 25px;
-                        height: 25px;
-                        top: 8px;
-                        left: 55%;
-                        font-size: 1.7rem;
-                        color: $gray-dark;
-                      }
+                        left: 50%;
+                        top: 12px;
+                        transform: translate(-50%, 0);
 
-                      &:hover {
-                        cursor: pointer;
-                        &:after {
-
-                          color: red !important;
+                        .one-contrib-user-image {
                         }
                       }
-
                     }
 
-                    .one-contrib-likes-container-button {
-                      width: 40px;
-                      height: 46px;
+                    .one-contrib-right {
+                      width: $right / 2 - 125px;
                       display: inline-block;
-                      margin-left: 0px;
-                      // margin: 0 auto;
+                      margin-top: 12px;
 
-                      .demon-body {
+                      .one-contrib-username {
+                        font-family: 'lepb';
+                        text-transform: uppercase;
+                        font-size: 1.2rem;
+                        margin-bottom: 3px;
+                      }
+                      .one-contrib-title {
+                        margin-top: 10px;
+                        font-family: 'square';
+                        font-size: 1.2rem;
+                      }
+                    }
+
+                    .one-contrib-info {
+                      margin-top: 5px;
+                      width: 100%;
+                      padding: 13px 13px 0px 13px;
+                      font-family: 'lepm';
+                      font-size: 0.8rem;
+                      line-height: 1.14rem;
+                    }
+                  }
+
+                  .one-contrib-likes {
+                    width: 100%;
+                    height: 47px;
+                    font-family: 'lepb';
+                    text-align: center;
+                    font-size: .8rem;
+
+                    .one-contrib-likes-container {
+                      width: 100%;
+                      margin-top: 4px;
+                      text-align: left;
+
+                      .one-contrib-likes-container-button-arrow {
+                        width: 40px;
+                        height: 46px;
+                        margin-left: -4px;
+                        display: inline-block;
                         position: relative;
-                        top: 10px;
-                        $demon-color: $game-background;
-                        $demon-eyes: $gray-dark;
 
-                        .demon-head {
-                          width: 24px;
-                          height: 21px;
-                          left: 8px;
-                          position: relative;
-
-                          .demon-face {
-                            transition: .1s ease-out;
-                            width: 22px;
-                            height: 23px;
-                            left: 50%;
-                            margin-left: -11px;
-                            background-color: $demon-color;
-                            position: absolute;
-                            border-radius: 17px 17px 13px 13px;
-                            box-shadow: 0 -4px 0 rgba($gray-dark, 0.1) inset;
-                            text-align: center;
-
-                            &::after {
-                              content: '';
-                              background-color: $demon-color;
-                              width: 2px;
-                              height: 2px;
-                              right: 15px;
-                              top: 4px;
-                              position: absolute;
-                            }
-
-                            &::before {
-                              content: '';
-                              background-color: $gray-dark;
-                              z-index: 1;
-                              width: 2px;
-                              height: 3px;
-                              right: 10px;
-                              top: 20px;
-                              position: absolute;
-                              opacity: 0;
-                            }
-
-
-                            .demon-plus1 {
-                              padding-top: 8px;
-                              padding-right: 1px;
-                              margin: 0 auto;
-                              color: $demon-eyes;
-                              font-size: 0.7rem;
-                              transition: .1s ease-out;
-
-                              &:before {
-                                content: '+'
-                              }
-                              &:after {
-                                opacity: 0;
-                                content: '+'
-                              }
-                            }
-                          }
-
-                          .demon-ears {
-                            background-color: $demon-color;
-                            position: absolute;
-                            left: 50%;
-                            margin-left: -14px;
-                            top: 14px;
-                            width: 28px;
-                            height: 8px;
-                            border-radius: 0px 0px 20px 20px;
-
-                            &:after {
-                              content: '◀';
-                              color: $demon-color;
-                              position: absolute;
-                              right: 3px;
-                              top: -11px;
-
-                            }
-                          }
-
-                          .demon-tongue {
-                            position: absolute;
-                            width: 2px;
-                            height: 8px;
-                            background-color: #AD3CFF;
-                            bottom: 0px;
-                            left: 50%;
-                            margin-left: -1px;
-                            box-shadow: 0 4px 0 rgba($gray-dark, 0.7) inset;
-                          }
+                        &:after {
+                          content: '+';
+                          position: absolute;
+                          width: 25px;
+                          height: 25px;
+                          top: 8px;
+                          left: 55%;
+                          font-size: 1.7rem;
+                          color: $gray-dark;
                         }
 
                         &:hover {
                           cursor: pointer;
+                          &:after {
+
+                            color: red !important;
+                          }
+                        }
+
+                      }
+
+                      .one-contrib-likes-container-button {
+                        width: 40px;
+                        height: 46px;
+                        display: inline-block;
+                        margin-left: 0px;
+                        // margin: 0 auto;
+
+                        .demon-body {
+                          position: relative;
+                          top: 10px;
+                          $demon-color: $game-background;
+                          $demon-eyes: $gray-dark;
+
                           .demon-head {
+                            width: 24px;
+                            height: 21px;
+                            left: 8px;
+                            position: relative;
+
                             .demon-face {
-                              background-color: $red-alert !important;
+                              transition: .1s ease-out;
+                              width: 22px;
+                              height: 23px;
+                              left: 50%;
+                              margin-left: -11px;
+                              background-color: $demon-color;
+                              position: absolute;
+                              border-radius: 17px 17px 13px 13px;
+                              box-shadow: 0 -4px 0 rgba($gray-dark, 0.1) inset;
+                              text-align: center;
+
+                              &::after {
+                                content: '';
+                                background-color: $demon-color;
+                                width: 2px;
+                                height: 2px;
+                                right: 15px;
+                                top: 4px;
+                                position: absolute;
+                              }
+
+                              &::before {
+                                content: '';
+                                background-color: $gray-dark;
+                                z-index: 1;
+                                width: 2px;
+                                height: 3px;
+                                right: 10px;
+                                top: 20px;
+                                position: absolute;
+                                opacity: 0;
+                              }
+
 
                               .demon-plus1 {
-                                &:after {
-                                  opacity: 1;
-                                }
+                                padding-top: 8px;
+                                padding-right: 1px;
+                                margin: 0 auto;
+                                color: $demon-eyes;
+                                font-size: 0.7rem;
+                                transition: .1s ease-out;
+
                                 &:before {
-                                  content: '+';
+                                  content: '+'
                                 }
-                              }
-
-                              &:before {
-                                opacity: 1;
-                              }
-
-                              &:after {
-                                background-color: white;
+                                &:after {
+                                  opacity: 0;
+                                  content: '+'
+                                }
                               }
                             }
 
                             .demon-ears {
-                              background-color: $red-alert !important;
+                              background-color: $demon-color;
+                              position: absolute;
+                              left: 50%;
+                              margin-left: -14px;
+                              top: 14px;
+                              width: 28px;
+                              height: 8px;
+                              border-radius: 0px 0px 20px 20px;
+
                               &:after {
-                                top: -16px;
-                                color: $red-alert;
+                                content: '◀';
+                                color: $demon-color;
+                                position: absolute;
+                                right: 3px;
+                                top: -11px;
+
                               }
                             }
 
                             .demon-tongue {
-                              bottom: -6px;
-                              animation: tongue .1s ease-out infinite alternate;
+                              position: absolute;
+                              width: 2px;
+                              height: 8px;
+                              background-color: #AD3CFF;
+                              bottom: 0px;
+                              left: 50%;
+                              margin-left: -1px;
+                              box-shadow: 0 4px 0 rgba($gray-dark, 0.7) inset;
                             }
-                          
+                          }
+
+                          &:hover {
+                            cursor: pointer;
+                            .demon-head {
+                              .demon-face {
+                                background-color: $red-alert !important;
+
+                                .demon-plus1 {
+                                  &:after {
+                                    opacity: 1;
+                                  }
+                                  &:before {
+                                    content: '+';
+                                  }
+                                }
+
+                                &:before {
+                                  opacity: 1;
+                                }
+
+                                &:after {
+                                  background-color: white;
+                                }
+                              }
+
+                              .demon-ears {
+                                background-color: $red-alert !important;
+                                &:after {
+                                  top: -16px;
+                                  color: $red-alert;
+                                }
+                              }
+
+                              .demon-tongue {
+                                bottom: -6px;
+                                animation: tongue .1s ease-out infinite alternate;
+                              }
+
+                            }
                           }
                         }
                       }
-                    }
 
-                    .one-contrib-likes-container-names {
-                      height: 45px;
-                      width: 220px;
-                      display: inline-block;
-                      vertical-align: top;
-                      position: relative;
+                      .one-contrib-likes-container-names {
+                        height: 45px;
+                        width: 220px;
+                        display: inline-block;
+                        vertical-align: top;
+                        position: relative;
 
-                      .one-contrib-likes-container-names-list {
-                        font-family: 'lepl';
-                        font-size: 0.65rem;
-                        position: absolute;
-                        top: 50%;
-                        transform: translateY(-50%);
-                        line-height: 1rem;
+                        .one-contrib-likes-container-names-list {
+                          font-family: 'lepl';
+                          font-size: 0.65rem;
+                          position: absolute;
+                          top: 50%;
+                          transform: translateY(-50%);
+                          line-height: 1rem;
 
-                        .one-contrib-likes-container-item {
-                          // margin: 1px;
-                          text-align: center;
+                          .one-contrib-likes-container-item {
+                            // margin: 1px;
+                            text-align: center;
 
-                          .name {
-                            padding: 2px 3px 2px 2px;
-                            border-radius: 2px;
-                            background-color: $gray-dark;
-                            // margin-right: -2px;
-                            margin-right: -1px;
-                            color: $game-background;
+                            .name {
+                              padding: 2px 3px 2px 2px;
+                              border-radius: 2px;
+                              background-color: $gray-dark;
+                              // margin-right: -2px;
+                              margin-right: -1px;
+                              color: $game-background;
 
-                            &:hover {
-                              cursor: pointer;
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-
-                .one-contrib-hidden-content {
-                  width: 100%;
-                  overflow: hidden;
-                  height: 0;
-
-                  .one-contrib-messages-container {
-                    width: 100%;
-                    .one-contrib-messages-content {
-                    }
-
-                    .one-contrib-messages-form-container {
-                      width: 100%;
-                      margin-bottom: 13px;
-
-                      .one-contrib-messages-form {
-                        border: none;
-                        
-                        .one-contrib-messages-uimage-container {
-                          vertical-align: top;
-                          width: 32px;
-                          height: 32px;
-                          background-color: salmon;
-                          display: inline-block;
-                          margin-right: 10px;
-                          margin-top: 1px;
-                        }
-
-                        .one-contrib-messages-text-form-container {
-                          display: inline-block;
-                          position: relative;
-                          width: 78%;
-                          text-align: left;
-
-                          .one-contrib-messages-text-form {
-                            border: 2px solid $gray-dark;
-                            background-color: $game-background;
-                            width: 100%;
-                            min-height: 32px;
-                            display: inline-block;
-                            // overflow: hidden;
-                            font-family: 'lepm';
-                            font-size: 0.8rem;
-                            line-height: 1.1rem;
-                            border-radius: 2px;
-                            position: relative;
-
-                            .one-contrib-messages-text-editable {
-                              padding: 5px 10px 5px 10px;
-                              text-align: left;
-                              display: inline-block;
-                              min-width: 185px;
-                              max-width: 100%;
-                            }
-
-                            .one-contrib-messages-submit{
-                              height: 30px;
-                              width: 60px;
-                              // background-color: $game-background-dark;
-                              color: $gray-dark;
-                              float: right;
-                              font-family: 'lepb';
-                              font-size: 0.9rem;
-                              text-align: center;
                               &:hover {
                                 cursor: pointer;
                               }
                             }
                           }
-
-
                         }
                       }
                     }
                   }
+                  .one-contrib-show-hidden-content {
+                    height: auto !important;
+                  }
 
-                  .one-contrib-dev-res-form {
+                  .one-contrib-hidden-content {
                     width: 100%;
-                    height: 127px;
+                    overflow: hidden;
+                    height: 0;
 
-                    .one-contrib-dev-form {
-                      border: 2px solid $gray-dark;
-                      margin: 7px;
-                      margin-top: 13px;
-                      vertical-align: middle;
-                      display: inline-block;
-                      width: 91%;
-                      // overflow: hidden;
-                      height: 100px;
-                      border-radius: 3px;
-                      
-                      .one-contrib-dev-textarea-container {
-                        display: inline-block;
-                        width: 85%;
-                        height: 100%;
-                        
-                        .one-contrib-dev-textarea {
-                          border-radius: 2px;
-                          width: 100%;
-                          border: none;
-                          resize: none;
-                          height: 100%;
-                          font-family: 'lepm';
-                          font-size: 0.8rem;
-                          line-height: 1.2rem;
-                          background-color: $game-background;
-                          padding: 5px;
+                    .one-contrib-messages-container {
+                      width: 100%;
+
+                      .one-contrib-messages {
+                        text-align: left;
+                        margin-bottom: 15px;
+
+                        .one-contrib-messages-single {
+                          padding-top: 12px;
+                          min-height: 60px;
+                          &:nth-child(odd) {
+                            background-color: rgba(0, 0, 0, .1);
+                          }
+                          padding-bottom: 15px;
+                          .one-contrib-messages-single-left {
+                            vertical-align: top;
+                            width: 57px;
+                            display: inline-block;
+                            margin-right: 12px;
+                            text-align: right;
+
+                            .one-contrib-messages-single-avatar-container {
+                              display: inline-block;
+                              background-color: gray;
+                              width: 30px;
+                              height: 30px;
+                              border-radius: 2px;
+
+                              .one-contrib-messages-single-avatar {
+                              }
+                            }
+                          }
+                          .one-contrib-messages-single-right {
+                            text-align: left;
+                            vertical-align: top;
+                            display: inline-block;
+                            width: 74%;
+
+                            
+                            .one-contrib-messages-single-content {
+                              padding-right: 10px;
+                              font-family: 'lepm';
+                              font-size: 0.8rem;
+                              line-height: 1.1rem;
+                            }
+
+                            .one-contrib-messages-single-userName {
+                              font-family: 'lepb';
+                              font-size: 0.9rem;
+                            }
+
+                            .one-contrib-messages-single-delete {
+                              width: 13px;
+                              height: 25px;
+                              cursor: pointer;
+                              float: right;
+                              color: $gray-dark;
+                              
+                              .appear-confirm {
+                                transform: rotateX(0deg) !important;
+                              }
+
+                              .confirmation {
+                                border-radius: 2px;
+                                width: 24px;
+                                height: 24px;
+                                bottom: -7px;
+                                position: relative;
+                                right: 5px;
+                                background-color: $red-alert;
+                                color: $gray-dark;
+                                transform-origin: 100% 0;
+                                transform: rotateX(90deg);
+                                transition: 0.2s cubic-bezier(0.77, 0, 0.175, 1);
+                                box-shadow: 0 3px 0 rgba(0,0,0,0.3);
+
+                                &:before {
+                                  content: '';
+                                  position: absolute;
+                                  width: 0; 
+                                  height: 0; 
+                                  top: -7px;
+                                  border-left: 5px solid transparent;  /* left arrow slant */
+                                  border-right: 5px solid transparent; /* right arrow slant */
+                                  border-bottom: 7px solid $red-alert; /* bottom, add background color here */
+                                  font-size: 0;
+                                  line-height: 0;
+                                }
+
+                                .accept {
+                                  font-size: 1.3rem;
+                                  position: absolute;
+                                  top: 2px;
+                                  left: 2px;
+                                  &:hover {
+                                    color: $yellow-light;
+                                  }
+                                }
+                              }
+
+                              .trash-body {
+                                transition: .1s
+                              }
+
+                              .trash-cap {
+                                transform-origin: 100% 100%;
+                                transition: .1s;
+                              }
+
+                              &:hover {
+                                .trash-body {
+                                  opacity: 0;
+                                }
+
+                                .trash-cap {
+                                  transform: rotate(14deg);
+                                }
+                              }
+                            }
+
+                            .one-contrib-messages-single-delete {
+                              float: right;
+                              margin-right: -20px;
+                              color: $gray-dark;
+                              font-family: 'geo';
+                              font-size: 0.8rem;
+
+                              &:hover {
+                                cursor: pointer;
+                                color: $red-alert;
+                              }
+                            }
+                          }
                         }
                       }
 
-                      .one-contrib-dev-buttons {
-                        display: inline-block;
-                        width: 15%;
-                        height: 100px;
-                        vertical-align: top;
-                        margin-left: -3px;
+                      .one-contrib-messages-form-container {
+                        width: 100%;
+                        margin-bottom: 13px;
 
-                        .one-contrib-dev-input-false {
-                          height: 48px;
-                          width: 100%;
-                          background: $yellow-zero url('/img/false-s.png') no-repeat 45% 50%;
-                          background-size: 25px;
-                        }
-
-                        .button {
+                        .one-contrib-messages-form {
                           border: none;
-                          &:hover{
-                            cursor: pointer;
+
+                          .one-contrib-messages-uimage-container {
+                            vertical-align: top;
+                            width: 30px;
+                            height: 30px;
+                            background-color: salmon;
+                            display: inline-block;
+                            margin-right: 10px;
+                            margin-top: 1px;
+                          }
+
+                          .one-contrib-messages-text-form-container {
+                            display: inline-block;
+                            position: relative;
+                            width: 78%;
+                            text-align: left;
+
+                            .one-contrib-messages-text-form {
+                              background-color: $game-background;
+                              width: 100%;
+                              min-height: 32px;
+                              display: inline-block;
+                              // overflow: hidden;
+                              font-family: 'lepm';
+                              font-size: 0.8rem;
+                              line-height: 1.1rem;
+                              border-radius: 2px;
+                              position: relative;
+
+                              .one-contrib-messages-text-editable {
+                                padding: 5px 10px 5px 10px;
+                                text-align: left;
+                                display: inline-block;
+                                min-width: 245px;
+                                max-width: 100%;
+                              }
+
+                              .one-contrib-messages-submit{
+                                height: 32px;
+                                width: 50px;
+                                // background-color: $game-background-dark;
+                                color: white;
+                                float: right;
+                                font-family: 'lepl';
+                                letter-spacing: 0.05rem;
+                                font-size: 0.8rem;
+                                background-color: rgba(0,0,0,0.2);
+                                text-align: center;
+                                &:hover {
+                                  cursor: pointer;
+                                }
+                              }
+                            }
+
+
+                          }
+                        }
+                      }
+                    }
+
+                    .one-contrib-dev-res-form {
+                      width: 100%;
+                      height: 127px;
+
+                      .one-contrib-dev-form {
+                        border: 2px solid $gray-dark;
+                        margin: 7px;
+                        margin-top: 13px;
+                        vertical-align: middle;
+                        display: inline-block;
+                        width: 91%;
+                        // overflow: hidden;
+                        height: 100px;
+                        border-radius: 3px;
+
+                        .one-contrib-dev-textarea-container {
+                          display: inline-block;
+                          width: 85%;
+                          height: 100%;
+
+                          .one-contrib-dev-textarea {
+                            border-radius: 2px;
+                            width: 100%;
+                            border: none;
+                            resize: none;
+                            height: 100%;
+                            font-family: 'lepm';
+                            font-size: 0.8rem;
+                            line-height: 1.2rem;
+                            background-color: $game-background;
+                            padding: 5px;
                           }
                         }
 
-                        .one-contrib-dev-input-true {
-                          width: 100%;
-                          height: 48px;
-                          background: $green-true url('/img/true-s.png') no-repeat 45% 45%;
-                          background-size: 25px;
-                          input {
-                            color: transparent;
+                        .one-contrib-dev-buttons {
+                          display: inline-block;
+                          width: 15%;
+                          height: 100px;
+                          vertical-align: top;
+                          margin-left: -3px;
+
+                          .one-contrib-dev-input-false {
+                            height: 48px;
                             width: 100%;
-                            height: 100%;
+                            background: $yellow-zero url('/img/false-s.png') no-repeat 45% 50%;
+                            background-size: 25px;
+                          }
+
+                          .button {
+                            border: none;
                             &:hover{
                               cursor: pointer;
                             }
                           }
-                        }
-                      }
-                    }
-                  }
 
-                  .one-contrib-dev-panel {
-                    width: 100%;
-                    display: inline-block;
-                    border-top: 1px dotted #717171;
-                    margin-top: 5px;
-
-
-                    .one-contrib-dev-response {
-                      height: 100%;
-                      position: relative;
-                      margin: 20px;
-                      text-align: left;
-                      
-                      .one-contrib-dev-response-left {
-                        display: inline-block;
-                        width: 100%;
-
-                        .one-contrib-dev-left-title {
-                          font-family: 'lepb';
-                          font-size: 1.8rem;
-                          width: 100%;
-                          
-                          .one-contrib-dev-hand {
-                            height: 30px;
-                            display: inline-block;
-                            position: relative;
-                            margin-left: 2px;
-                            
-                            img {
-                              width: 30px;
-                              vertical-align: top;
-                              margin-top: 1px;
+                          .one-contrib-dev-input-true {
+                            width: 100%;
+                            height: 48px;
+                            background: $green-true url('/img/true-s.png') no-repeat 45% 45%;
+                            background-size: 25px;
+                            input {
+                              color: transparent;
+                              width: 100%;
+                              height: 100%;
+                              &:hover{
+                                cursor: pointer;
+                              }
                             }
                           }
                         }
-                        
-                        .one-contrib-dev-left-content {
-                          margin-top: 10px;
-                          font-family: 'lepm';
-                          font-size: .9rem;
-                          line-height: 1.14rem;
+                      }
+                    }
+
+                    .one-contrib-dev-panel {
+                      width: 100%;
+                      display: inline-block;
+                      border-top: 1px dotted #717171;
+                      margin-top: 5px;
+
+
+                      .one-contrib-dev-response {
+                        height: 100%;
+                        position: relative;
+                        margin: 20px;
+                        text-align: left;
+
+                        .one-contrib-dev-response-left {
+                          display: inline-block;
+                          width: 100%;
+
+                          .one-contrib-dev-left-title {
+                            font-family: 'lepb';
+                            font-size: 1.8rem;
+                            width: 100%;
+
+                            .one-contrib-dev-hand {
+                              height: 30px;
+                              display: inline-block;
+                              position: relative;
+                              margin-left: 2px;
+
+                              img {
+                                width: 30px;
+                                vertical-align: top;
+                                margin-top: 1px;
+                              }
+                            }
+                          }
+
+                          .one-contrib-dev-left-content {
+                            margin-top: 10px;
+                            font-family: 'lepm';
+                            font-size: .9rem;
+                            line-height: 1.14rem;
+                          }
                         }
                       }
                     }
+
                   }
 
-                }
-
-                &:hover {
-                  border: 1px solid rgba($gray-dark, .7);
+                  &:hover {
+                    background-color: rgba(255, 255, 255, 1);
+                  }
                 }
               }
             }

@@ -28,6 +28,10 @@ class devBoard {
 
     devBoardContainer.append(this.inside)
 
+    socket.on('newDevBoardMessage', (data) => {
+      console.log('llego un mensaje', data)
+    })
+
     // se piden todas las contribuciones
     this.getMOM((err, mOM) => {
       if (err) console.log(`ha ocurrido un error obteniendo el MOM: ${err}`)
@@ -247,6 +251,7 @@ class devBoard {
       let $containerToMove =  $this.find('.one-contrib-content')
       let $back =  $this.find('.one-contrib-content-back')
       let $eyes =  $back.find('.one-contrib-content-back-eyes')
+      let $hiddenC = $this.find('.one-contrib-hidden-content')
 
       let myHeightToSave = $this.height()
 
@@ -255,15 +260,19 @@ class devBoard {
 
       let $ecran = $(ecran)
       $ecran.toggleClass('ecran-display')
+      $hiddenC.toggleClass('one-contrib-show-hidden-content')
       $back.toggleClass('back-display')
 
       $("<style/>", {text: `.get-devboard-contrib {
+        margin-top: 7px !important;
+        margin-bottom: 7px !important;
+        overflow: scroll;
         position: fixed !important;
         left: 50% !important;
-        top: 40% !important;
+        top: 5% !important;
+        height: 90%;
         width: ${width}px !important;
         margin-left: -${width / 2}px;
-        margin-top: -${height / 2}px;
         z-index: 12 !important;
       }`}).appendTo('head');
 
@@ -346,7 +355,7 @@ class devBoard {
 
     // construye el mensaje de la fecha
     let dateString = createTemplate.drawDate(contrib.dateAdded)
-    
+
     // SE CONSTRUYEN LAS CONTRIBUCIONES -----------
 
     // dibuja el boton de rate
@@ -373,8 +382,9 @@ class devBoard {
     // </textarea>
 
     let userMessageForm = yo`
-    <p class="one-contrib-messages-text-editable" contenteditable="true">
-    </p>`
+      <p class="one-contrib-messages-text-editable" contenteditable="true">
+      </p>
+    `
 
     let containerMessage = yo`
       <div class="one-contrib-messages-text-form">
@@ -391,7 +401,7 @@ class devBoard {
 
       // insert text manually
       document.execCommand("insertHTML", false, text);
-  });
+    });
 
     // formulario de subida de mensajes de usuario
     let messagesForm = yo`
@@ -406,33 +416,29 @@ class devBoard {
     `
 
     // EVENT: subir mensaje.
-    let $messagesForm = $(messagesForm)
-    $messagesForm.on('submit', (ev) => {
-      ev.preventDefault()
-    })
+    // let $messagesForm = $(messagesForm)
+    // $messagesForm.on('submit', (ev) => {
+    //   ev.preventDefault()
+    // })
 
     // template de mensajes de usuario
-    let contribMessages = yo`
-      <div class="one-contrib-messages-single">
-      </div>
-    `
 
     // template del contenido escondido
     let hiddenContent = yo`
-    <div class="one-contrib-hidden-content">
-      <div class="one-contrib-messages-container">
-        <div class="one-contrib-messages-content">
-          ${contribMessages}
+      <div class="one-contrib-hidden-content">
+        <div class="one-contrib-messages-container">
+          ${this.drawMessages(contrib)}
+          <div class="one-contrib-messages-form-container">
+            ${messagesForm}
+          </div>
         </div>
-        <div class="one-contrib-messages-form-container">
-          ${messagesForm}
+        <div class="one-contrib-dev-res">
+          <div class="one-contrib-dev-res-to-change">
+            ${devResponse}
+          </div>
+          ${this.user.admin ? devForm : ''}
         </div>
       </div>
-      <div class="one-contrib-dev-res">
-        ${devResponse}
-        ${this.user.admin ? devForm : ''}
-      </div>
-    </div>
     `
 
     // TEMPLATE PRINCIPAL
@@ -445,29 +451,31 @@ class devBoard {
             </div>
           </div>
           <div class="one-contrib-content" contrib="${contrib.publicId}">
-            <div class="one-contrib-header">
-              <div class="one-contrib-left">
-                <div class="one-contrib-avatar-container">
-                  <img src="${contrib.user.avatar}" alt="" class="one-contrib-user-image">
+            <div class="one-contrib-content-scroll">
+              <div class="one-contrib-header">
+                <div class="one-contrib-left">
+                  <div class="one-contrib-avatar-container">
+                    <img src="${contrib.user.avatar}" alt="" class="one-contrib-user-image">
+                  </div>
+                </div>
+                <div class="one-contrib-right">
+                  <div class="one-contrib-username">${contrib.user.username}</div>
+                    <span>${dateString}</span>
+                  </div>
+                <div class="one-contrib-info">${contrib.data.data || contrib.data.info}</div>
+              </div>
+              <div class="one-contrib-likes">
+                <div class="one-contrib-likes-container">
+                  <div class="one-contrib-likes-container-button-arrow">
+                  </div>
+                  ${likeButton}
+                  <div class="one-contrib-likes-container-names">
+                    ${contribRate}
+                  </div>
                 </div>
               </div>
-              <div class="one-contrib-right">
-                <div class="one-contrib-username">${contrib.user.username}</div>
-                  <span>${dateString}</span>
-                </div>
-              <div class="one-contrib-info">${contrib.data.data || contrib.data.info}</div>
+              ${hiddenContent}
             </div>
-            <div class="one-contrib-likes">
-              <div class="one-contrib-likes-container">
-                <div class="one-contrib-likes-container-button-arrow">
-                </div>
-                ${likeButton}
-                <div class="one-contrib-likes-container-names">
-                  ${contribRate}
-                </div>
-              </div>
-            </div>
-            ${hiddenContent}
           </div>
         </div>
       </div>
@@ -484,12 +492,11 @@ class devBoard {
       let textToSend = $this.find('.one-contrib-messages-text-editable').html()
 
       let data = {
-        textToSend: textToSend
+        userMessage: textToSend
       }
 
-      addUserMessage(id, data, (err, data) => {
+      addUserMessage(id, data, (err, res) => {
         if (err) console.log(err)
-        console.log(data)
       })
     }
 
@@ -498,6 +505,7 @@ class devBoard {
     let devAddApproval = this.devResponse.bind(this)
     // dibuja la contribucion
     let drawDevResponse = this.drawDevResponse.bind(this)
+
     $devForm.on('click', '.one-contrib-dev-buttons .button', (ev) => {
       ev.preventDefault()
       let $head = $(ev.target).closest('.one-contrib-content')
@@ -509,7 +517,7 @@ class devBoard {
       let $this = $(ev.currentTarget)
       let action = $this.attr('value')
 
-      let $devResponse = $(devResponse)
+      let $contribToChange = $head.find('.one-contrib-dev-res-to-change')
 
       let data = {
         approval: action,
@@ -518,11 +526,15 @@ class devBoard {
 
       devAddApproval(id, data, (err, res) => {
         if (err) return console.log('este es un mensaje de error a optimizar', err)
+
         let changes = {
           dev: res.body.data
         }
+
         $textArea.val('')
-        $devResponse.empty().append(drawDevResponse(changes))
+        let templateToDraw = drawDevResponse(changes)
+        console.log($contribToChange)
+        $contribToChange.empty().append(templateToDraw)
       })
     })
 
@@ -551,22 +563,33 @@ class devBoard {
     let redAlert = '#FF2B4A'
     let greenOk = '#1EFFDC'
 
+    let approval = JSON.parse(contrib.dev.approval)
+    let message = contrib.dev.message
+
+    if (approval === null && message === null) {
+      return
+    }
+
+    console.log(contrib.dev)
+
+    console.log(approval)
     let devMessageTemplate = yo`
-    <div class="one-contrib-dev-left-content">
-      ${contrib.dev.message}
-    </div>
+      <div class="one-contrib-dev-left-content">
+        ${message}
+      </div>
     `
+
     return yo`
-      <div class="one-contrib-dev-panel" style="background:${contrib.dev.approval ? greenOk : redAlert}">
+      <div class="one-contrib-dev-panel" style="background-color: ${approval === true ? greenOk : redAlert}">
         <div class="one-contrib-dev-response">
           <div class="one-contrib-dev-response-left">
             <div class="one-contrib-dev-left-title">
-              ${contrib.dev.approval ? 'POSIBLE': 'IMPOSIBLE'}
+              ${approval ? 'POSIBLE': 'IMPOSIBLE'}
               <div class="one-contrib-dev-hand">
-                <img src="img/${contrib.dev.approval ? 'true' : 'false'}.png" alt="${contrib.dev.approval}">
+                <img src="img/${approval ? 'true' : 'false'}.png" alt="${approval}">
               </div>
             </div>
-            ${contrib.dev.message ? devMessageTemplate : ''}
+            ${message ? devMessageTemplate : ''}
           </div>
         </div>
       </div>
@@ -592,6 +615,62 @@ class devBoard {
       if (err) return cb(err)
       cb(null, res)
     })
+  }
+
+  // Dibuja los mensajes
+  drawMessages(contrib){
+    let myMessages = contrib.messages
+    let allMessages = yo`
+      <div class="one-contrib-messages">
+      </div>
+    `
+    for(let i = 0; i < myMessages.length; i++) {
+      allMessages.appendChild(this.drawSingleMessage(myMessages[i]))
+    }
+
+    let $allMessages = $(allMessages)
+
+    // Queda a la escucha de una eliminacioooon! XD
+    $allMessages.on('click', '.one-contrib-messages-single .one-contrib-messages-single-right .one-contrib-messages-single-delete .one-contrib-messages-single-delete-container .confirmation .accept', (ev) => {
+      ev.preventDefault()
+      let $head = $(ev.target).closest('.one-contrib-messages-single')
+      let id = $head.attr('messageId')
+      console.log(id)
+    })
+
+    return allMessages
+  }
+
+  // Dibuja un mensaje solo
+  drawSingleMessage (data) {
+    let trash = createTemplate.getTrash()
+
+    let deleteMessage = yo`
+      <div class="one-contrib-messages-single-delete">
+        ${trash}
+      </div>
+    `
+
+    console.log(data)
+
+    return yo`
+      <div class="one-contrib-messages-single" messageId = ${data.id}>
+        <div class="one-contrib-messages-single-left">
+          <div class="one-contrib-messages-single-avatar-container">
+            <img src="${data.user.image}.png" alt="" class="one-contrib-messages-single-avatar">
+          </div>
+        </div>
+        <div class="one-contrib-messages-single-right">
+          ${data.user.username === this.user.username ? deleteMessage: ''}
+          <p class="one-contrib-messages-single-content">
+            <span class="one-contrib-messages-single-userName">
+              ${data.user.username}
+            </span>
+            ${data.content.userMessage}
+          </p>
+        </div>
+      </div>
+    `
   }
 
   // rate contrib
@@ -625,11 +704,13 @@ class devBoard {
 
 module.exports = devBoard
 
-// 💀 se agrega un mensaje a la contribucion
+// 🍷 se agrega un mensaje a la contribucion
 // 💀 se elimina un mensaje a la contribucion
 // 💀 se pide una contribucion por tags
 // 💀 se edita una contribucion
 // 💀 se elimina una contribucion
+// 💀 set mom
+// 💀 get mom
 // 🍷 se piden las contribuciones por id
 // 🍷 se pide una contribucion por id
 // 🍷 se lee si el usuario es dev

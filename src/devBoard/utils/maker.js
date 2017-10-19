@@ -1,4 +1,6 @@
 const yo = require('yo-yo')
+const d3 = require('d3')
+const $ = require('jquery')
 
 function drawRateName (left, item, right) {
   let conectorLeft = yo`<span class="conector">${left || ''}</span>`
@@ -322,5 +324,72 @@ module.exports = {
       return rateTemplate
     }
     return null
+  },
+
+  getTrash: () => {
+    let xmlns="http://www.w3.org/2000/svg"
+    let xmlns_xlink = "http://www.w3.org/1999/xlink"
+
+    let trash = yo`
+      <svg viewBox="0 -75 414.19 530">
+        <defs>
+          <style>
+          .trash-cls-1 {
+            fill:#222;
+          }
+          .trash-cls-2 {
+            fill: #222;
+          }
+          .trash-cls-3 {
+            fill:#222;
+          }
+          </style>
+        </defs>
+        <title>trash</title>
+        <path class="trash-cls-1 trash-body-hover" d="M40.26,126.2V480H373.93V126.2H40.26Zm86.25,284H93.15V183.74h33.37V410.21Zm97.27,0H190.41V183.74h33.37V410.21Zm97.26,0H287.67V183.74H321V410.21Z"/>
+        <path class="trash-cls-3 trash-body" d="M40.26,126.2V480H373.93V126.2H40.26Zm86.25,284H93.15V183.74h33.37V410.21Zm97.27,0H190.41V183.74h33.37V410.21Zm97.26,0H287.67V183.74H321V410.21Z"/>
+        <path class="trash-cls-2 trash-cap" d="M292.79,77.09V0H114.56V77.09H0v54H414.19v-54H292.79Zm-37.88,0H152.45V34.65H254.91V77.09Z"/>
+      </svg>
+    `
+
+    let okAccept = yo`
+      <div class="accept">
+        <i class="fa fa-check"></i>
+      </div>
+    `
+
+    let confirm = yo`
+      <div class="confirmation">
+        ${okAccept}
+      </div>
+    `
+    let d3trash = d3.select(trash)
+
+    d3trash
+    .attr("xmlns", xmlns)
+    .attr("xmlns:xlink", xmlns_xlink)
+
+    trash.classList.add('focused-trash')
+
+    let $trash = $(trash)
+    let $confirm = $(confirm)
+    
+    // oculta el dialogo de eliminar imagen cuando se da click afuera
+    $trash.blur(function(){
+      setTimeout(function() {
+        $confirm.removeClass('appear-confirm')
+      }, 100);
+    })
+
+    $trash.click(function(){
+      $confirm.toggleClass('appear-confirm')
+    })
+
+    return yo`
+      <div class="one-contrib-messages-single-delete-container">
+        ${trash}
+        ${confirm}
+      </div>
+    `
   }
 }
