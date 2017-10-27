@@ -14,22 +14,65 @@ const Masonnry = require('masonry-layout')
 let devBoardContainer = document.getElementById('devboard-container')
 
 // pantalla oscura
-let ecran = yo`<div class='ecran-gray'></div>`
+let ecran = yo`
+<div class='ecran-gray'>
+</div>
+`
 devBoardContainer.appendChild(ecran)
 
 
 class devBoard {
   constructor (user, socket) {
     // construye una plantilla basica
+    this.right = yo`<div class="devboard devBoard-right"></div>`
     this.inside = yo`<div class="clearfix"></div>`
     this.tagBoard = yo`<div class="devboard-right-tags"></div>`
     this.tags = []
     this.user = user
+    this.contentOpen = false
+    this.contentOpened = null
 
+    this.$ecran = $(ecran)
+
+    // nombre del tablero
+    this.boardName = 'conexiones'
     devBoardContainer.append(this.inside)
 
-    socket.on('newDevBoardMessage', (data) => {
-      console.log('llego un mensaje', data)
+    let drawSingleMessage = this.drawSingleMessage.bind(this)
+
+    socket.on('newDevBoardMessage', (newMessage) => {
+      if (this.contentOpen) {
+        let myContent = this.contentOpened.find('.one-contrib-content')
+        let $myContent = $(myContent[0])
+        let id = $(myContent[0]).attr('contrib')
+
+        if (id === newMessage.contribId) {
+          let $container = $myContent.find('.one-contrib-messages')
+          $container[0].append(drawSingleMessage(newMessage))
+        }
+      }
+    })
+
+    socket.on('deleteDevBoardMessage', (deletedMessage) => {
+      if (this.contentOpen) {
+        let myContent = this.contentOpened.find('.one-contrib-content')
+        let $myContent = $(myContent[0])
+        let id = $(myContent[0]).attr('contrib')
+
+        if (id === deletedMessage.contribId) {
+          let deleteMessageTemplate = yo`
+            <div class="delete-message-template">
+              <span class="delete-message-template-username">
+                ${deletedMessage.username}
+              </span>
+              ha eliminado el comentario ...
+            </div>
+          `
+          let $container = $myContent.find('.one-contrib-messages')
+          let $message = $container.find(`.one-contrib-messages-single[messageid='${deletedMessage.id}']`)
+          $message.empty().append(deleteMessageTemplate)
+        }
+      }
     })
 
     // se piden todas las contribuciones
@@ -47,7 +90,10 @@ class devBoard {
 
       // lado derecho, contiene los tags, el formulario de contribuciones, las contribuciones.
       // pdta: se tiene en cuenta si es dev o no, para renderizar el formulario
-      this.buildRight(user)
+      this.getContribs(null, (err, response) => {
+        if (err) return console.log(err)
+        this.buildRight(user, response.contributions)
+      })
     })
   }
 
@@ -128,12 +174,12 @@ class devBoard {
   // get man of the month
   getMOM (cb) {
     // this need a server req
-    cb(null, {
-      username: 'adriana',
-      image: '/images/none.jpg',
-      title: 'Beast',
-      genre: 'female',
-      publicId: '123124124'
+    request
+    .get('/api/contributions/getmom')
+    .set('Accept', 'application/json')
+    .end(function (err, res) {
+      if (err) return cb(err)
+      cb(null, res.body.mom)
     })
   }
 
@@ -143,8 +189,9 @@ class devBoard {
     let wrapper = yo`<div class="devboard-wrapper"></div>`
     let left = yo`<div class="devBoard-left devboard"></div>`
 
+
     // BRAND
-    let brand = createTemplate.drawBrand()
+    let brand = createTemplate.drawBrand(this.boardName)
 
     // MAN OF THE MONTH
     // Simplemente un setter y getter
@@ -158,12 +205,14 @@ class devBoard {
 
     // IN PROCESS CONTRIBUTIONS
     // se crea un listado de las contribuciones que estan en proceso
-    let inProcess = createTemplate.drawInProcess(contribsInProcess)
+
+    // in process: aun no
+    // let inProcess = createTemplate.drawInProcess(contribsInProcess)
+    // wrapper.appendChild(inProcess)
 
     // se añanden los contenidos al wrapper
     wrapper.appendChild(brand)
     wrapper.appendChild(manOfMonth)
-    wrapper.appendChild(inProcess)
 
     // se añade el contenido al contenedor
     left.appendChild(wrapper)
@@ -172,8 +221,11 @@ class devBoard {
   }
 
   buildRight (user, contribs) {
-    let right = yo`<div class="devboard devBoard-right"></div>`
-    let wrapper = yo`<div class="devboard-wrapper"></div>`
+    // let container = document.getElementById('devboard-wrapper-right')
+    // let $container = $(container)
+    // $container.remove()
+
+    let wrapper = yo`<div id="devboard-wrapper-right" class="devboard-wrapper"></div>`
     let tagContainer = yo`<div class="tag-devboard-container"></div>`
 
     // contenido
@@ -183,8 +235,8 @@ class devBoard {
     let msnry = new Masonnry (content, {
       itemSelector: '.grid-item',
       columWidth: 270,
-      transitionDuration: '0.2s',
-      isInitLayout: false
+      transitionDuration: '0.2s'
+      // isInitLayout: false
     })
 
     // FORMULARIO DE CONTRIBUCIONES -------
@@ -244,62 +296,25 @@ class devBoard {
 
     // Muestra y esconde de nuevo el contenido oculto.
     let $content = $(content)
+    let contribOpenInteractions = this.contribOpenInteractions.bind(this)
+
     $content.on('click', '.one-contrib-container .one-contrib-wrapper .one-contrib-content .one-contrib-likes .one-contrib-likes-container-button-arrow', (ev) => {
       let $masIcon = $(ev.currentTarget)
-      let $this = $masIcon.closest('.one-contrib-container')
+      this.contentOpen = true
+      let $content = $masIcon.closest('.one-contrib-container')
+      this.contentOpened = $content
+      contribOpenInteractions($content)
+    })
 
-      let $containerToMove =  $this.find('.one-contrib-content')
-      let $back =  $this.find('.one-contrib-content-back')
-      let $eyes =  $back.find('.one-contrib-content-back-eyes')
-      let $hiddenC = $this.find('.one-contrib-hidden-content')
-
-      let myHeightToSave = $this.height()
-
-      let width = $containerToMove.width() + 100;
-      let height = $containerToMove.height()
-
-      let $ecran = $(ecran)
-      $ecran.toggleClass('ecran-display')
-      $hiddenC.toggleClass('one-contrib-show-hidden-content')
-      $back.toggleClass('back-display')
-
-      $("<style/>", {text: `.get-devboard-contrib {
-        margin-top: 7px !important;
-        margin-bottom: 7px !important;
-        overflow: scroll;
-        position: fixed !important;
-        left: 50% !important;
-        top: 5% !important;
-        height: 90%;
-        width: ${width}px !important;
-        margin-left: -${width / 2}px;
-        z-index: 12 !important;
-      }`}).appendTo('head');
-
-      if($eyes.hasClass('show-eyes')){
-        $eyes.removeClass('show-eyes')
+    this.$ecran.on('click', (ev) => {
+      if (this.contentOpen) {
+        contribOpenInteractions(this.contentOpened)
+        this.contentOpen = false
       }
-
-      $containerToMove.toggleClass('opacity-zero')
-      setTimeout(function() {
-        $containerToMove.toggleClass('get-devboard-contrib')
-        setTimeout(function() {
-          $containerToMove.toggleClass('opacity-zero')
-
-          if(!$eyes.hasClass('show-eyes')){
-            setTimeout(function() {
-              $eyes.addClass('show-eyes')
-            }, 200);
-          }
-
-        }, 100);
-      }, 100);
-
-      $this.css('height', myHeightToSave)
     })
 
     // se agregan todas las contribuciones
-    this.buildContribList(user, content, msnry, (err, content) => {
+    this.buildContribList(user, content, msnry, contribs, (err, content) => {
       if (err) console.log(err)
       tagContainer.appendChild(this.tagBoard)
       wrapper.appendChild(tagContainer)
@@ -310,23 +325,84 @@ class devBoard {
     })
 
     // se agregan los elementos a la envoltura
-    right.appendChild(wrapper)
-    this.inside.append(right)
+    empty(this.right)
+    this.right.appendChild(wrapper)
+    this.inside.append(this.right)
   }
 
-  buildContribList (user, container, msnry, cb) {
-    this.getcontribs(0, (err, res) => {
+  contribOpenInteractions($this){
+    let $containerToMove =  $this.find('.one-contrib-content')
+    let $back =  $this.find('.one-contrib-content-back')
+    let $eyes =  $back.find('.one-contrib-content-back-eyes')
+    let $hiddenC = $this.find('.one-contrib-hidden-content')
+
+    let myHeightToSave = $this.height()
+
+    let width = $containerToMove.width() + 100;
+    let height = $containerToMove.height()
+
+    let $ecran = $(ecran)
+    $ecran.toggleClass('ecran-display')
+    $hiddenC.toggleClass('one-contrib-show-hidden-content')
+    $back.toggleClass('back-display')
+
+    $("<style/>", {text: `.get-devboard-contrib {
+      margin-top: 7px !important;
+      margin-bottom: 7px !important;
+      overflow-y: auto;
+      position: fixed !important;
+      left: 50% !important;
+      top: 5% !important;
+      max-height: 90%;
+      width: ${width}px !important;
+      margin-left: -${width / 2}px;
+      z-index: 12 !important;
+    }`}).appendTo('head');
+
+    if($eyes.hasClass('show-eyes')){
+      $eyes.removeClass('show-eyes')
+    }
+
+    $containerToMove.toggleClass('opacity-zero')
+    setTimeout(function() {
+      $containerToMove.toggleClass('get-devboard-contrib')
+      setTimeout(function() {
+        $containerToMove.toggleClass('opacity-zero')
+        if(!$eyes.hasClass('show-eyes')){
+          setTimeout(function() {
+            $eyes.addClass('show-eyes')
+          }, 200);
+        }
+      }, 100);
+    }, 100);
+    $this.css('height', myHeightToSave)
+  }
+
+  buildContribList (user, container, msnry, contribs, cb) {
+    for (let i = 0; i < contribs.length; i++) {
+      let oneContrib = contribs[i]
+      let renderedContrib = this.renderContrib(user, oneContrib)
+      msnry.addItems(renderedContrib)
+      container.appendChild(renderedContrib)
+    }
+
+    cb(null, container, contribs)
+
+    // this.getcontribs(0, (err, res) => {
+    //   if (err) return cb(err)
+    //   let contribs = res.contributions
+    // })
+  }
+
+  // TAGS
+  // pide las contribuciones por tags
+  getContribsByTag (tag, cb) {
+    request
+    .get(`/api/contributions/getbytag/${tag}`)
+    .set('Accept', 'application/json')
+    .end((err, res) => {
       if (err) return cb(err)
-      let contribs = res.contributions
-
-      for (let i = 0; i < contribs.length; i++) {
-        let oneContrib = contribs[i]
-        let renderedContrib = this.renderContrib(user, oneContrib)
-        msnry.addItems(renderedContrib)
-        container.appendChild(renderedContrib)
-      }
-
-      cb(null, container, contribs)
+      cb(null, res.body)
     })
   }
 
@@ -334,13 +410,40 @@ class devBoard {
   addTagToBoard(contrib) {
     let contribTags = contrib.tags
 
+    contribTags.unshift('#all')
+
     for (let i = 0; i < contribTags.length; i++) {
       if (!this.tags.includes(contribTags[i])) {
+        let tagToSend = contribTags[i].slice(1, contribTags[i].length);
         let tagTemplate = yo`
-            <a href="" class="contrib-tag">
-              ${contribTags[i]}
-            </a>
-        `
+            <div title="${tagToSend}" class="contrib-tag ${tagToSend==='all'? 'contrib-tag-all': ''}">
+              ${tagToSend==='all'? tagToSend: contribTags[i]}
+            </div>
+          `
+        let $tagTemplate = $(tagTemplate)
+
+        let getContribsByTag = this.getContribsByTag.bind(this)
+        let getContribs = this.getContribs.bind(this)
+        let buildRight = this.buildRight.bind(this)
+
+        let user = this.user
+
+        $tagTemplate.on('click', (e) => {
+          let tag = e.target['title']
+          let $container = $(e.target)
+          if (tag === 'all') {
+            getContribs(null, (err, res) => {
+              if (err) return console.log({error: err})
+              buildRight(user, res.contributions)
+            })
+          } else {
+            getContribsByTag(tag, (err, contribs) => {
+              if (err) return console.log({error: err})
+              buildRight(user, contribs)
+            })
+          }
+        })
+
         this.tagBoard.appendChild(tagTemplate)
         this.tags.push(contribTags[i])
       }
@@ -440,7 +543,15 @@ class devBoard {
         </div>
       </div>
     `
+    let trash = createTemplate.getTrash()
 
+    let deleteContribButton = yo`
+      <div class="one-contrib-delete-container">
+        <div class="one-contrib-delete">
+          ${trash}
+        </div>
+      </div>
+    `
     // TEMPLATE PRINCIPAL
     let contribTemplate = yo`
       <div class="one-contrib-container devboard-right-content-items grid-item">
@@ -460,14 +571,15 @@ class devBoard {
                 </div>
                 <div class="one-contrib-right">
                   <div class="one-contrib-username">${contrib.user.username}</div>
-                    <span>${dateString}</span>
-                  </div>
+                  <span>${dateString}</span>
+
+                </div>
                 <div class="one-contrib-info">${contrib.data.data || contrib.data.info}</div>
               </div>
               <div class="one-contrib-likes">
                 <div class="one-contrib-likes-container">
-                  <div class="one-contrib-likes-container-button-arrow">
-                  </div>
+                  <div class="one-contrib-likes-container-button-arrow"></div>
+                  ${this.user.username === contrib.user.username ? deleteContribButton: ''}
                   ${likeButton}
                   <div class="one-contrib-likes-container-names">
                     ${contribRate}
@@ -607,9 +719,11 @@ class devBoard {
     })
   }
 
+  // agrega un mensaje a la contribucion
   addUserMessage (id, req, cb) {
     request
     .post(`/api/contributions/addMessage/${id}`)
+    .set('Accept', 'application/json')
     .send(req)
     .end(function (err, res) {
       if (err) return cb(err)
@@ -630,15 +744,35 @@ class devBoard {
 
     let $allMessages = $(allMessages)
 
-    // Queda a la escucha de una eliminacioooon! XD
+    // Queda a la escucha de una eliminacion del mensaje! XD
+    let deleteContribMessage = this.deleteMessageContrib.bind(this)
     $allMessages.on('click', '.one-contrib-messages-single .one-contrib-messages-single-right .one-contrib-messages-single-delete .one-contrib-messages-single-delete-container .confirmation .accept', (ev) => {
       ev.preventDefault()
-      let $head = $(ev.target).closest('.one-contrib-messages-single')
-      let id = $head.attr('messageId')
-      console.log(id)
+      let $head = $(ev.target).closest('.one-contrib-content')
+      let $message = $(ev.target).closest('.one-contrib-messages-single')
+
+      let contribId = $head.attr('contrib')
+      let messageId = $message.attr('messageId')
+
+      deleteContribMessage(contribId, messageId, (err, res) => {
+        if (err) return console.log(err)
+        console.log(res)
+      })
     })
 
     return allMessages
+  }
+
+  deleteMessageContrib(contribId, messageId, cb){
+    request
+    .get(`/api/contributions/delmessage/${contribId}/${messageId}`)
+    .set('Accept', 'application/json')
+    .end((err, res) => {
+      if (err) {
+        return cb(err)
+      }
+      cb(null, res.body)
+    })
   }
 
   // Dibuja un mensaje solo
@@ -651,7 +785,13 @@ class devBoard {
       </div>
     `
 
-    console.log(data)
+    let message = yo`
+      <span class="one-contrib-messages-single-message">
+      </span>
+    `
+
+    let $message = $(message)
+    $message.html(data.content.userMessage)
 
     return yo`
       <div class="one-contrib-messages-single" messageId = ${data.id}>
@@ -666,7 +806,7 @@ class devBoard {
             <span class="one-contrib-messages-single-userName">
               ${data.user.username}
             </span>
-            ${data.content.userMessage}
+            ${message}
           </p>
         </div>
       </div>
@@ -684,11 +824,10 @@ class devBoard {
       }
       cb(null, res.body)
     })
-
   }
 
   // get info
-  getcontribs (group, cb) {
+  getContribs (group, cb) {
     group = group || 0
     request
         .get(`/api/contributions/last/${group}`)
@@ -704,13 +843,18 @@ class devBoard {
 
 module.exports = devBoard
 
-// 🍷 se agrega un mensaje a la contribucion
-// 💀 se elimina un mensaje a la contribucion
-// 💀 se pide una contribucion por tags
-// 💀 se edita una contribucion
-// 💀 se elimina una contribucion
-// 💀 set mom
-// 💀 get mom
+// :clock: se edita una contribucion.
+
+// 💀 return button
+// 💀 icons about contribution type
+// 💀 hovers de users
+// 💀 set mow
+// 💀 se elimina una contribucion.
+// 🍷 se pide una contribucion por tags.
+// 🍷 get mow
+// 🍷 se agrega un mensaje a la contribucion.
+// 🍷 se elimina un mensaje a la contribucion.
+// 🍷 realtime para mensajes.
 // 🍷 se piden las contribuciones por id
 // 🍷 se pide una contribucion por id
 // 🍷 se lee si el usuario es dev

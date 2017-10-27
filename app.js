@@ -541,6 +541,14 @@ app.get('/api/contributions/last/:group', (req, res) => {
   })
 })
 
+app.get('/api/contributions/getbytag/:tag', (req, res) => {
+  let tag = req.params.tag
+  client.getContribsByTag(tag, (err, contribs) => {
+    if (err) return res.status(500).json(err)
+    res.status(200).json(contribs)
+  })
+})
+
 // create contribution
 app.post('/api/contributions', secure, (req, res) => {
   // buscar el socket en la lista de usuarios conectados
@@ -557,7 +565,7 @@ app.post('/api/contributions', secure, (req, res) => {
   let token = req.user.token
 
   client.createContrib(contribution, username, token, (err, data) => {
-    if (err) return res.status(500).json(err)
+    if (err) return res.status(500).json({error: err})
     data.message = 'gracias por su contribucion'
     res.status(200).json(data)
   })
@@ -592,7 +600,7 @@ app.post('/api/contributions/devres/:id', secure, (req, res) => {
   })
 })
 
-// add Message
+// add Contrib Message
 app.post('/api/contributions/addMessage/:id', secure, (req, res) => {
   // buscar el socket en la lista de usuarios conectados
   // utilizar el publicId para hacer la busqueda
@@ -617,15 +625,38 @@ app.post('/api/contributions/addMessage/:id', secure, (req, res) => {
   let message = req.body
 
   client.addContribMessage(id, username, message, token, (err, addedMessage) => {
-    if (err) res.json({error: err})
+    if (err) return res.json({error: err})
+    userSocket.rt.newUserMessage(addedMessage, (err, response) => {
+      if(err) return res.status(500).json(err)
+      res.status(200).json(response)
+    })
+  })
+})
 
-    res.status(200).json(addedMessage)
+// Delete contrib Message
+app.get('/api/contributions/delmessage/:contribId/:messageId', secure, (req, res) => {
+  // buscar el socket en la lista de usuarios conectados
+  // utilizar el publicId para hacer la busqueda
+  let userSocket = _.find(usersSockets, {username: req.user.username})
+  if (!userSocket) {
+    return res.status(500).json({error: 'you need be logged with realtime too'})
+  }
 
-    // userSocket.rt.newUserMessage(id, data, (err, response) => {
-    //   if(err) return res.status(500).json(err)
-    //   console.log(response)
-    //   res.status(200).json(response)
-    // })
+
+  let token = req.user.token
+  let username = req.user.username
+
+  let contribId = req.params.contribId
+  let messageId = req.params.messageId
+
+  console.log(contribId, messageId)
+
+  client.delContribMessage(contribId, messageId, username, token, (err, deletedMessage) => {
+    if (err) return res.status(500).json({error: err})
+    userSocket.rt.deleteUserMessage( deletedMessage, (err, response) => {
+      if(err) return res.status(500).json({error: err})
+      res.status(200).json(response)
+    })
   })
 })
 
@@ -637,11 +668,17 @@ app.get('/api/contributions/rate/:contribution', secure, (req, res) => {
   let token = req.user.token
 
   client.rateContrib(contribId, scoringUsername, token, (err, newContrib) => {
-    if (err) {
-      console.log(err.error)
-      return res.json(err.error)
-    }
+    if (err) return res.status(500).json(err.error)
     res.status(200).json(newContrib)
+  })
+})
+
+// MOM
+// get mom
+app.get('/api/contributions/getmom', (req, res) => {
+  client.getManOfMonth((err, mom) => {
+    if (err) return res.status(500).json(err.error)
+    res.status(200).json(mom)
   })
 })
 

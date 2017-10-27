@@ -7,6 +7,17 @@ $border: 1px solid rgba($gray-dark, 0.3);
 $border-form: 1px solid rgba($gray-dark, 0.5);
 $shadow: 0 4px 0 $gray-dark, 0 5px 2px rgba(0,0,0,0.2);
 
+@mixin backgroundGradient {
+  $backside: rgba($gray-dark, 0.7);
+  $lines: rgba($gray-dark,.03);
+background: linear-gradient(115deg, transparent 75%, $lines 75%) 0 0,
+            linear-gradient(245deg, transparent 75%, $lines 75%) 0 0,
+            linear-gradient(115deg, transparent 75%, $lines 75%) 7px -15px,
+            linear-gradient(245deg, transparent 75%, $lines 75%) 7px -15px,
+            $backside;
+background-size: 15px 30px
+}
+
 @keyframes Gradient {
 	0% { background-position: 0% 300%; }
 	100% { background-position: 0% 0%; }
@@ -55,10 +66,15 @@ $shadow: 0 4px 0 $gray-dark, 0 5px 2px rgba(0,0,0,0.2);
 .ecran-gray {
   display: none;
   width: 100%;
-  background-color: rgba($gray-dark, 0.7);
+  background-color: rgba(19, 19, 19, 0.5);
   height: 100%;
   position: fixed;
   z-index: 10;
+  @include backgroundGradient;
+
+  &:hover {
+    cursor: url('/img/close-red.png'), pointer;
+  }
 }
 
 .opacity-zero {
@@ -199,6 +215,7 @@ $shadow: 0 4px 0 $gray-dark, 0 5px 2px rgba(0,0,0,0.2);
             font-size: 2.2rem;
             margin-top: -6px;
             text-shadow: 0 -3px 0px white;
+            color: $red-alert;
             position: absolute;
             left: 50%;
             transform: translate(-50%, 0);
@@ -354,24 +371,40 @@ $shadow: 0 4px 0 $gray-dark, 0 5px 2px rgba(0,0,0,0.2);
     .devBoard-right {
       display: inline-block;
       min-width: $right;
+      padding-bottom: 100px;
 
       .devboard-wrapper {
         width: 100%;
 
         .tag-devboard-container {
-          height: 100px;
+          height: 135px;
           width: 100%;
           position: relative;
           white-space: no;
           overflow: hidden;
+          margin-left: -10px;
+          margin-bottom: 0.4rem;
 
           .devboard-right-tags {
             position: absolute;
             bottom: 0;
-            right: 10px;;
+            margin-top: -10px;
+            right: -15px;
             text-align: right;
-            overflow: hidden;
-            height: 80px;
+            overflow-y: scroll;
+            height: 117px;
+
+            .contrib-tag-all {
+              background-color: $red-alert !important;
+              border: 3px solid $red-alert !important;
+              color: $gray-dark !important;
+              float: right;
+              
+              &:hover {
+                background-color: transparent !important;
+                color: $red-alert !important;
+              }
+            }
 
             .contrib-tag {
               display: inline-block;
@@ -390,6 +423,7 @@ $shadow: 0 4px 0 $gray-dark, 0 5px 2px rgba(0,0,0,0.2);
                 background-color: transparent;
                 // border: 3px solid $red-alert;
                 color: $gray-dark;
+                cursor: pointer;
               }
 
             }
@@ -416,6 +450,7 @@ $shadow: 0 4px 0 $gray-dark, 0 5px 2px rgba(0,0,0,0.2);
             position: relative;
             float: left;
             box-shadow: $shadow;
+            z-index: 1;
 
             .devboard-form-title {
               font-family: 'lepb';
@@ -600,11 +635,12 @@ $shadow: 0 4px 0 $gray-dark, 0 5px 2px rgba(0,0,0,0.2);
 
               .one-contrib-content {
                 width: $right / 2 - 20;
+                border-radius: 2px;
+                box-shadow: $shadow;
 
                 .one-contrib-content-scroll {
                   background-color: ghostwhite;
                   border-radius: 2px;
-                  box-shadow: $shadow;
                   z-index: 2;
                   transition: 0.1s;
                   transition: all 100ms cubic-bezier(0.350, -0.255, 0.585, 1.460); /* custom */
@@ -702,11 +738,93 @@ $shadow: 0 4px 0 $gray-dark, 0 5px 2px rgba(0,0,0,0.2);
 
                       }
 
+                      .one-contrib-delete-container {
+                        width: 35px;
+                        height: 40px;
+                        cursor: pointer;
+                        color: $gray-dark;
+                        display: inline-block;
+                        position: relative;
+                        top: -14px;
+                        text-align: center;
+
+                        .one-contrib-delete {
+                          width: 18px;
+                          height: 40px;
+                          margin-bottom: 10px;
+                          cursor: pointer;
+                          color: $gray-dark;
+                          display: inline-block;
+
+                          .appear-confirm {
+                            transform: rotateX(0deg) !important;
+                          }
+
+                          .confirmation {
+                            border-radius: 2px;
+                            width: 24px;
+                            height: 24px;
+                            bottom: -1px;
+                            position: relative;
+                            right: 5px;
+                            background-color: $red-alert;
+                            color: $gray-dark;
+                            transform-origin: 100% 0;
+                            transform: rotateX(90deg);
+                            transition: 0.2s cubic-bezier(0.77, 0, 0.175, 1);
+                            box-shadow: 0 3px 0 rgba(0,0,0,0.3);
+    
+                            &:before {
+                              content: '';
+                              position: absolute;
+                              width: 0; 
+                              height: 0; 
+                              top: -7px;
+                              border-left: 5px solid transparent;  /* left arrow slant */
+                              border-right: 5px solid transparent; /* right arrow slant */
+                              border-bottom: 7px solid $red-alert; /* bottom, add background color here */
+                              font-size: 0;
+                              line-height: 0;
+                            }
+    
+                            .accept {
+                              font-size: 1.3rem;
+                              position: absolute;
+                              top: 2px;
+                              left: 2px;
+                              &:hover {
+                                color: $yellow-light;
+                              }
+                            }
+                          }
+    
+                          .trash-body {
+                            transition: .1s
+                          }
+    
+                          .trash-cap {
+                            transform-origin: 100% 100%;
+                            transition: .1s;
+                          }
+    
+                          &:hover {
+                            .trash-body {
+                              opacity: 0;
+                            }
+    
+                            .trash-cap {
+                              transform: rotate(14deg);
+                            }
+                          }
+                        }
+                      }
+  
+
                       .one-contrib-likes-container-button {
-                        width: 40px;
+                        width: 35px;
                         height: 46px;
                         display: inline-block;
-                        margin-left: 0px;
+                        margin-left: -4px;
                         // margin: 0 auto;
 
                         .demon-body {
@@ -850,10 +968,11 @@ $shadow: 0 4px 0 $gray-dark, 0 5px 2px rgba(0,0,0,0.2);
 
                       .one-contrib-likes-container-names {
                         height: 45px;
-                        width: 220px;
+                        width: 200px;
                         display: inline-block;
                         vertical-align: top;
                         position: relative;
+                        margin-left: 5px;
 
                         .one-contrib-likes-container-names-list {
                           font-family: 'lepl';
@@ -907,6 +1026,18 @@ $shadow: 0 4px 0 $gray-dark, 0 5px 2px rgba(0,0,0,0.2);
                             background-color: rgba(0, 0, 0, .1);
                           }
                           padding-bottom: 15px;
+
+                          .delete-message-template {
+                            color: rgba(#000,0.5);
+                            font-family: 'lepl';
+                            font-size: 0.7rem;
+                            margin-left: 70px;
+                            margin-top: 12px;
+
+                            .delete-message-template-username {
+                              font-family: 'lepb'
+                            }
+                          }
                           .one-contrib-messages-single-left {
                             vertical-align: top;
                             width: 57px;
@@ -931,7 +1062,6 @@ $shadow: 0 4px 0 $gray-dark, 0 5px 2px rgba(0,0,0,0.2);
                             display: inline-block;
                             width: 74%;
 
-                            
                             .one-contrib-messages-single-content {
                               padding-right: 10px;
                               font-family: 'lepm';

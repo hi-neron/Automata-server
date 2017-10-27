@@ -18,26 +18,27 @@ function drawRateName (left, item, right) {
 }
 
 module.exports = {
-  drawBrand: () => {
+  drawBrand: (boardName) => {
     // se construye la template donde ira el logo
     return yo`
     <div class="brandContainer">
     <div id="dev-logo">
-    <img class='dev-logo-image' src="" alt="">
+      <img class='dev-logo-image' src="" alt="${boardName}">
     </div>
-    <h1 class="dev-logo-message">DEV BOARD</h1>
+    <h1 class="dev-logo-message">${boardName}</h1>
     </div>`
   },
 
-  drawManOfMonth: (MoM) => {
+  drawManOfMonth: (moM) => {
     // se construye la template donde ira el hombre/mujer del mes
-    let title = MoM.genre === 'male' ? 'DON': 'MISS'
+    console.log(moM)
+    let title = moM.genre === 'male' ? 'DON': 'MISS'
     let phrase = yo`
     <div class="genre">
       <span class="genre-message"></span>hombre del mes
     </div>`
 
-    if (MoM.genre==='female') {
+    if (moM.genre==='female') {
       phrase = yo`
       <div class="genre">
         <span class="genre-message-woman">mujer</span>
@@ -53,7 +54,7 @@ module.exports = {
       </div>
       ${phrase}
       <div class="mom-divisor">${title}</div>
-      <div class="user-name"><span>${MoM.username}</span></div>
+      <div class="user-name"><span>${moM.username}</span></div>
     </div>`
 
     return manOfMonth
