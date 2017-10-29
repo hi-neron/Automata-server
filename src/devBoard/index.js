@@ -10,6 +10,9 @@ const autosize = require('autosize')
 // Posiciona los objetos verticalmente
 const Masonnry = require('masonry-layout')
 
+// tooltips util
+const Tooltips = require('./../utils/userTooltips')
+
 // contenedor principal
 let devBoardContainer = document.getElementById('devboard-container')
 
@@ -31,6 +34,7 @@ class devBoard {
     this.user = user
     this.contentOpen = false
     this.contentOpened = null
+    this.layout = null
 
     this.$ecran = $(ecran)
 
@@ -40,6 +44,13 @@ class devBoard {
 
     let drawSingleMessage = this.drawSingleMessage.bind(this)
 
+    // REALTIME
+    // delete contrib
+    socket.on('deleteContrib', (contribDeleted) => {
+      console.log(contribDeleted)
+    })
+
+    // new message
     socket.on('newDevBoardMessage', (newMessage) => {
       if (this.contentOpen) {
         let myContent = this.contentOpened.find('.one-contrib-content')
@@ -53,6 +64,7 @@ class devBoard {
       }
     })
 
+    // delete message
     socket.on('deleteDevBoardMessage', (deletedMessage) => {
       if (this.contentOpen) {
         let myContent = this.contentOpened.find('.one-contrib-content')
@@ -201,7 +213,7 @@ class devBoard {
       console.log('Pendiente: crear un fromulario para dar el hombre del mes: MoM')
     }
 
-    let manOfMonth = createTemplate.drawManOfMonth(MoM)
+    let manOfMonth = createTemplate.drawManOfMonth(MoM, Tooltips, this.user)
 
     // IN PROCESS CONTRIBUTIONS
     // se crea un listado de las contribuciones que estan en proceso
@@ -234,7 +246,7 @@ class devBoard {
     // masonry init: ajusta el layout de forma vertical
     let msnry = new Masonnry (content, {
       itemSelector: '.grid-item',
-      columWidth: 270,
+      columnWidth: '.grid-item',
       transitionDuration: '0.2s'
       // isInitLayout: false
     })
@@ -255,6 +267,7 @@ class devBoard {
     `
 
     msnry.stamp(mainForm)
+    this.layout = msnry
 
     // evento cuando se hace submit del formulario
     form.onsubmit = (ev) => {
@@ -465,7 +478,7 @@ class devBoard {
     let likeButton = createTemplate.drawLikesDevil()
 
     // dibuja las etiquetas de los que dan un rate
-    let contribRate = createTemplate.renderRate(contrib.rate, this.user.username)
+    let contribRate = createTemplate.renderRate(contrib.rate, this.user.username, Tooltips, this.user)
 
     // el dev panel tiene dos partes
     // la respuesta del dev, y en caso de que el user sea admin, el formulario
@@ -552,9 +565,12 @@ class devBoard {
         </div>
       </div>
     `
+
+    let usernameTooltip = new Tooltips (contrib.user.username, this.user)
+
     // TEMPLATE PRINCIPAL
     let contribTemplate = yo`
-      <div class="one-contrib-container devboard-right-content-items grid-item">
+      <div title="${contrib.publicId}" class="one-contrib-container devboard-right-content-items grid-item">
         <div class="one-contrib-wrapper">
           <div class="one-contrib-content-back">
             <div class="one-contrib-content-back-eyes">
@@ -570,7 +586,7 @@ class devBoard {
                   </div>
                 </div>
                 <div class="one-contrib-right">
-                  <div class="one-contrib-username">${contrib.user.username}</div>
+                  <div class="one-contrib-username">${usernameTooltip.get()}</div>
                   <span>${dateString}</span>
 
                 </div>
@@ -592,6 +608,22 @@ class devBoard {
         </div>
       </div>
     `
+    let $trash = $(trash)
+
+    // evento que elimina una contribucion! muajajajajaja
+    let delContribution = this.delContribution.bind(this)
+    let removeDelContribution = this.removeDelContribution.bind(this)
+
+    $trash.on('click', '.confirmation .accept', (ev) => {
+      ev.preventDefault()
+      let $head = $(ev.target).closest('.one-contrib-content')
+      let id = $head.attr('contrib')
+
+      delContribution(id, (err, res) => {
+        if (err) return console.log(err)
+        removeDelContribution(res)
+      })
+    })
 
     let addUserMessage = this.addUserMessage.bind(this)
 
@@ -645,7 +677,6 @@ class devBoard {
 
         $textArea.val('')
         let templateToDraw = drawDevResponse(changes)
-        console.log($contribToChange)
         $contribToChange.empty().append(templateToDraw)
       })
     })
@@ -654,6 +685,7 @@ class devBoard {
     let $likeButton = $(likeButton)
     let rateContrib = this.rateContrib.bind(this)
 
+    // Evento de like a una contribución
     $likeButton.on('click', (ev) => {
       ev.preventDefault()
       let $newRateContainer = $(ev.target).closest('.one-contrib-likes-container').find('.one-contrib-likes-container-names')
@@ -662,13 +694,22 @@ class devBoard {
 
       rateContrib(id, (err, contribRated) => {
         if (err) return console.log(err)
-        let newRateRender = createTemplate.renderRate(contribRated.rate, this.user.username)
+        let newRateRender = createTemplate.renderRate(contribRated.rate, this.user.username, this.user)
         $newRateContainer.empty().append(newRateRender)
         // $newRateContainer
       })
     })
 
     return contribTemplate
+  }
+
+  removeDelContribution (res) {
+    let id = res.publicId
+    let message = res.message
+    let toDelete = $(`[title=${id}]`)[0]
+    let $toDelete = $(toDelete)
+    $toDelete.remove()
+    this.layout.layout()
   }
 
   drawDevResponse (contrib) {
@@ -682,9 +723,6 @@ class devBoard {
       return
     }
 
-    console.log(contrib.dev)
-
-    console.log(approval)
     let devMessageTemplate = yo`
       <div class="one-contrib-dev-left-content">
         ${message}
@@ -706,17 +744,6 @@ class devBoard {
         </div>
       </div>
     `
-  }
-
-  // send dev response
-  devResponse (id, req, cb) {
-    request
-    .post(`/api/contributions/devres/${id}`)
-    .send(req)
-    .end(function (err, res) {
-      if (err) return cb(err)
-      cb(null, res)
-    })
   }
 
   // agrega un mensaje a la contribucion
@@ -763,18 +790,6 @@ class devBoard {
     return allMessages
   }
 
-  deleteMessageContrib(contribId, messageId, cb){
-    request
-    .get(`/api/contributions/delmessage/${contribId}/${messageId}`)
-    .set('Accept', 'application/json')
-    .end((err, res) => {
-      if (err) {
-        return cb(err)
-      }
-      cb(null, res.body)
-    })
-  }
-
   // Dibuja un mensaje solo
   drawSingleMessage (data) {
     let trash = createTemplate.getTrash()
@@ -813,6 +828,19 @@ class devBoard {
     `
   }
 
+  // elimina un mensaje en una contribucion
+  deleteMessageContrib(contribId, messageId, cb){
+    request
+    .get(`/api/contributions/delmessage/${contribId}/${messageId}`)
+    .set('Accept', 'application/json')
+    .end((err, res) => {
+      if (err) {
+        return cb(err)
+      }
+      cb(null, res.body)
+    })
+  }
+
   // rate contrib
   rateContrib (id, cb) {
     request
@@ -824,6 +852,16 @@ class devBoard {
       }
       cb(null, res.body)
     })
+  }
+
+  delContribution(id, cb) {
+    request
+        .get(`/api/contributions/delete/${id}`)
+        .set('Accept', 'application/json')
+        .end((err, res) => {
+          if (err) return cb(err)
+          cb(null, res.body)
+        })
   }
 
   // get info
@@ -839,6 +877,17 @@ class devBoard {
           cb(null, res.body)
         })
   }
+
+  // send dev response
+  devResponse (id, req, cb) {
+    request
+    .post(`/api/contributions/devres/${id}`)
+    .send(req)
+    .end(function (err, res) {
+      if (err) return cb(err)
+      cb(null, res)
+    })
+  }
 }
 
 module.exports = devBoard
@@ -847,9 +896,10 @@ module.exports = devBoard
 
 // 💀 return button
 // 💀 icons about contribution type
-// 💀 hovers de users
+// 💀 Titles ¿What are we going to do whit it?
 // 💀 set mow
-// 💀 se elimina una contribucion.
+// 💀 hovers de users
+// 🍷 se elimina una contribucion.
 // 🍷 se pide una contribucion por tags.
 // 🍷 get mow
 // 🍷 se agrega un mensaje a la contribucion.

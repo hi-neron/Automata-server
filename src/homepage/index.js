@@ -12,6 +12,7 @@ const display = require('../display')
 // new classes
 const Game = require('../game')
 const DevBoard = require('../devBoard')
+const UserTooltips = require('../utils/userTooltips')
 
 
 let socket = io.connect('//' + window.location.host)
@@ -28,7 +29,11 @@ page('/', auth, signup, modalClose, display, leftMenu, mouseInfo, (ctx, next) =>
   //  modal:
   //    signups
   let container = 'game-container'
+
+  // inicia el juego
   let game = new Game (container, ctx.auth, socket)
+
+  // inicia el panel de conversacion
   let dev = new DevBoard (ctx.auth, socket)
 
   if (ctx.auth.username) {

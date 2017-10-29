@@ -1,11 +1,14 @@
 const yo = require('yo-yo')
 const d3 = require('d3')
 const $ = require('jquery')
+const Tooltips = require('./../../utils/userTooltips')
 
-function drawRateName (left, item, right) {
+function drawRateName (left, item, right, user) {
+  let itemWithTooltip = item ? new Tooltips(item, user).get(): ''
+
   let conectorLeft = yo`<span class="conector">${left || ''}</span>`
   let conectorRight = yo`<span class="conector">${right || ''}</span>`
-  let itemToDraw = yo`<span class="name">${item || ''}</span>`
+  let itemToDraw = yo`<span class="name">${itemWithTooltip}</span>`
 
 
   return yo`
@@ -29,11 +32,11 @@ module.exports = {
     </div>`
   },
 
-  drawManOfMonth: (moM) => {
+  drawManOfMonth: (moM, Tooltips, user) => {
     // se construye la template donde ira el hombre/mujer del mes
-    console.log(moM)
     let title = moM.genre === 'male' ? 'DON': 'MISS'
     let phrase = yo`
+
     <div class="genre">
       <span class="genre-message"></span>hombre del mes
     </div>`
@@ -47,6 +50,10 @@ module.exports = {
       </div>`
     }
 
+    console.log(user, moM)
+
+    let userTooltip = new Tooltips (moM.username, user)
+
     let manOfMonth = yo`
     <div class="devBoard-item mom">
       <div class="image-container">
@@ -54,7 +61,7 @@ module.exports = {
       </div>
       ${phrase}
       <div class="mom-divisor">${title}</div>
-      <div class="user-name"><span>${moM.username}</span></div>
+      <div class="user-name">${userTooltip.get()}</div>
     </div>`
 
     return manOfMonth
@@ -263,7 +270,7 @@ module.exports = {
     `
   },
 
-  renderRate: (rate, username) => {
+  renderRate: (rate, username, Tooltips, myUser) => {
     let users = rate.length
 
     if (users > 0){
@@ -276,7 +283,6 @@ module.exports = {
         if ( i !== -1 ) {
             arr.splice( i, 1 );
         }
-        console.log(arr)
         return arr
       }
 
@@ -284,9 +290,9 @@ module.exports = {
 
       if (index != -1) {
         if (users === 2) {
-          itemToDraw = drawRateName('Sumercé', null, null)
+          itemToDraw = drawRateName('Sumercé', null, null, myUser)
         } else {
-          itemToDraw = users > 1 ? drawRateName('Sumercé,', null, null) : drawRateName('Sumercé', null, null)
+          itemToDraw = users > 1 ? drawRateName('Sumercé,', null, null, myUser) : drawRateName('Sumercé', null, null, myUser)
         }
         rateTemplate.prepend(itemToDraw)
         rate = removeItemMe(rate, index)
@@ -299,12 +305,12 @@ module.exports = {
         let limit = 4
         if (i < limit) {
           if (rate.length === 1){
-            itemToDraw = user ? drawRateName('y ', item, null): drawRateName(null, item, null)
+            itemToDraw = user ? drawRateName('y ', item, null, myUser): drawRateName(null, item, null, myUser)
           } else {
             if (i === 0) {
-              itemToDraw = drawRateName(null, item, null)
+              itemToDraw = drawRateName(null, item, null, myUser)
             } else {
-              itemToDraw = i === rate.length - 1 && i < limit? drawRateName('y ', item, null) : drawRateName(guion, item, null)
+              itemToDraw = i === rate.length - 1 && i < limit? drawRateName('y ', item, null, myUser) : drawRateName(guion, item, null, myUser)
             }
           }
           rateTemplate.appendChild(itemToDraw)

@@ -571,6 +571,32 @@ app.post('/api/contributions', secure, (req, res) => {
   })
 })
 
+// Delete contribution
+app.get('/api/contributions/delete/:id', secure, (req, res) => {
+  // buscar el socket en la lista de usuarios conectados
+  // utilizar el publicId para hacer la busqueda
+
+  let userSocket = _.find(usersSockets, {username: req.user.username})
+
+  if (!userSocket) {
+    return res.status(500).json({error: 'you need be logged with realtime too'})
+  }
+
+  let username = req.user.username
+  let contributionId = req.params.id
+  let token = req.user.token
+
+  client.deleteContrib(contributionId, username, token, (err, data) => {
+    if (err) return res.status(500).json({error: err})
+    data.message = `${username} ha eliminado la contribucion: ${contributionId}`
+
+    userSocket.rt.deleteContrib(data, (err, response) => {
+      if(err) return res.status(500).json({error: err})
+      res.status(200).json(response)
+    })
+  })
+})
+
 // dev response
 app.post('/api/contributions/devres/:id', secure, (req, res) => {
   // buscar el socket en la lista de usuarios conectados
