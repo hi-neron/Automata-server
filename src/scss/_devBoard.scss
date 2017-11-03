@@ -67,6 +67,7 @@ $shadow: 0 4px 0 $gray-dark, 0 5px 2px rgba(0,0,0,0.2);
 }
 
 #devboard-container {
+  display: none;
   position: fixed;
   background-color: $game-background;
   width: 100%;
