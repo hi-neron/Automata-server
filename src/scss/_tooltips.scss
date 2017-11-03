@@ -1,6 +1,244 @@
+@mixin gradient-triangle {
+  background: rgba(65,0,165,0.8);
+  background: -moz-linear-gradient(-45deg, rgba(65,0,165,0.8) 0%, rgba(255,51,82,1) 100%);
+  background: -webkit-gradient(left top, right bottom, color-stop(0%, rgba(65,0,165,0.8)), color-stop(100%, rgba(255,51,82,1)));
+  background: -webkit-linear-gradient(-45deg, rgba(65,0,165,0.8) 0%, rgba(255,51,82,1) 100%);
+  background: -o-linear-gradient(-45deg, rgba(65,0,165,0.8) 0%, rgba(255,51,82,1) 100%);
+  background: -ms-linear-gradient(-45deg, rgba(65,0,165,0.8) 0%, rgba(255,51,82,1) 100%);
+  background: linear-gradient(135deg, rgba(65,0,165,0.8) 0%, rgba(255,51,82,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4100a5', endColorstr='#ff3352', GradientType=1 );
+}
+
+#tooltips-container {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  z-index: 11;
+
+  .user-tooltip-container {
+    position: absolute;
+    width: 140px;
+    // height: 195px;
+    max-height: 225px;
+    bottom: 30px;
+    z-index: 5;
+
+    .user-tooltip-badges-plain{
+      img[alt=right] {
+        position: absolute;
+        right: -45px;
+        top: 30px;
+      }
+
+      img[alt=left] {
+        backface-visibility: visible;
+        position: absolute;
+        left: -45px;
+        transform: rotateY(190deg); // rotateZ(10deg);
+        top: 30px;
+      }
+    }
+
+    .user-tooltip-badges-origami{
+      img[alt=right] {
+        position: absolute;
+        right: -32px;
+        top: 30px;
+      }
+
+      img[alt=left] {
+        backface-visibility: visible;
+        position: absolute;
+        left: -32px;
+        transform: rotateY(190deg); // rotateZ(10deg);
+        top: 60px;
+      }
+    }
+
+    .user-tooltip-mom{
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      background-color: $red-alert;
+      top: 50%;
+      padding: 1px;
+      right: -10px;
+      font-family: 'geo';
+      line-height: 0.7rem;
+      font-size: 0.7rem;
+      color: $gray-dark;
+      text-transform: uppercase;
+      z-index: 2;
+    }
+
+    .user-tooltip-close {
+      border-radius: 2px 2px 0px 0px;
+      width: 26px;
+      height: 26px;
+      position: absolute;
+      top: -25px;
+      right: 0;
+      background-color: #afafaf;
+      border-bottom: 4px solid rgb(90, 90, 90);
+      box-shadow: 4px 3px 0 rgba(#000, 0.4);
+      // margin-left: -13px;
+
+      &:hover {
+        cursor: url('/img/devil-hand.png'), pointer;
+        &:after {
+          color: $purple-active;
+        }
+      }
+
+      &:after {
+        content: '\f00d';
+        font-family: 'fontawesome';
+        position: absolute;
+        font-size: 1.2rem;
+        color: $red-alert;
+        left: 50%;
+        top: 50%;
+        margin-left: -7px;
+        margin-top: -9px;
+      }
+    }
+
+    .user-tooltip-board{
+      box-shadow: 4px 4px 0 rgba(#000, 0.4);
+      border-radius: 12px 2px 2px 2px;
+      background-color: $purple-dark;
+      padding: 6px;
+      width: 100%;
+      height: 100%;
+      text-transform: uppercase;
+      color: $game-background;
+      overflow: hidden;
+      position: relative;
+
+      .user-tooltip-rainbow {
+        position: absolute;
+        z-index: 1;
+        width: 120px;
+        height: 65px;
+        background-color: yellow;
+        top: 55px;
+        left: 80px;
+        transform: rotateZ(-151deg);
+        @include gradient-triangle;
+      }
+
+      .user-tooltip-header{
+        position: relative;
+        height: 80px;
+        overflow: hidden;
+
+        .user-tooltip-username{
+          position: absolute;
+          font-family: 'lepb';
+          line-height: 1.8rem;
+          font-size: 1.7rem;
+          color: rgb(230, 230, 230);
+
+          &:after {
+            content: '**';
+            display: inline-block;
+            color: $red-alert;
+          }
+        }
+        .user-tooltip-image{
+          z-index: 1;
+          position: absolute;
+          width: 100px;
+          height: 100px;
+          top: 110px;
+          margin: 0;
+          display: block;
+          right: -40px;
+          overflow: hidden;
+          transform: skew(-30deg, 60deg) translate3d(0,0,0);
+
+          img {
+            position: absolute;
+            transform: skew(52deg, -68deg) rotate(9deg);
+            width: 27px;
+            height: 27px;
+            background-color: $red-alert;
+            left: -2px;
+            top: 10px;
+          }
+        }
+      }
+      .user-tooltip-title{
+        text-transform: uppercase;
+        font-size: 1.4rem;
+        font-family: 'lepm';
+        color: $red-alert;
+        margin-top: 5px;
+        margin-bottom: 3px;
+        letter-spacing: 0.04rem;
+        position: relative;
+        z-index: 3;
+      }
+      .user-tooltip-masteries {
+        .user-tooltip-masteries-single {
+          color: $game-background;
+          font-size: 1rem;
+          font-family: 'lepm';
+          line-height: 1.2rem;
+        }
+      }
+
+      .user-tooltip-footer {
+        text-align: center;
+        margin-top: 10px;
+        font-family: 'lepb';
+        font-size: 1.2rem;
+
+        .user-tooltip-points{
+          display: inline-block;
+          vertical-align: middle;
+          &:after {
+            content: '\f006';
+            font-family: 'fontawesome';
+            font-size: 0.8rem;
+            margin-left: 2px;
+            vertical-align: middle;
+          }
+        }
+        .user-tooltip-lvls{
+          font-size: 1.9rem;
+          line-height: 1.5rem;
+          color: $red-alert;
+          vertical-align: middle;
+          display: inline-block;
+          &:after {
+            content: 'lvl';
+            font-family: 'lepm';
+            font-size: 0.8rem;
+            margin-left: 2px;
+            vertical-align: middle;
+          }
+        }
+        .user-tooltip-images{
+          vertical-align: middle;
+          display: inline-block;
+          &:after {
+            content: '\f24a';
+            font-family: 'fontawesome';
+            margin-left: 4px;
+            font-size: 0.7rem;
+            vertical-align: middle;
+          }
+        }
+      }
+    }
+  }
+}
+
 .user-name-tooltip {
+  text-align: left;
+
   &:hover {
-    cursor: url('/img/devil-hand.png'), pointer;
-    position: relative;
+    cursor: url('/img/devil-hand-eye.png'), pointer;
   }
 }

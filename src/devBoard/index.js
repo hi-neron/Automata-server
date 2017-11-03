@@ -59,7 +59,7 @@ class devBoard {
 
         if (id === newMessage.contribId) {
           let $container = $myContent.find('.one-contrib-messages')
-          $container[0].append(drawSingleMessage(newMessage))
+          $container[0].prepend(drawSingleMessage(newMessage))
         }
       }
     })
@@ -219,12 +219,12 @@ class devBoard {
     // se crea un listado de las contribuciones que estan en proceso
 
     // in process: aun no
-    // let inProcess = createTemplate.drawInProcess(contribsInProcess)
-    // wrapper.appendChild(inProcess)
-
+    let inProcess = createTemplate.drawInProcess(contribsInProcess)
+    
     // se añanden los contenidos al wrapper
     wrapper.appendChild(brand)
     wrapper.appendChild(manOfMonth)
+    wrapper.appendChild(inProcess)
 
     // se añade el contenido al contenedor
     left.appendChild(wrapper)
@@ -247,8 +247,7 @@ class devBoard {
     let msnry = new Masonnry (content, {
       itemSelector: '.grid-item',
       columnWidth: '.grid-item',
-      transitionDuration: '0.2s'
-      // isInitLayout: false
+      transitionDuration: '0.2s',
     })
 
     // FORMULARIO DE CONTRIBUCIONES -------
@@ -542,17 +541,17 @@ class devBoard {
     // template del contenido escondido
     let hiddenContent = yo`
       <div class="one-contrib-hidden-content">
-        <div class="one-contrib-messages-container">
-          ${this.drawMessages(contrib)}
-          <div class="one-contrib-messages-form-container">
-            ${messagesForm}
-          </div>
-        </div>
         <div class="one-contrib-dev-res">
           <div class="one-contrib-dev-res-to-change">
             ${devResponse}
           </div>
           ${this.user.admin ? devForm : ''}
+        </div>
+        <div class="one-contrib-messages-container">
+          <div class="one-contrib-messages-form-container">
+            ${messagesForm}
+          </div>
+          ${this.drawMessages(contrib)}
         </div>
       </div>
     `
@@ -633,14 +632,19 @@ class devBoard {
       let id = $head.attr('contrib')
 
       let $this = $(ev.currentTarget)
-      let textToSend = $this.find('.one-contrib-messages-text-editable').html()
-
+      let $form = $this.find('.one-contrib-messages-text-editable')
+      let textToSend = $form.html()
+      
       let data = {
         userMessage: textToSend
       }
-
+      let sendingMessage = yo`
+        <span class="info-sending"> sending ...</span>
+      `
+      $form.append(sendingMessage)
       addUserMessage(id, data, (err, res) => {
         if (err) console.log(err)
+        $form.html('')
       })
     }
 
@@ -766,7 +770,7 @@ class devBoard {
       </div>
     `
     for(let i = 0; i < myMessages.length; i++) {
-      allMessages.appendChild(this.drawSingleMessage(myMessages[i]))
+      allMessages.prepend(this.drawSingleMessage(myMessages[i]))
     }
 
     let $allMessages = $(allMessages)
@@ -823,6 +827,7 @@ class devBoard {
             </span>
             ${message}
           </p>
+          <p class="one-contrib-messages-single-date">${createTemplate.drawDate(data.date)}</p>
         </div>
       </div>
     `
@@ -897,11 +902,11 @@ module.exports = devBoard
 // 💀 return button
 // 💀 icons about contribution type
 // 💀 Titles ¿What are we going to do whit it?
-// 💀 set mow
 // 💀 hovers de users
 // 🍷 se elimina una contribucion.
 // 🍷 se pide una contribucion por tags.
 // 🍷 get mow
+// 🍷 set mow
 // 🍷 se agrega un mensaje a la contribucion.
 // 🍷 se elimina un mensaje a la contribucion.
 // 🍷 realtime para mensajes.

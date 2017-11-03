@@ -708,6 +708,18 @@ app.get('/api/contributions/getmom', (req, res) => {
   })
 })
 
+// setMom
+app.get('/api/contributions/setmom/:usermom', secure, (req, res) => {
+  let mom = req.params.usermom
+  let username = req.user.username
+  let token = req.user.token
+
+  client.setManOfMonth(username, mom, token, (err, mom) => {
+    if (err) return res.status(500).json(err.error)
+    res.status(200).json(mom)
+  })
+})
+
 // CHAT *soon*
 
 // secure middleware

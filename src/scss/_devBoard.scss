@@ -63,6 +63,10 @@ background-size: 15px 30px
   opacity: 1 !important;
 }
 
+.info-sending {
+  color: $purple-active;
+}
+
 .ecran-gray {
   display: none;
   width: 100%;
@@ -809,6 +813,7 @@ background-size: 15px 30px
     
                           .trash-cap {
                             transform-origin: 100% 100%;
+                            -moz-transform-origin: 100% 25%;
                             transition: .1s;
                           }
     
@@ -985,18 +990,18 @@ background-size: 15px 30px
                           position: absolute;
                           top: 50%;
                           transform: translateY(-50%);
-                          line-height: 1rem;
+                          line-height: 1.1rem;
 
                           .one-contrib-likes-container-item {
                             // margin: 1px;
                             text-align: center;
 
                             .name {
-                              padding: 2px 0px 2px 2px;
+                              padding: 2px 2px 2px 2px;
                               border-radius: 2px;
                               background-color: $gray-dark;
-                              // margin-right: -2px;
-                              margin-right: 2px;
+                              margin-right: -2px;
+                              //margin-right: 2px;
                               color: $game-background;
 
                               &:hover {
@@ -1022,7 +1027,6 @@ background-size: 15px 30px
 
                       .one-contrib-messages {
                         text-align: left;
-                        margin-bottom: 15px;
 
                         .one-contrib-messages-single {
                           padding-top: 12px;
@@ -1066,6 +1070,10 @@ background-size: 15px 30px
                             vertical-align: top;
                             display: inline-block;
                             width: 74%;
+
+                            .one-contrib-messages-single-date {
+                              margin-top: 2px;
+                            }
 
                             .one-contrib-messages-single-content {
                               padding-right: 10px;
@@ -1166,6 +1174,7 @@ background-size: 15px 30px
 
                       .one-contrib-messages-form-container {
                         width: 100%;
+                        margin-top: 13px;
                         margin-bottom: 13px;
 
                         .one-contrib-messages-form {
@@ -1205,6 +1214,7 @@ background-size: 15px 30px
                                 display: inline-block;
                                 min-width: 245px;
                                 max-width: 100%;
+                                position: relative;
                               }
 
                               .one-contrib-messages-submit{

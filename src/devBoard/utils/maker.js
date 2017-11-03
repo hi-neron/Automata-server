@@ -305,12 +305,12 @@ module.exports = {
         let limit = 4
         if (i < limit) {
           if (rate.length === 1){
-            itemToDraw = user ? drawRateName('y ', item, null, myUser): drawRateName(null, item, null, myUser)
+            itemToDraw = user ? drawRateName(' y ', item, null, myUser): drawRateName(null, item, null, myUser)
           } else {
             if (i === 0) {
               itemToDraw = drawRateName(null, item, null, myUser)
             } else {
-              itemToDraw = i === rate.length - 1 && i < limit? drawRateName('y ', item, null, myUser) : drawRateName(guion, item, null, myUser)
+              itemToDraw = i === rate.length - 1 && i < limit? drawRateName(' y ', item, null, myUser) : drawRateName(guion, item, null, myUser)
             }
           }
           rateTemplate.appendChild(itemToDraw)
