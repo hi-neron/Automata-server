@@ -1,0 +1,30 @@
+#actions-container {
+  position: fixed;
+  z-index: 12;
+  right: 5%;
+  bottom: 4%;
+
+  #list-container {
+    .single-message{
+      font-family: 'lepm';
+      font-size: 0.8rem !important;
+      margin-bottom: 12px;
+      color: $gray-dark;
+    }
+
+    // estilos segun tipo
+    .normal {
+      padding: 8px 15px;
+      border-radius: 3px;
+      box-shadow: 0 3px 0 rgba(#000, 0.6);
+      background-color: $yellow-zero;
+    }
+
+    .mom {
+      background-color: $red-alert;
+      color: $yellow-zero;
+    }
+
+
+  }
+}

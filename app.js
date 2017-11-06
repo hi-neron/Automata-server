@@ -650,6 +650,11 @@ app.post('/api/contributions/addMessage/:id', secure, (req, res) => {
   let username = req.user.username
   let message = req.body
 
+  console.log(message)
+  if (message.userMessage === '') {
+    return res.status(500).json({status: '500', message:'Mensaje vacío'})
+  }
+
   client.addContribMessage(id, username, message, token, (err, addedMessage) => {
     if (err) return res.json({error: err})
     userSocket.rt.newUserMessage(addedMessage, (err, response) => {
@@ -710,13 +715,24 @@ app.get('/api/contributions/getmom', (req, res) => {
 
 // setMom
 app.get('/api/contributions/setmom/:usermom', secure, (req, res) => {
+  // buscar el socket en la lista de usuarios conectados
+  // utilizar el publicId para hacer la busqueda
+  let userSocket = _.find(usersSockets, {username: req.user.username})
+  if (!userSocket) {
+    return res.status(500).json({error: 'you need be logged with realtime too'})
+  }
+
   let mom = req.params.usermom
   let username = req.user.username
   let token = req.user.token
 
   client.setManOfMonth(username, mom, token, (err, mom) => {
     if (err) return res.status(500).json(err.error)
-    res.status(200).json(mom)
+
+    userSocket.rt.setManOfMonth( mom, (err, response) => {
+      if(err) return res.status(500).json({error: err})
+      res.status(200).json(response)
+    })
   })
 })
 

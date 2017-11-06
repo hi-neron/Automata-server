@@ -31,7 +31,7 @@ page('/', auth, signup, modalClose, display, leftMenu, mouseInfo, (ctx, next) =>
   let container = 'game-container'
 
   // inicia el juego
-  let game = new Game (container, ctx.auth, socket)
+  // let game = new Game (container, ctx.auth, socket)
 
   // inicia el panel de conversacion
   let dev = new DevBoard (ctx.auth, socket)

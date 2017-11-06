@@ -48,7 +48,6 @@ class Tooltips {
 
     let content = this.content
     
-    //let startCounterTime = this.startCounterTime.bind(this)
     let drawTooltip = this.drawTooltip.bind(this)
 
     template.onclick = function (ev) {

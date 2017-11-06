@@ -12,6 +12,8 @@ const Masonnry = require('masonry-layout')
 
 // tooltips util
 const Tooltips = require('./../utils/userTooltips')
+const Singles = require('./utils/contrib')
+const communicator = require('./../utils/activityCommunicator')
 
 // contenedor principal
 let devBoardContainer = document.getElementById('devboard-container')
@@ -29,7 +31,7 @@ class devBoard {
     // construye una plantilla basica
     this.right = yo`<div class="devboard devBoard-right"></div>`
     this.inside = yo`<div class="clearfix"></div>`
-    this.tagBoard = yo`<div class="devboard-right-tags"></div>`
+    this.tagBoard = yo`<div class="devboard-left-tags"></div>`
     this.tags = []
     this.user = user
     this.contentOpen = false
@@ -46,8 +48,19 @@ class devBoard {
 
     // REALTIME
     // delete contrib
+    let removeDelContribution = this.removeDelContribution.bind(this)
     socket.on('deleteContrib', (contribDeleted) => {
-      console.log(contribDeleted)
+      removeDelContribution(contribDeleted)
+    })
+
+    socket.on('settedMom', (mom) => {
+      let data = {
+        type: 'newMom',
+        message: `${mom.username} ha pasado a ser el nuevo iluminado de la semana`,
+        info: 'null'
+      }
+
+      communicator.addMessage(data)
     })
 
     // new message
@@ -98,7 +111,7 @@ class devBoard {
       // en proceso).
       // pdta1: Se comporta de forma distinta en pantallas pequeñas
       // pdta2: se tiene en cuenta si es dev o no, para renderizar el formulario
-      this.buildLeft(user, mOM, this.getCIP())
+      this.buildLeft(user, mOM)
 
       // lado derecho, contiene los tags, el formulario de contribuciones, las contribuciones.
       // pdta: se tiene en cuenta si es dev o no, para renderizar el formulario
@@ -109,80 +122,6 @@ class devBoard {
     })
   }
 
-  // get Contribs in process
-  getCIP () {
-    // this need a server req
-    return [
-      {
-        publicId: '6QjLPtk8EYHsb0G9FIqftU',
-        id: 'e0de1420-01ba-4e19-91c6-00a76ba0668a',
-        title: 'Si se tiene un chat donde pariticpe solo mujeres',
-        dateAdded: new Date(),
-        inProcess: true,
-        user: {
-          userId: '6QjLPtk8EYHsb0G9FIqftU',
-          username: 'Mauricio',
-          title: 'Esparandaculo',
-          avatar: 'pepe.jpg'
-        },
-        tags: ['#tipografia', '#servicios', '#moral', '#salto'],
-        data: {
-          type: 'message',
-          info: 'Eiusmod officia laborum adipisicing et aliquip magna velit. Officia nulla officia laboris pariatur nisi qui do quis laborum. Irure deserunt in aliquip occaecat tempor commodo amet eiusmod est dolor incididunt. Aliquip proident eiusmod nulla incididunt ut et quis. Magna qui excepteur excepteur nisi magna duis aliquip sit incididunt.',
-          image: 'noTieneImage.png'
-        },
-        messages: [
-          {
-            date: new Date(),
-            message: 'hola mundo',
-            user: {
-              username: 'titi',
-              avatar: 'nono.png'
-            }
-          }
-        ],
-        rate: ['pepe', 'conan', 'last'],
-        dev: {
-          message: null,
-          approval: false
-        }
-      },
-      {
-        publicId: '6QjLPtk8EYHsb0G9FIqftU',
-        id: 'e0de1420-01ba-4e19-91c6-00a76ba0668a',
-        title: 'Una contrib',
-        dateAdded: new Date(),
-        inProcess: true,
-        user: {
-          userId: '6QjLPtk8EYHsb0G9FIqftU',
-          username: 'roberto',
-          title: 'Esparandaculo',
-          avatar: 'pepe.jpg'
-        },
-        tags: ['#love', '#data'],
-        data: {
-          type: 'message',
-          info: 'Laborum excepteur nostrud voluptate laborum nisi ullamco nisi sit sunt sit veniam. Aute anim do sit tempor incididunt. Ipsum irure labore ullamco dolor dolor ipsum incididunt consectetur proident cupidatat. Ea culpa laboris in qui. Laboris aliquip eiusmod quis quis ad. Aliquip irure aliqua ad dolore adipisicing deserunt. Et minim duis aute esse ex ad aute tempor.',
-          image: 'noTieneImage.png'
-        },
-        messages: [
-          {
-            date: new Date(),
-            message: 'hola mundo',
-            user: {
-              username: 'titi',
-              avatar: 'nono.png'
-            }
-          }
-        ],
-        rate: ['pepe', 'conan'],
-        dev: {
-          message: null,
-          approval: false
-        }
-      }
-    ]
-  }
   // get man of the month
   getMOM (cb) {
     // this need a server req
@@ -200,10 +139,7 @@ class devBoard {
     // contenedores
     let wrapper = yo`<div class="devboard-wrapper"></div>`
     let left = yo`<div class="devBoard-left devboard"></div>`
-
-
-    // BRAND
-    let brand = createTemplate.drawBrand(this.boardName)
+    let tagContainer = yo`<div class="tag-devboard-container"></div>`
 
     // MAN OF THE MONTH
     // Simplemente un setter y getter
@@ -215,16 +151,10 @@ class devBoard {
 
     let manOfMonth = createTemplate.drawManOfMonth(MoM, Tooltips, this.user)
 
-    // IN PROCESS CONTRIBUTIONS
-    // se crea un listado de las contribuciones que estan en proceso
-
-    // in process: aun no
-    let inProcess = createTemplate.drawInProcess(contribsInProcess)
-    
     // se añanden los contenidos al wrapper
-    wrapper.appendChild(brand)
+    tagContainer.appendChild(this.tagBoard)
     wrapper.appendChild(manOfMonth)
-    wrapper.appendChild(inProcess)
+    wrapper.appendChild(tagContainer)
 
     // se añade el contenido al contenedor
     left.appendChild(wrapper)
@@ -238,7 +168,6 @@ class devBoard {
     // $container.remove()
 
     let wrapper = yo`<div id="devboard-wrapper-right" class="devboard-wrapper"></div>`
-    let tagContainer = yo`<div class="tag-devboard-container"></div>`
 
     // contenido
     let content = yo`<div class="devboard-right-content"></div>`
@@ -328,8 +257,6 @@ class devBoard {
     // se agregan todas las contribuciones
     this.buildContribList(user, content, msnry, contribs, (err, content) => {
       if (err) console.log(err)
-      tagContainer.appendChild(this.tagBoard)
-      wrapper.appendChild(tagContainer)
       wrapper.appendChild(content)
       setTimeout(function() {
         msnry.layout()
@@ -565,17 +492,23 @@ class devBoard {
       </div>
     `
 
+    let back = ''
+    // yo`
+    //   <div class="one-contrib-content-back">
+    //     <div class="one-contrib-content-back-eyes">
+    //       <div class="one-contrib-content-back-eyes-pupil"></div>
+    //     </div>
+    //   </div>
+    // `
+
     let usernameTooltip = new Tooltips (contrib.user.username, this.user)
 
     // TEMPLATE PRINCIPAL
     let contribTemplate = yo`
       <div title="${contrib.publicId}" class="one-contrib-container devboard-right-content-items grid-item">
         <div class="one-contrib-wrapper">
-          <div class="one-contrib-content-back">
-            <div class="one-contrib-content-back-eyes">
-              <div class="one-contrib-content-back-eyes-pupil"></div>
-            </div>
-          </div>
+          ${back}
+
           <div class="one-contrib-content" contrib="${contrib.publicId}">
             <div class="one-contrib-content-scroll">
               <div class="one-contrib-header">
@@ -638,13 +571,23 @@ class devBoard {
       let data = {
         userMessage: textToSend
       }
+
       let sendingMessage = yo`
         <span class="info-sending"> sending ...</span>
       `
+      $form.prop('disabled', true)
       $form.append(sendingMessage)
+
       addUserMessage(id, data, (err, res) => {
-        if (err) console.log(err)
+        if (err) {
+          console.log(err)
+          $form.html('')
+          $form.prop('disabled', false)
+          return communicator.addMessage(err.message)
+        }
+
         $form.html('')
+        $form.prop('disabled', false)
       })
     }
 
@@ -675,9 +618,23 @@ class devBoard {
       devAddApproval(id, data, (err, res) => {
         if (err) return console.log('este es un mensaje de error a optimizar', err)
 
+        let approval = res.body.data.approval
+
+        console.log(res.body)
+
         let changes = {
           dev: res.body.data
         }
+
+        let approved = approval==='true' ? 'aprobado': 'no aprobado'
+
+        let data = {
+          info: approval,
+          type: 'dev',
+          message: `Su acción: ${approved}, se ha guardado con exito`
+        }
+
+        communicator.addMessage(data)
 
         $textArea.val('')
         let templateToDraw = drawDevResponse(changes)
@@ -757,7 +714,14 @@ class devBoard {
     .set('Accept', 'application/json')
     .send(req)
     .end(function (err, res) {
-      if (err) return cb(err)
+      if (err) {
+        console.log(res)
+        let data = {
+          type: 'error',
+          message: res.body
+        }
+        return cb(data)
+      }
       cb(null, res)
     })
   }
@@ -840,6 +804,7 @@ class devBoard {
     .set('Accept', 'application/json')
     .end((err, res) => {
       if (err) {
+        console.log(err.body,'kalalalala')
         return cb(err)
       }
       cb(null, res.body)

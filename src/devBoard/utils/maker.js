@@ -21,17 +21,6 @@ function drawRateName (left, item, right, user) {
 }
 
 module.exports = {
-  drawBrand: (boardName) => {
-    // se construye la template donde ira el logo
-    return yo`
-    <div class="brandContainer">
-    <div id="dev-logo">
-      <img class='dev-logo-image' src="" alt="${boardName}">
-    </div>
-    <h1 class="dev-logo-message">${boardName}</h1>
-    </div>`
-  },
-
   drawManOfMonth: (moM, Tooltips, user) => {
     // se construye la template donde ira el hombre/mujer del mes
     let title = moM.genre === 'male' ? 'DON': 'MISS'
@@ -55,7 +44,7 @@ module.exports = {
     let userTooltip = new Tooltips (moM.username, user)
 
     let manOfMonth = yo`
-    <div class="devBoard-item mom">
+    <div class="mom">
       <div class="image-container">
         <img src="" alt="">
       </div>
