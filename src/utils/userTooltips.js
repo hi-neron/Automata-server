@@ -34,20 +34,13 @@ class Tooltips {
 
     this.user = user
     this.content = template
-    this.time = 0
     this.info = null
     this.tooltip = null
     this.running = false
 
     let running = this.running
-    let time = this.time
-    this.counter = 0
-
-
-    this.counterTime = null
-
     let content = this.content
-    
+
     let drawTooltip = this.drawTooltip.bind(this)
 
     template.onclick = function (ev) {
@@ -56,16 +49,14 @@ class Tooltips {
           x: ev.clientX,
           y: ev.clientY
         }
-        time = drawTooltip(pos)
+        drawTooltip(pos)
       }
     }
   }
 
   drawTooltip(pos) {
-    let time = this.counter
     let createTooltip = this.createTooltip.bind(this)
     createTooltip(pos)
-
   }
 
   // se crea el tooltip
@@ -80,6 +71,7 @@ class Tooltips {
   // dibuja el tooltip
   renderTooltip(userToDraw, pos) {
     let user = this.user
+    console.log(userToDraw)
 
     // estas maestrias deben ser remplazadas, solo para prueba
     let masteries = ['Illustrator', 'Designer']
@@ -156,14 +148,12 @@ class Tooltips {
     }
 
     let randomDeg = (Math.random() * 6) - 3
-    template.style.transform = `rotateZ(${randomDeg}deg) translate(-50%, -50%)`
-    template.style.position = 'fixed'
-    template.style.zIndex = '2'
+    // template.style.transform = `rotateZ(${randomDeg}deg) translate(-50%, -50%)`
+    // template.style.position = 'fixed'
+    // template.style.zIndex = '2'
     template.style.top = `${pos.y}px`
     template.style.left = `${pos.x}px`
     console.log(userToDraw)
-    console.log(pos.x, pos.y)
-    console.log(template)
     this.tooltip = template
 
     this.deleteParrotedChilds(userToDraw.username, () => {
@@ -181,22 +171,23 @@ class Tooltips {
 
   getUserInfo(cb) {
     if (this.username === 'La Bête') return cb(null, laBete)
-    if (this.info) {
-      cb(null, this.info)
-      console.log('hay')
-    } else {
-      console.log('no hay')
-      request
-      .get(`/api/users/${this.username}`)
-      .set('Accept', 'application/json')
-      .end((err, res) => {
-        if (err) {
-          return cb(err)
-        }
-        this.info = res.body
-        cb(null, res.body)
-      })
-    }
+    request
+    .get(`/api/users/${this.username}`)
+    .set('Accept', 'application/json')
+    .end((err, res) => {
+      if (err) {
+        return cb(err)
+      }
+      this.info = res.body
+      cb(null, res.body)
+    })
+
+    // if (this.info) {
+    //   cb(null, this.info)
+    //   console.log('hay')
+    // } else {
+    //   console.log('no hay')
+    // }
   }
 
   getOrnaments(title){

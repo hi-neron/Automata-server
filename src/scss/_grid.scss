@@ -126,8 +126,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
   overflow: hidden;
   position: fixed;
   z-index: 0;
-  // top: -15px;
-  // left: -15px;
+  top: 15px;
+  left: -15px;
 
   .game-scrollbars{
     width: 100%;
@@ -136,11 +136,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
     overflow: scroll;
     z-index: 0;
     text-align: center;
-    // top: 10px;
-    // left: 15px;
-    // padding-right: 50px;
-    // padding-left: 20px;
-    // padding-bottom: 30px;
+    top: 15px;
+    left: 15px;
 
     .game-grid {
       padding: 250px;
@@ -495,12 +492,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
 
         }
 
-        // .active {
-        //   // animation-fill-mode: forwards;
-        //   // -webkit-animation-fill-mode: forwards;
-        //   // animation: skillsOpen 0.5s ease;
-        // }
-
         &:hover {
           .small-target {
             opacity: 1;
@@ -517,7 +508,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
           opacity: 1;
           position: absolute;
           background-color: $yellow-dark;
-          // box-shadow: 0 1px 0 rgba(#2c2932, 0.3);
+          box-shadow: 0 1px 0 rgba(#2c2932, 0.3);
           transform: translate(-50%, -50%);
           left: 50%;
           top: 50%;

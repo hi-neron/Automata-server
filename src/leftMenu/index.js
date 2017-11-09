@@ -351,6 +351,98 @@ let startMenu = function () {
 }
 
 function render () {
+  let searchTrigger = yo`
+  <div id="search_trigger">
+    <svg id="m_glass" viewBox="0 0 82.31 82.28">
+      <defs>
+        <style>
+          .cls-1_search {
+            fill: #959590;
+          }
+
+          .cls-2_search {
+            fill: #c5c5c0;
+          }
+
+          .cls-3_search {
+            fill: #343430;
+          }
+
+          .cls-4_search {
+            opacity: 0.22;
+          }
+
+          .cls-5_search {
+            fill: #FFFA75;
+          }
+
+          .cls-6_search {
+            fill: #FFFA75;
+          }
+
+          .cls-7_search, .cls-8_search, .cls-9_search {
+            fill: none;
+            stroke-miterlimit: 10;
+          }
+
+          .cls-7_search {
+            stroke: #FFFA75;
+            stroke-width: 7px;
+          }
+
+          .cls-8_search {
+            /*stroke: #545327;*/
+            stroke: #FFFA75;
+            stroke-width: 5px;
+          }
+
+          .cls-10_search {
+            fill: #363636;
+          }
+
+          .cls-8_search, .cls-9_search {
+            stroke-linecap: square;
+          }
+
+          .cls-9_search {
+            stroke: #FFFA75;
+            stroke-width: 4px;
+          }
+        </style>
+      </defs>
+      <title>m_glass</title>
+      <g id='search_trigger_all'>
+        <g id="search_eye">
+          <g>
+            <path class="cls-1_search" d="M55.37,55.9h0L26.59,27.12h0A20.35,20.35,0,1,0,55.37,55.9Z"/>
+            <path class="cls-2_search" d="M55.37,55.9h0L26.59,27.12h0A20.35,20.35,0,1,1,55.37,55.9Z"/>
+            <ellipse class="cls-3_search" cx="26.87" cy="27.4" rx="3.93" ry="2.42" transform="translate(-11.51 27.03) rotate(-45)"/>
+          </g>
+        </g>
+        <g id="search_body">
+          <path class="cls-4_search" d="M55.37,55.9h0a20.33,20.33,0,0,0-17-34.56V38.89H20.82A20.33,20.33,0,0,0,55.37,55.9Z"/>
+          <g>
+            <path id="search_darker" class="cls-6_search" d="M23.93,24.39h0A24.16,24.16,0,1,0,58.11,58.56h0Z"/>
+          </g>
+          <g>
+            <path id="search_lighter" class="cls-6_search" d="M58.07,58.6h0A24.16,24.16,0,1,0,23.89,24.42h0Z"/>
+            <path class="cls-6_search" d="M65.26,41.51a24.2,24.2,0,0,0-7.11-17.16L41,41.51,58.15,58.68h0A24.2,24.2,0,0,0,65.26,41.51Z"/>
+          </g>
+          <path class="cls-6_search" id="search_darker_2" d="M41.06,65.71A24.2,24.2,0,0,1,23.89,58.6L41.06,41.43,58.22,58.6h0A24.2,24.2,0,0,1,41.06,65.71Z"/>
+        </g>
+        <line id="search_handle" class="cls-7_search" x1="68.6" y1="69.13" x2="40.98" y2="41.51"/>
+        <g id="search_x">
+          <line id="search_line2" class="cls-8_search" x1="40.81" y1="41.59" x2="41.31" y2="41.59"/>
+          <line id="search_line1" class="cls-8_search" x1="41.06" y1="41.45" x2="41.06" y2="41.73"/>
+        </g>
+      </g>
+      <g id="search_shine">
+        <path class="cls-9_search" d="M26.64,27.17a20.19,20.19,0,0,1,8-4.94"/>
+        <path class="cls-9_search" d="M21.1,37.51a20.07,20.07,0,0,1,1.08-3.61"/>
+      </g>
+    </svg>
+  </div>
+  `
   return yo`
     <div>
       <aside id="profile"></aside>
@@ -361,9 +453,6 @@ function render () {
           <a id="logout" href="/logout">
             <a class="close-logout"></a>
           </a>
-        </div>
-        <div id="dev_board">
-          <span class="dev_text">DEV</span>
         </div>
         <div class="trigger_menu">
           <svg id="menuSvg" viewBox="48 2 85 76.67">
@@ -386,12 +475,12 @@ function render () {
                 <polygon class="cls-1_menu" points="98.28 51.62 80.65 51.62 78.2 53.43 75.83 51.62 58.65 51.62 58.65 23.93 98.28 23.93 98.28 51.62"/>
               </clipPath>
               <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%" gradientUnits="userSpaceOnUse" gradientTransform='translate(100, 100)'>
-                <stop offset="0%" stop-color="#BFFFDF" />
-                <stop offset="30%" stop-color="#BFFFDF" />
-                <stop offset="40%" stop-color="#84f2c2" />
-                <stop offset="60%" stop-color="#84f2c2" />
-                <stop offset="70%" stop-color="#BFFFDF" />
-                <stop offset="100%" stop-color="#BFFFDF" />
+                <stop offset="0%" stop-color="#FF2B4A" />
+                <stop offset="30%" stop-color="#FF2B4A" />
+                <stop offset="40%" stop-color="#ff6078" />
+                <stop offset="60%" stop-color="#ff6078" />
+                <stop offset="70%" stop-color="#FF2B4A" />
+                <stop offset="100%" stop-color="#FF2B4A" />
               </linearGradient>
             </defs>
             <title>automata</title>
@@ -418,96 +507,7 @@ function render () {
           </div>
         </div>
       </menu>
-      <div id="search_trigger">
-        <svg id="m_glass" viewBox="0 0 82.31 82.28">
-          <defs>
-            <style>
-              .cls-1_search {
-                fill: #959590;
-              }
-
-              .cls-2_search {
-                fill: #c5c5c0;
-              }
-
-              .cls-3_search {
-                fill: #343430;
-              }
-
-              .cls-4_search {
-                opacity: 0.22;
-              }
-
-              .cls-5_search {
-                fill: #FFFA75;
-              }
-
-              .cls-6_search {
-                fill: #FFFA75;
-              }
-
-              .cls-7_search, .cls-8_search, .cls-9_search {
-                fill: none;
-                stroke-miterlimit: 10;
-              }
-
-              .cls-7_search {
-                stroke: #FFFA75;
-                stroke-width: 7px;
-              }
-
-              .cls-8_search {
-                /*stroke: #545327;*/
-                stroke: #FFFA75;
-                stroke-width: 5px;
-              }
-
-              .cls-10_search {
-                fill: #363636;
-              }
-
-              .cls-8_search, .cls-9_search {
-                stroke-linecap: square;
-              }
-
-              .cls-9_search {
-                stroke: #FFFA75;
-                stroke-width: 4px;
-              }
-            </style>
-          </defs>
-          <title>m_glass</title>
-          <g id='search_trigger_all'>
-            <g id="search_eye">
-              <g>
-                <path class="cls-1_search" d="M55.37,55.9h0L26.59,27.12h0A20.35,20.35,0,1,0,55.37,55.9Z"/>
-                <path class="cls-2_search" d="M55.37,55.9h0L26.59,27.12h0A20.35,20.35,0,1,1,55.37,55.9Z"/>
-                <ellipse class="cls-3_search" cx="26.87" cy="27.4" rx="3.93" ry="2.42" transform="translate(-11.51 27.03) rotate(-45)"/>
-              </g>
-            </g>
-            <g id="search_body">
-              <path class="cls-4_search" d="M55.37,55.9h0a20.33,20.33,0,0,0-17-34.56V38.89H20.82A20.33,20.33,0,0,0,55.37,55.9Z"/>
-              <g>
-                <path id="search_darker" class="cls-6_search" d="M23.93,24.39h0A24.16,24.16,0,1,0,58.11,58.56h0Z"/>
-              </g>
-              <g>
-                <path id="search_lighter" class="cls-6_search" d="M58.07,58.6h0A24.16,24.16,0,1,0,23.89,24.42h0Z"/>
-                <path class="cls-6_search" d="M65.26,41.51a24.2,24.2,0,0,0-7.11-17.16L41,41.51,58.15,58.68h0A24.2,24.2,0,0,0,65.26,41.51Z"/>
-              </g>
-              <path class="cls-6_search" id="search_darker_2" d="M41.06,65.71A24.2,24.2,0,0,1,23.89,58.6L41.06,41.43,58.22,58.6h0A24.2,24.2,0,0,1,41.06,65.71Z"/>
-            </g>
-            <line id="search_handle" class="cls-7_search" x1="68.6" y1="69.13" x2="40.98" y2="41.51"/>
-            <g id="search_x">
-              <line id="search_line2" class="cls-8_search" x1="40.81" y1="41.59" x2="41.31" y2="41.59"/>
-              <line id="search_line1" class="cls-8_search" x1="41.06" y1="41.45" x2="41.06" y2="41.73"/>
-            </g>
-          </g>
-          <g id="search_shine">
-            <path class="cls-9_search" d="M26.64,27.17a20.19,20.19,0,0,1,8-4.94"/>
-            <path class="cls-9_search" d="M21.1,37.51a20.07,20.07,0,0,1,1.08-3.61"/>
-          </g>
-        </svg>
-      </div>
+      ${searchTrigger}
       <div id="empty_screen">
       </div>
       <div id="search_inputContainer">

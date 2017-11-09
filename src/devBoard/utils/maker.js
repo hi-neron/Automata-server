@@ -56,53 +56,6 @@ module.exports = {
     return manOfMonth
   },
 
-  drawInProcess: (contribsInProcess) => {
-    // se dibuja el template donde iran las contribuciones en estado de desarrollo
-    let templateContribsInProcess = yo`<div class="contribs-in-process"></div>`
-
-    for (let i = 0; i < contribsInProcess.length; i++) {
-      let tags = yo`<div class="contribs-process"></div>`
-
-      for (let x = 0; x < contribsInProcess[i].tags.length && x < 3; x++) {
-        tags.appendChild(
-          yo`
-            <div class="contrib-inProcess-tag">
-              <a href="#">${contribsInProcess[i].tags[x]}</a>
-            </div>
-          `
-        )
-      }
-
-      templateContribsInProcess.appendChild( yo`
-        <div class="contrib-in-process contrib">
-          <div class="title">
-            <a href="/${contribsInProcess[i].publicId}">
-              ${contribsInProcess[i].title}
-            </a>
-          </div>
-          <div class="data">
-            ${tags}
-          </div>
-          <div class="author">
-            <a href="${contribsInProcess[i].user.userId}" class="contrib-author">
-              <span class="author">author</span>${contribsInProcess[i].user.username}
-            </a>
-          </div>
-        </div>
-      `)
-    }
-
-    return yo`
-    <div class="devBoard-item in-process">
-      <h2 class="in-process-title">
-        EN PROCESO
-      </h2>
-      <div class="in-process-alert">!</div>
-      ${templateContribsInProcess}
-    </div>
-    `
-  },
-
   drawContribsForm: (user) => {
     let adminForm
 

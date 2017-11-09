@@ -31,6 +31,7 @@ $upload-body-border-top:    $gray-dark-2;
 $purple-mid:               #2A262E;
 $supervisor-body:          #F1F5ED;
 $red-alert:                #FF2B4A;
+$red-alert-light:          #ff6078;
 $background-awards:         $blue-light;
 
 // to replace
@@ -48,10 +49,10 @@ $logo-background: $supervisor-body;
 
 // display
 $display-black: $menu-trigger-background;
-$display-letters: #BFFFDF;
-$display-letters-outer: #61FFAE;
+$display-letters: $red-alert;
+$display-letters-outer: #ff6078;
 $metal-top: #918181;
-$color-grad: $display-letters;
+$color-grad: $red-alert;
 
 // other colors
 $green-true: #1EFFDC;
