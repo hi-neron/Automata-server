@@ -155,16 +155,17 @@
           display: block;
           right: -40px;
           overflow: hidden;
-          transform: skew(-30deg, 60deg) translate3d(0,0,0);
+          transform: skew(-30deg, 60deg);
 
           img {
             position: absolute;
-            transform: skew(52deg, -68deg) rotate(9deg);
-            width: 27px;
-            height: 27px;
+
+            transform: skew(30deg, -60deg) rotate(0deg);
+            width: 32px;
+            height: 32px;
             background-color: $red-alert;
-            left: -2px;
-            top: 10px;
+            left: -7px;
+            top: 0px;
           }
         }
       }
@@ -237,8 +238,21 @@
 
 .user-name-tooltip {
   text-align: left;
+  position: relative;
 
   &:hover {
     cursor: url('/img/devil-hand-eye.png'), pointer;
+    &:after {
+      content: '★';
+      position: absolute;
+      transform: rotateZ(-35deg);
+      top: -7px;
+      width: 5px;
+      height: 5px;
+      right: 0px;
+      color: $red-alert;
+      font-family: 'font-awesome';
+      font-size: 0.7rem;
+    }
   }
 }

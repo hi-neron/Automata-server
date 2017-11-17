@@ -3,14 +3,15 @@ $shadow-normal: rgba(54, 54, 54, 0.30);
 $shadow: rgba(54, 54, 50, 0.10);
 $shadow-light: rgba(54, 54, 50, 0.06);
 $gray-dark:             #1a1a1a;
-$gray-dark-2:             #393939;
+$gray-dark-2:           #393939;
 $gray-dark-low:         #4A7E64;
-$gray-dark-low2:         #3a4a4a;
+$gray-dark-low2:        #3a4a4a;
 $gray-light:            #7b7b79;
-$blue-light:              #BFFFDF;
+$blue-light:            #BFFFDF;
 $green-light:           #D3F3BE;
 $gray-add-body:         #C8E0B9;
 $gray-add-body-dark:    #B8D0A9;
+$gray-white:            #f9f9f9;
 $white-modal:           #F5F0F9;
 $white-supervisor:      #E3E3Dc;
 $white-body:            #E5E5E1;
@@ -46,6 +47,7 @@ $tooltip-purple: $purple-mid;
 
 // logo
 $logo-background: $supervisor-body;
+$game-white: $supervisor-body;
 
 // display
 $display-black: $menu-trigger-background;

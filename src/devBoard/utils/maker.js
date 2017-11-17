@@ -23,7 +23,7 @@ function drawRateName (left, item, right, user) {
 module.exports = {
   drawManOfMonth: (moM, Tooltips, user) => {
     // se construye la template donde ira el hombre/mujer del mes
-    let title = moM.genre === 'male' ? 'DON': 'MISS'
+    let title = moM.genre === 'male' ? 'Don': 'Miss'
     let phrase = yo`
 
     <div class="genre">
@@ -45,12 +45,12 @@ module.exports = {
 
     let manOfMonth = yo`
     <div class="mom">
-      <div class="image-container">
-        <img src="" alt="">
-      </div>
       ${phrase}
       <div class="mom-divisor">${title}</div>
       <div class="user-name">${userTooltip.get()}</div>
+      <div class="image-container">
+        <img src="" alt="">
+      </div>
     </div>`
 
     return manOfMonth
@@ -90,11 +90,11 @@ module.exports = {
           <div class="type-contrib-form">
             <div class="type-contrib-aporte-form">
               <input type="radio" name="type" value="contribution" id="type-contrib-contribution-form" checked="checked">
-              <span for="aporte">APORTE</span>
+              <span for="aporte">DISCUSIÓN</span>
             </div>
             <div class="type-contrib-message-form">
               <input type="radio" name="type" value="message" id="type-contrib-message-form">
-              <span for="message">MENSAJE</span>
+              <span for="message">IDEA</span>
             </div>
             <div class="type-contrib-advert-form">
               <input type="radio" name="type" value="advertise" id="type-contrib-advert-form" title="advert">
@@ -147,7 +147,7 @@ module.exports = {
     let month
     switch (date.getMonth()) {
       case 0:
-        month = 'enero'
+        month = 'Enero'
         break;
       case 1:
         month = 'febrero'
@@ -189,30 +189,12 @@ module.exports = {
     let newHour =  myHour < 12 ? myHour: myHour - 12
     let meridian = myHour < 12 ? 'am': 'pm'
 
-    let dateString = yo`<span class="date">${month} ${date.getDate()}, ${date.getFullYear()} / ${newHour} ${meridian}</span>`
+    let dateString = yo`<span class="date"> El ${date.getDate()} de ${month}, ${date.getFullYear()} / ${newHour} ${meridian}</span>`
 
     return dateString
   },
 
-  drawDevForm: () => {
-    return yo`
-      <div class="one-contrib-dev-res-form">
-      <form class="one-contrib-dev-form">
-        <div class="one-contrib-dev-textarea-container">
-          <textarea name="message" placeholder="Puedes escribir algo aquí, ¿o no?" class="one-contrib-dev-textarea" maxlength="140"></textarea>
-        </div>
-        <div class="one-contrib-dev-buttons">
-          <button class="one-contrib-dev-input-true button" value="true">
-          </button>
-          <button class="one-contrib-dev-input-false button" value="false">
-          </button>
-        </div>
-      </form>
-    </div>
-    `
-  },
-
-  renderRate: (rate, username, Tooltips, myUser) => {
+  renderRate: (rate, username, myUser) => {
     let users = rate.length
 
     if (users > 0){
@@ -266,7 +248,7 @@ module.exports = {
         rateTemplate.appendChild(counterContainer)
       }
 
-      let finalRes = users > 1 ? ' apoyan estó': 'apoyá estó'
+      let finalRes = users > 1 ? 'apoyan estó': 'apoyá estó'
       let finalMessage = yo`<span class="counter-plus">${finalRes}</span>`
       rateTemplate.appendChild(finalMessage)
 
@@ -275,7 +257,7 @@ module.exports = {
     return null
   },
 
-  getTrash: () => {
+  getTrash: (okAccept) => {
     let xmlns="http://www.w3.org/2000/svg"
     let xmlns_xlink = "http://www.w3.org/1999/xlink"
 
@@ -299,12 +281,6 @@ module.exports = {
         <path class="trash-cls-3 trash-body" d="M40.26,126.2V480H373.93V126.2H40.26Zm86.25,284H93.15V183.74h33.37V410.21Zm97.27,0H190.41V183.74h33.37V410.21Zm97.26,0H287.67V183.74H321V410.21Z"/>
         <path class="trash-cls-2 trash-cap" d="M292.79,77.09V0H114.56V77.09H0v54H414.19v-54H292.79Zm-37.88,0H152.45V34.65H254.91V77.09Z"/>
       </svg>
-    `
-
-    let okAccept = yo`
-      <div class="accept">
-        <i class="fa fa-check"></i>
-      </div>
     `
 
     let confirm = yo`

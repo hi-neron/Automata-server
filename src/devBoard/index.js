@@ -12,7 +12,7 @@ const autosize = require('autosize')
 
 // tooltips util
 const Tooltips = require('./../utils/userTooltips')
-const Singles = require('./utils/contrib')
+const Single = require('./utils/contrib')
 const communicator = require('./../utils/activityCommunicator')
 
 // contenedor principal
@@ -30,7 +30,8 @@ class devBoard {
   constructor (user, socket) {
     // construye una plantilla basica
     this.right = yo`<div class="devboard devBoard-right"></div>`
-    this.inside = yo`<div class="clearfix"></div>`
+    this.left = yo`<div class="devboard devBoard-left"></div>`
+    this.inside = yo`<div id="devboard-scroll" class="clearfix"></div>`
     this.tagBoard = yo`<div class="devboard-left-tags"></div>`
     this.launcher = yo`
       <div id="chat-launcher">
@@ -39,6 +40,7 @@ class devBoard {
       </div>
     `
     this.tags = []
+    this.contribList = []
     this.user = user
     this.contentOpen = false
     this.contentOpened = null
@@ -73,39 +75,18 @@ class devBoard {
 
     // new message
     socket.on('newDevBoardMessage', (newMessage) => {
-      if (this.contentOpen) {
-        let myContent = this.contentOpened.find('.one-contrib-content')
-        let $myContent = $(myContent[0])
-        let id = $(myContent[0]).attr('contrib')
+      let id = newMessage.contribId
 
-        if (id === newMessage.contribId) {
-          let $container = $myContent.find('.one-contrib-messages')
-          $container[0].prepend(drawSingleMessage(newMessage))
-        }
-      }
+      let modified = _.find(this.contribList, {id: id}).contrib
+      modified.addNewMessage(newMessage)
     })
 
     // delete message
     socket.on('deleteDevBoardMessage', (deletedMessage) => {
-      if (this.contentOpen) {
-        let myContent = this.contentOpened.find('.one-contrib-content')
-        let $myContent = $(myContent[0])
-        let id = $(myContent[0]).attr('contrib')
+      let id = deletedMessage.contribId
 
-        if (id === deletedMessage.contribId) {
-          let deleteMessageTemplate = yo`
-            <div class="delete-message-template">
-              <span class="delete-message-template-username">
-                ${deletedMessage.username}
-              </span>
-              ha eliminado el comentario ...
-            </div>
-          `
-          let $container = $myContent.find('.one-contrib-messages')
-          let $message = $container.find(`.one-contrib-messages-single[messageid='${deletedMessage.id}']`)
-          $message.empty().append(deleteMessageTemplate)
-        }
-      }
+      let deleted = _.find(this.contribList, {id: id}).contrib
+      deleted.removeMessage(deletedMessage)
     })
 
 
@@ -132,8 +113,8 @@ class devBoard {
       </div>
       `
       devBoardContainer.appendChild(loader)
-
       $devBoardContainer.toggleClass('devboard-open')
+
       if (open) {
         setTimeout(function() {
           newChatBoard(user)
@@ -193,7 +174,7 @@ class devBoard {
   buildLeft (user, MoM) {
     // contenedores
     let wrapper = yo`<div class="devboard-wrapper"></div>`
-    let left = yo`<div class="devBoard-left devboard"></div>`
+    let left = this.left
     let tagContainer = yo`<div class="tag-devboard-container"></div>`
 
     // MAN OF THE MONTH
@@ -208,11 +189,11 @@ class devBoard {
 
     // se añanden los contenidos al wrapper
     tagContainer.appendChild(this.tagBoard)
-    wrapper.appendChild(tagContainer)
     wrapper.appendChild(manOfMonth)
+    wrapper.appendChild(tagContainer)
 
     // se añade el contenido al contenedor
-    left.appendChild(wrapper)
+    empty(left).appendChild(wrapper)
 
     this.inside.appendChild(left)
   }
@@ -222,7 +203,7 @@ class devBoard {
     // let $container = $(container)
     // $container.remove()
 
-    let wrapper = yo`<div id="devboard-wrapper-right" class="devboard-wrapper"></div>`
+    let wrapper = Single.setContainer(this.inside)
 
     // contenido
     let content = yo`<div class="devboard-right-content"></div>`
@@ -235,7 +216,7 @@ class devBoard {
     let mainForm = yo`
       <div class="contrib-create-form-wrapper devboard-right-content-items">
         <h2 class="devboard-form-title">
-          NUEVO
+          NUEVA
         </h2>
         ${form}
         ${counterTemplate}
@@ -243,6 +224,8 @@ class devBoard {
     `
 
     // evento cuando se hace submit del formulario
+    let createContrib = this.createContrib.bind(this)
+
     form.onsubmit = (ev) => {
       ev.preventDefault()
       let myForm = ev.target
@@ -270,8 +253,8 @@ class devBoard {
         .end(function (err, res) {
           if (err) return(err)
           let newContrib = res.body
-          let newContribRendered = renderContrib(user, newContrib)
-          content.prepend(newContribRendered)
+          // se crea un objeto contribución
+          createContrib(newContrib, 'before')
           myForm.reset()
         })
     }
@@ -282,8 +265,9 @@ class devBoard {
 
 
     // se agregan todas las contribuciones
-    this.buildContribList(user, content, contribs, (err, content) => {
+    this.buildContribList(user, content, contribs, (err) => {
       if (err) console.log(err)
+      Single.addList(this.contribList)
       wrapper.appendChild(content)
     })
 
@@ -293,112 +277,114 @@ class devBoard {
     this.inside.append(this.right)
   }
 
-  // buildRight (user, contribs) {
-  //   // let container = document.getElementById('devboard-wrapper-right')
-  //   // let $container = $(container)
-  //   // $container.remove()
+  /*
+    // buildRight (user, contribs) {
+    //   // let container = document.getElementById('devboard-wrapper-right')
+    //   // let $container = $(container)
+    //   // $container.remove()
 
-  //   let wrapper = yo`<div id="devboard-wrapper-right" class="devboard-wrapper"></div>`
+    //   let wrapper = yo`<div id="devboard-wrapper-right" class="devboard-wrapper"></div>`
 
-  //   // contenido
-  //   let content = yo`<div class="devboard-right-content"></div>`
+    //   // contenido
+    //   let content = yo`<div class="devboard-right-content"></div>`
 
-  //   // masonry init: ajusta el layout de forma vertical
-  //   let msnry = new Masonnry (content, {
-  //     itemSelector: '.grid-item',
-  //     columnWidth: '.grid-item',
-  //     transitionDuration: '0.2s',
-  //   })
+    //   // masonry init: ajusta el layout de forma vertical
+    //   let msnry = new Masonnry (content, {
+    //     itemSelector: '.grid-item',
+    //     columnWidth: '.grid-item',
+    //     transitionDuration: '0.2s',
+    //   })
 
-  //   // FORMULARIO DE CONTRIBUCIONES -------
-  //   let formTemplate = createTemplate.drawContribsForm(user)
-  //   let form = formTemplate.form
-  //   let counterTemplate = formTemplate.counter
+    //   // FORMULARIO DE CONTRIBUCIONES -------
+    //   let formTemplate = createTemplate.drawContribsForm(user)
+    //   let form = formTemplate.form
+    //   let counterTemplate = formTemplate.counter
 
-  //   let mainForm = yo`
-  //     <div class="contrib-create-form-wrapper devboard-right-content-items">
-  //       <h2 class="devboard-form-title">
-  //         NEW
-  //       </h2>
-  //       ${form}
-  //       ${counterTemplate}
-  //     </div>
-  //   `
+    //   let mainForm = yo`
+    //     <div class="contrib-create-form-wrapper devboard-right-content-items">
+    //       <h2 class="devboard-form-title">
+    //         NEW
+    //       </h2>
+    //       ${form}
+    //       ${counterTemplate}
+    //     </div>
+    //   `
 
-  //   msnry.stamp(mainForm)
-  //   this.layout = msnry
+    //   msnry.stamp(mainForm)
+    //   this.layout = msnry
 
-  //   // evento cuando se hace submit del formulario
-  //   form.onsubmit = (ev) => {
-  //     ev.preventDefault()
-  //     let myForm = ev.target
-  //     let $myForm = $(myForm)
+    //   // evento cuando se hace submit del formulario
+    //   form.onsubmit = (ev) => {
+    //     ev.preventDefault()
+    //     let myForm = ev.target
+    //     let $myForm = $(myForm)
 
-  //     let data = $myForm.serializeArray()
-  //     let dataToSend = {}
+    //     let data = $myForm.serializeArray()
+    //     let dataToSend = {}
 
-  //     // se construye el body de la peticion
-  //     // {
-  //     //  title
-  //     //  type
-  //     //  info
-  //     // }
-  //     for (let i = 0; i < data.length; i++) {
-  //       dataToSend[data[i].name] = data[i].value
-  //     }
+    //     // se construye el body de la peticion
+    //     // {
+    //     //  title
+    //     //  type
+    //     //  info
+    //     // }
+    //     for (let i = 0; i < data.length; i++) {
+    //       dataToSend[data[i].name] = data[i].value
+    //     }
 
-  //     // se incluye el metodo de renderizar una sola contribucion al contexto
-  //     let renderContrib = this.renderContrib.bind(this)
+    //     // se incluye el metodo de renderizar una sola contribucion al contexto
+    //     let renderContrib = this.renderContrib.bind(this)
 
-  //     request
-  //       .post('/api/contributions')
-  //       .send(dataToSend)
-  //       .end(function (err, res) {
-  //         if (err) return(err)
-  //         let newContrib = res.body
-  //         let newContribRendered = renderContrib(user, newContrib)
-  //         content.appendChild(newContribRendered)
-  //         msnry.prepended(newContribRendered)
-  //         myForm.reset()
-  //       })
-  //   }
+    //     request
+    //       .post('/api/contributions')
+    //       .send(dataToSend)
+    //       .end(function (err, res) {
+    //         if (err) return(err)
+    //         let newContrib = res.body
+    //         let newContribRendered = renderContrib(user, newContrib)
+    //         content.appendChild(newContribRendered)
+    //         msnry.prepended(newContribRendered)
+    //         myForm.reset()
+    //       })
+    //   }
 
-  //   // se agrega el formulario
-  //   content.appendChild(mainForm)
+    //   // se agrega el formulario
+    //   content.appendChild(mainForm)
 
-  //   // Muestra y esconde de nuevo el contenido oculto.
-  //   let $content = $(content)
-  //   let contribOpenInteractions = this.contribOpenInteractions.bind(this)
+    //   // Muestra y esconde de nuevo el contenido oculto.
+    //   let $content = $(content)
+    //   let contribOpenInteractions = this.contribOpenInteractions.bind(this)
 
-  //   $content.on('click', '.one-contrib-container .one-contrib-wrapper .one-contrib-content .one-contrib-likes .one-contrib-likes-container-button-arrow', (ev) => {
-  //     let $masIcon = $(ev.currentTarget)
-  //     this.contentOpen = true
-  //     let $content = $masIcon.closest('.one-contrib-container')
-  //     this.contentOpened = $content
-  //     contribOpenInteractions($content)
-  //   })
+    //   $content.on('click', '.one-contrib-container .one-contrib-wrapper .one-contrib-content .one-contrib-likes .one-contrib-likes-container-button-arrow', (ev) => {
+    //     let $masIcon = $(ev.currentTarget)
+    //     this.contentOpen = true
+    //     let $content = $masIcon.closest('.one-contrib-container')
+    //     this.contentOpened = $content
+    //     contribOpenInteractions($content)
+    //   })
 
-  //   this.$ecran.on('click', (ev) => {
-  //     if (this.contentOpen) {
-  //       contribOpenInteractions(this.contentOpened)
-  //       this.contentOpen = false
-  //     }
-  //   })
+    //   this.$ecran.on('click', (ev) => {
+    //     if (this.contentOpen) {
+    //       contribOpenInteractions(this.contentOpened)
+    //       this.contentOpen = false
+    //     }
+    //   })
 
-  //   // se agregan todas las contribuciones
-  //   this.buildContribList(user, content, msnry, contribs, (err, content) => {
-  //     if (err) console.log(err)
-  //     wrapper.appendChild(content)
-  //     setTimeout(function() {
-  //       msnry.layout()
-  //     }, 50);
-  //   })
+    //   // se agregan todas las contribuciones
+    //   this.buildContribList(user, content, msnry, contribs, (err, content) => {
+    //     if (err) console.log(err)
+    //     wrapper.appendChild(content)
+    //     setTimeout(function() {
+    //       msnry.layout()
+    //     }, 50);
+    //   })
 
-  //   // se agregan los elementos a la envoltura
-  //   empty(this.right)
-  //   this.right.appendChild(wrapper)
-  //   this.inside.append(this.right)
-  // }
+    //   // se agregan los elementos a la envoltura
+    //   empty(this.right)
+    //   this.right.appendChild(wrapper)
+    //   this.inside.append(this.right)
+    // }
+  */
 
   contribOpenInteractions($this){
     let $containerToMove =  $this.find('.one-contrib-content')
@@ -446,14 +432,28 @@ class devBoard {
     $this.css('height', myHeightToSave)
   }
 
+  createContrib (contrib, position) {
+    this.contribList.push({
+      id: contrib.publicId,
+      contrib: new Single(contrib, this.user, position),
+      position: position
+    })
+  }
+
   buildContribList (user, container, contribs, cb) {
+    this.contribList = []
     for (let i = 0; i < contribs.length; i++) {
       let oneContrib = contribs[i]
-      let renderedContrib = this.renderContrib(user, oneContrib)
-      container.appendChild(renderedContrib)
+      this.createContrib(oneContrib, 'after')
+      // agrega los tags de la contribucion, al tablero de tags
+      // en la parte superior
+
+      this.addTagToBoard(oneContrib)
+      // let renderedContrib = this.renderContrib(user, oneContrib)
+      // container.appendChild(renderedContrib)
     }
 
-    cb(null, container, contribs)
+    cb(null)
 
     // this.getcontribs(0, (err, res) => {
     //   if (err) return cb(err)
@@ -521,35 +521,22 @@ class devBoard {
   renderContrib (user, contrib) {
     // agrega los tags de la contribucion, al tablero de tags
     // en la parte superior
-    this.addTagToBoard(contrib)
+    // this.addTagToBoard(contrib)
 
     // construye el mensaje de la fecha
-    let dateString = createTemplate.drawDate(contrib.dateAdded)
+    // let dateString = createTemplate.drawDate(contrib.dateAdded)
 
     // SE CONSTRUYEN LAS CONTRIBUCIONES -----------
 
     // dibuja el boton de rate
-    let likeButton = createTemplate.drawLikesDevil()
+    // let likeButton = createTemplate.drawLikesDevil()
 
     // dibuja las etiquetas de los que dan un rate
-    let contribRate = createTemplate.renderRate(contrib.rate, this.user.username, Tooltips, this.user)
+    // let contribRate = createTemplate.renderRate(contrib.rate, this.user.username, Tooltips, this.user)
 
-    // el dev panel tiene dos partes
-    // la respuesta del dev, y en caso de que el user sea admin, el formulario
-
-    // FORMULARIO DEV
-    // formulario para dar una opinión dev a la contribución
-    // El dev form se dibuja si es un usuario dev
-    let devForm = createTemplate.drawDevForm()
-
-    // PANEL DE RESPUESTA DEV
-    // el dev panel se dibuja si existe una respuesta del dev
-    let devResponse = this.drawDevResponse(contrib)
 
     // MENSAJES DE USUARIO
     // texarea donde se sube el mensaje
-    // <textarea name="message" class="one-contrib-messages-text-form" maxlength="340" value="">
-    // </textarea>
 
     let userMessageForm = yo`
       <p class="one-contrib-messages-text-editable" contenteditable="true">
@@ -577,7 +564,7 @@ class devBoard {
     let messagesForm = yo`
       <form action="" class="one-contrib-messages-form">
           <div class="one-contrib-messages-uimage-container">
-            <img src="${this.user.avatar}" alt="" class="one-contrib-messages-uimage">
+            <img src="/${this.user.avatar}" alt="" class="one-contrib-messages-uimage">
           </div>
           <div class="one-contrib-messages-text-form-container">
             ${containerMessage}
@@ -619,15 +606,6 @@ class devBoard {
         </div>
       </div>
     `
-
-    let back = ''
-    // yo`
-    //   <div class="one-contrib-content-back">
-    //     <div class="one-contrib-content-back-eyes">
-    //       <div class="one-contrib-content-back-eyes-pupil"></div>
-    //     </div>
-    //   </div>
-    // `
 
     let usernameTooltip = new Tooltips (contrib.user.username, this.user)
 
@@ -800,40 +778,6 @@ class devBoard {
     $toDelete.remove()
   }
 
-  drawDevResponse (contrib) {
-    let redAlert = '#FF2B4A'
-    let greenOk = '#1EFFDC'
-
-    let approval = JSON.parse(contrib.dev.approval)
-    let message = contrib.dev.message
-
-    if (approval === null && message === null) {
-      return
-    }
-
-    let devMessageTemplate = yo`
-      <div class="one-contrib-dev-left-content">
-        ${message}
-      </div>
-    `
-
-    return yo`
-      <div class="one-contrib-dev-panel" style="background-color: ${approval === true ? greenOk : redAlert}">
-        <div class="one-contrib-dev-response">
-          <div class="one-contrib-dev-response-left">
-            <div class="one-contrib-dev-left-title">
-              ${approval ? 'POSIBLE': 'IMPOSIBLE'}
-              <div class="one-contrib-dev-hand">
-                <img src="img/${approval ? 'true' : 'false'}.png" alt="${approval}">
-              </div>
-            </div>
-            ${message ? devMessageTemplate : ''}
-          </div>
-        </div>
-      </div>
-    `
-  }
-
   // agrega un mensaje a la contribucion
   addUserMessage (id, req, cb) {
     request
@@ -868,6 +812,7 @@ class devBoard {
 
     // Queda a la escucha de una eliminacion del mensaje! XD
     let deleteContribMessage = this.deleteMessageContrib.bind(this)
+
     $allMessages.on('click', '.one-contrib-messages-single .one-contrib-messages-single-right .one-contrib-messages-single-delete .one-contrib-messages-single-delete-container .confirmation .accept', (ev) => {
       ev.preventDefault()
       let $head = $(ev.target).closest('.one-contrib-content')

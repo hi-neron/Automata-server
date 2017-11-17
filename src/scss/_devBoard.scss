@@ -18,21 +18,14 @@ $shadow: 0 4px 0 $gray-dark, 0 5px 2px rgba(0,0,0,0.2);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c4f2f2', endColorstr='#c4f2f2', GradientType=1 );
 }
 
-
-@mixin backgroundGradient {
-  $backside: rgba($gray-dark, 0.7);
-  $lines: rgba($gray-dark,.03);
-background: linear-gradient(115deg, transparent 75%, $lines 75%) 0 0,
-            linear-gradient(245deg, transparent 75%, $lines 75%) 0 0,
-            linear-gradient(115deg, transparent 75%, $lines 75%) 7px -15px,
-            linear-gradient(245deg, transparent 75%, $lines 75%) 7px -15px,
-            $backside;
-background-size: 15px 30px
-}
-
 @keyframes Gradient {
 	0% { background-position: 0% 300%; }
 	100% { background-position: 0% 0%; }
+}
+
+@keyframes loaderMove {
+  0% { transform: translateX(40px) }
+  100% { transform: translateX(-40px) }
 }
 
 @keyframes tongue {
@@ -63,10 +56,6 @@ background-size: 15px 30px
   color: $red-alert !important;
 }
 
-.ecran-display {
-  display:  block !important;
-}
-
 .back-display {
   visibility:  visible !important;
 }
@@ -77,20 +66,11 @@ background-size: 15px 30px
 
 .info-sending {
   color: $purple-active;
-}
-
-.ecran-gray {
-  display: none;
-  width: 100%;
-  background-color: rgba(19, 19, 19, 0.5);
-  height: 100%;
-  position: fixed;
-  z-index: 10;
-  @include backgroundGradient;
-
-  &:hover {
-    cursor: url('/img/close-red.png'), pointer;
-  }
+  font-family: 'lepl';
+  font-size: .5rem;
+  position: absolute;
+  bottom: 3px;
+  right: 57px;
 }
 
 .opacity-zero {
@@ -102,6 +82,546 @@ background-size: 15px 30px
   width: 320px !important;
 }
 
+#dialog-container {
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  z-index: 12;
+
+  .dialog-bar {
+    position: absolute;
+    bottom: -4px;
+    right: 0;
+    width: 100%;
+    height: 0;
+    text-align: right;
+    margin-right: 340px;
+
+
+    .bar-item-clearfix {
+      display: inline-block;
+      width: 305px;
+      margin-left: 20px;
+      position: relative;
+
+      .bar-item-container {
+        border-top: 1px solid rgba(white, 0.7);
+        position: absolute;
+        width: 100%;
+        height: 600px;
+        margin-top: -600px;
+        border-radius: 3px 3px 0 0;
+        transition: all 200ms cubic-bezier(0.540, -0.425, 0.455, 0.975);
+        box-shadow: 3px 3px 0 rgba(#000, 0.4);
+        background-color: #505050;
+        
+        .bar-item-label {
+          background-color: $gray-dark;
+          text-align: left;
+          height: 28px;
+          padding: 7px 5px 4px 5px;
+          width: 100%;
+
+          .bar-item-title {
+            font-size: 1rem;
+            display: inline-block;
+            color: white;
+            font-family: 'lepm';
+            text-transform: uppercase;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 150px;
+          }
+
+          .bar-item-username {
+            text-transform: uppercase;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: inline-block;
+            font-size: 0.9rem;
+            color: rgba(white, 0.8);
+            font-family: 'lepl';
+            width: 80px;
+            margin-left: 2px;
+
+            &:before {
+              content: 'por';
+              font-size: 0.6rem;
+              vertical-align: top;
+              margin-right: 2px;
+            }
+          }
+
+          .bar-item-close {
+            color: white;
+            font-family: 'geo';
+            float: right;
+            background: url('/img/close-red.png') no-repeat;
+            width: 16px;
+            height: 16px;
+            background-size: 100%;
+            margin-top: -1px;
+
+            &:hover {
+              background-color: $purple-active;
+              cursor: url('/img/devil-hand.png'), pointer;
+            }
+          }
+
+          &:hover {
+            cursor: url('/img/devil-hand.png'), pointer;
+          }
+        }
+
+        .bar-item-content {
+          //padding: 0px 0px 10px 0px;
+          // margin-top: 10px;
+          
+          .bar-item-content-data {
+            background-color: $gray-white;
+            padding-top: 15px;
+
+            .bar-item-content-icons-bar {
+              padding: 5px 10px 5px 10px;
+              width: 100%;
+              text-align: center;
+
+              .bar-item-content-icons-avatar {
+                display: inline-block;
+                width: 35px;
+                height: 35px;
+                background-color: $gray-dark;
+                vertical-align: top;
+
+                img {
+                  width: 100%;
+                  height: 100%;
+                }
+              }
+
+              .bar-item-content-icons-dev-response {
+                vertical-align: top;
+                display: inline-block;
+                position: relative;
+                margin-left: 25px;
+
+                .bar-item-dev-icon {
+                  width: 20px;
+                  height: 20px;
+
+                  .bar-item-dev-response {
+                    .bar-item-dev-title {
+                      .bar-item-dev-hand {
+                        img{
+                          position: absolute;
+                          top: 60%;
+                          left: 50%;
+                          transform: translate(-50%, -50%);
+                          width: 180%;
+                        }
+                      }
+                      .bar-item-dev-string {
+                        position: absolute;
+                        font-family: 'lepm';
+                        font-size: 0.5rem;
+                        height: 10px;
+                        transform: translate(-50%, -50%);
+                        left: 50%;
+                        bottom: -23px;
+                      }
+                    }
+                    .bar-item-dev-content {
+                      border-radius: 3px;
+                      display: none;
+                      position: absolute;
+                      background-color: $red-alert;
+                      color: white;
+                      font-family: 'lepl';
+                      font-size: 0.7rem;
+                      text-align: left;
+                      width: 140px;
+                      line-height: 1rem;
+                      bottom: 0;
+                      left: 10px;
+                      padding: 5px;
+                      box-shadow: 0 3px 0 rgba(#000, .5);
+                    }
+                  }
+                }
+
+                &:hover{
+                  cursor: url('/img/devil-hand-eye.png'), pointer;
+                  .bar-item-dev-response {
+                    .bar-item-dev-content {
+                      display: block;
+                    }
+                  }
+                }
+              }
+            }
+
+            .bar-item-content-text {
+              margin-top: 15px;
+              color: $gray-dark;
+              text-align: left;
+              line-height: 1.05rem;
+              width: 100%;
+              font-family: 'lepm';
+              font-size: 0.8rem;
+              padding-left: 10px;
+              padding-right: 10px;
+              padding: 0px 15px 15px 15px;
+            }
+          }
+
+          .bar-item-dev-res {
+            background-color: $red-alert;
+            width: 100%;
+            
+            .bar-item-dev-res-form {
+              width: 270px;
+              height: 120px;
+              margin-left: 15px;
+
+              .bar-item-dev-form {
+                border: 2px solid $gray-dark;
+                margin-top: 10px;
+                vertical-align: middle;
+                display: inline-block;
+                text-align: center;
+                width: 275px;
+                height: 100px;
+                border-radius: 2px;
+                overflow: hidden;
+                
+                .bar-item-dev-textarea-container {
+                  display: inline-block;
+                  width: 230px;
+                  height: 100%;
+                  
+                  .bar-item-dev-textarea {
+                    width: 100%;
+                    border: none;
+                    resize: none;
+                    height: 100%;
+                    font-family: 'lepm';
+                    font-size: 0.8rem;
+                    line-height: 1.2rem;
+                    background-color: $red-alert;
+                    padding: 5px;
+                  }
+                }
+
+                .bar-item-dev-buttons {
+                  display: inline-block;
+                  width: 40px;
+                  height: 100px;
+                  vertical-align: top;
+                  margin-left: -3px;
+                  border-left: 2px solid $gray-dark;
+                  
+                  .bar-item-dev-input-false {
+                    height: 48px;
+                    width: 100%;
+                    background: $green-true url('/img/false-s.png') no-repeat 45% 50%;
+                    background-size: 25px;
+                  }
+                  
+                  .button {
+                    border-radius: 0;
+                    border: none;
+                    &:hover{
+                      cursor: url('/img/devil-hand.png'), pointer;
+                    }
+                  }
+                  
+                  .bar-item-dev-input-true {
+                    border-bottom: 2px solid $gray-dark;
+                    width: 100%;
+                    height: 48px;
+                    background: $yellow-zero url('/img/true-s.png') no-repeat 45% 45%;
+                    background-size: 25px;
+                    input {
+                      color: transparent;
+                      width: 100%;
+                      height: 100%;
+                      &:hover{
+                        cursor: url('/img/devil-hand.png'), pointer;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+
+          .bar-item-messages-container {
+            width: 100%;
+            overflow: hidden;
+            
+            .bar-item-messages {
+              height: 390px;
+              width: 320px;
+              overflow-y: auto;
+              text-align: left;
+
+              .bar-item-messages-single {
+                padding-top: 12px;
+                min-height: 60px;
+                padding-bottom: 15px;
+                width: 305px;
+                background-color: rgba(#f0f0f0, .9);
+
+                &:nth-child(odd) {
+                  background-color: rgba(#f0f0f0, 1);
+                }
+
+                &:nth-last-child(1) {
+                  box-shadow: 0 5px 0 rgba($gray-dark, .4);
+                }
+
+                .delete-message-template {
+                  color: rgba(#f0f0f0,0.5);
+                  font-family: 'lepl';
+                  font-size: 0.7rem;
+                  margin-left: 70px;
+                  margin-top: 12px;
+
+                  .delete-message-template-username {
+                    font-family: 'lepb'
+                  }
+                }
+
+                .bar-item-messages-single-left {
+                  vertical-align: top;
+                  width: 45px;
+                  display: inline-block;
+                  margin-right: 12px;
+                  text-align: right;
+
+                  .bar-item-messages-single-avatar-container {
+                    display: inline-block;
+                    background-color: gray;
+                    width: 30px;
+                    height: 30px;
+                    border-radius: 2px;
+                    margin-top: 2px;
+
+                    img {
+                      width: 100%;
+                      height: 100%;
+                    }
+                  }
+                }
+
+                .bar-item-messages-single-right {
+                  text-align: left;
+                  vertical-align: top;
+                  display: inline-block;
+                  width: 212px;
+
+                  .bar-item-messages-single-date {
+                    font-size: 0.6rem;
+                    vertical-align: top;
+                    font-family: lepm;
+                    color: rgba(26, 26, 26, 0.8);
+                    margin-top: 8px;
+                  }
+
+                  .bar-item-messages-single-content {
+                    padding-right: 10px;
+                    font-family: 'lepm';
+                    font-size: 0.8rem;
+                    line-height: 1.1rem;
+                    // word-break: break-all;
+                    hyphens: auto;
+                    // overflow-wrap: break-word;
+                  }
+
+                  .bar-item-messages-single-userName {
+                    font-family: 'lepb';
+                    font-size: 0.9rem;
+                    text-transform: capitalize;
+                  }
+
+                  .bar-item-messages-single-delete {
+                    width: 13px;
+                    height: 25px;
+                    cursor: url('/img/devil-hand.png'), pointer;
+                    float: right;
+                    color: $gray-dark;
+
+                    .appear-confirm {
+                      transform: rotateX(0deg) !important;
+                    }
+
+                    .confirmation {
+                      border-radius: 2px;
+                      width: 24px;
+                      height: 24px;
+                      bottom: -7px;
+                      position: relative;
+                      right: 5px;
+                      background-color: $red-alert;
+                      color: $gray-dark;
+                      transform-origin: 100% 0;
+                      transform: rotateX(90deg);
+                      transition: 0.2s cubic-bezier(0.77, 0, 0.175, 1);
+                      box-shadow: 0 3px 0 rgba(0,0,0,0.3);
+
+                      &:before {
+                        content: '';
+                        position: absolute;
+                        width: 0;
+                        height: 0;
+                        top: -7px;
+                        border-left: 5px solid transparent;  /* left arrow slant */
+                        border-right: 5px solid transparent; /* right arrow slant */
+                        border-bottom: 7px solid $red-alert; /* bottom, add background color here */
+                        font-size: 0;
+                        line-height: 0;
+                      }
+
+                      .accept {
+                        font-size: 1.3rem;
+                        position: absolute;
+                        top: 2px;
+                        left: 2px;
+                        &:hover {
+                          color: $yellow-light;
+                        }
+                      }
+                    }
+
+                    .trash-body {
+                      transition: .1s
+                    }
+
+                    .trash-cap {
+                      transform-origin: 100% 100%;
+                      transition: .1s;
+                    }
+
+                    &:hover {
+                      .trash-body {
+                        opacity: 0;
+                      }
+
+                      .trash-cap {
+                        transform: rotate(14deg);
+                      }
+                    }
+                  }
+
+                  .bar-item-messages-single-delete {
+                    float: right;
+                    margin-right: -20px;
+                    color: $gray-dark;
+                    font-family: 'geo';
+                    font-size: 0.8rem;
+
+                    &:hover {
+                      cursor: url('/img/devil-hand.png'), pointer;
+                      color: $red-alert;
+                    }
+                  }
+                }
+              }
+            }
+
+            .bar-item-messages-form-container {
+              width: 305px;
+              padding: 13px 0px;
+              margin-top: -2px;
+              background-color: $yellow-zero;
+              border-top: 2px solid rgba(#fff, 1);
+              border-bottom: 2px solid rgba($gray-dark, .9);
+              box-shadow: 0px 1px 0 rgba($gray-dark, .9) inset;
+
+              .bar-item-messages-form {
+                border: none;
+                text-align: left;
+                margin-left: 15px;
+
+                .bar-item-messages-uimage-container {
+                  vertical-align: top;
+                  width: 30px;
+                  height: 30px;
+                  background-color: salmon;
+                  display: inline-block;
+                  margin-right: 13px;
+                  margin-top: 1px;
+                  position: relative;
+
+                  img {
+                    width: 100%;
+                  }
+                }
+
+                .bar-item-messages-text-form-container {
+                  display: inline-block;
+                  position: relative;
+                  width: 230px;
+                  text-align: left;
+
+                  .bar-item-messages-text-form {
+                    // background-color: $gray-white;
+                    border: 2px solid $gray-dark;
+                    color: $gray-dark;
+                    width: 100%;
+                    min-height: 32px;
+                    display: inline-block;
+                    // overflow: hidden;
+                    font-family: 'lepm';
+                    font-size: 0.8rem;
+                    line-height: 1.05rem;
+                    border-radius: 2px;
+                    position: relative;
+
+                    .bar-item-messages-text-editable {
+                      padding: 3px 5px 3px 5px;
+                      text-align: left;
+                      display: inline-block;
+                      min-width: 175px;
+                      max-width: 226px;
+                      position: relative;
+                    }
+
+                    .bar-item-messages-submit{
+                      height: 28px;
+                      padding-top: 4px;
+                      width: 50px;
+                      background-color: $gray-dark;
+                      color: $yellow-zero;
+                      float: right;
+                      font-family: 'square';
+                      text-transform: uppercase;
+                      letter-spacing: 0.05rem;
+                      font-size: 0.7rem;
+                      text-align: left;
+                      position: relative;
+
+                      // .bar-item-messages-submit{
+                      // }
+
+                      &:hover {
+                        color: white;
+                        cursor: url('/img/devil-hand.png'), pointer;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 #devboard-container {
   position: fixed;
   width: 0px;
@@ -110,6 +630,7 @@ background-size: 15px 30px
   text-align: center;
   z-index: 10;
   transition: .2s ease-in-out;
+  box-shadow: -7px 0px 0px rgba($gray-dark, 0.2);
 
   #chat-launcher {
     // size
@@ -124,7 +645,7 @@ background-size: 15px 30px
     box-shadow: 0 3px 0 rgba(#000, 0.3);
     background-color: $gray-dark;
     border-left: 2px solid rgba($red-alert-light, 0.45);
-    
+
     .chat-launcher-icon {
       transition: .1s ease-out;
       background: url('/img/dialog.png') no-repeat;
@@ -226,6 +747,7 @@ background-size: 15px 30px
     position: relative;
     overflow-y: scroll;
     background-color: $gray-dark;
+    border-left: 1px solid transparent;
 
     .devBoard-left {
       position: absolute;
@@ -234,7 +756,7 @@ background-size: 15px 30px
       width: 280px;
       top: 0;
       height: 100%;
-      z-index: 2;
+      z-index: 0;
       margin-top: 0px;
       left: -250px;
 
@@ -242,6 +764,7 @@ background-size: 15px 30px
         height: 100%;
         width: $left;
         position: fixed;
+        text-align: right;
 
         .devBoard-item {
           border-radius: 2px;
@@ -253,18 +776,26 @@ background-size: 15px 30px
         }
 
         .mom {
-          height: 290px;
+          box-shadow: 0 3px 0 rgba(#000, 0.35);
+          margin-top: 15px;
+          // height: 90px;
+          padding: 5px;
+          margin-left: 28px;
           position: relative;
+          background: $red-alert;
+          border-radius: 2px;
+          width: 205px;
+          color: $gray-dark;
 
           .image-container {
-            height: 125px;
-            width: 125px;
+            height: 50px;
+            width: 50px;
+            bottom: 0px;
+            left: 0px;
             background-color: $gray-dark;
             display: inline-block;
-            border-radius: 50%;
-            margin-top: 50px;
-            margin-bottom: 25px;
-            position: relative;
+            margin-top: 10px;
+            position: absolute;
             overflow: hidden;
             $image-size: 150px;
 
@@ -281,7 +812,7 @@ background-size: 15px 30px
 
           .genre {
             font-family: 'square';
-            font-size: 1.3rem;
+            font-size: 1.5rem;
             position: relative;
 
             .genre-message-woman {
@@ -309,41 +840,33 @@ background-size: 15px 30px
           }
 
           .mom-divisor {
-            font-family: 'lepb';
-            font-size: 2.2rem;
-            margin-top: -6px;
-            text-shadow: 0 -3px 0px $game-background;
-            color: $red-alert;
+            font-size: 1.7rem;
+            margin-top: -2px;
+            // text-shadow: 0 -3px 0px $game-background;
+            color: $gray-dark;
             position: absolute;
-            left: 50%;
-            transform: translate(-50%, 0);
-            letter-spacing: 0.05rem;
+            right: 4px;
+            // letter-spacing: 0.05rem;
+            font-family: 'lepb';
+            &:before {
+              content: '\'';
+            }
+            &:after {
+              content: '\'';
+            }
           }
 
           .user-name {
-            margin-top: 33px;
-            font-family: 'lepm';
-            font-size: 1.1rem;
+            color: white;
+            font-family: 'lepb';
+            margin-top: 28px;
+            font-size: 1.8rem;
+            text-align: right;
+            margin-right: 0;
+            text-transform: capitalize;
 
             span {
               position: relative;
-
-              &:before {
-                content: '★';
-                left: -12px;
-                position: absolute;
-                top: 7px;
-                font-size: 0.5rem;
-                transform: rotateZ(35deg);
-              }
-              &:after {
-                content: '★';
-                right: -12px;
-                position: absolute;
-                top: 7px;
-                font-size: 0.5rem;
-                transform: rotateZ(35deg);
-              }
             }
 
           }
@@ -512,7 +1035,6 @@ background-size: 15px 30px
 
                   .author {
                     color: white;
-                    letter-spacing: 0.06rem;
                     font-size: 0.6rem;
                     vertical-align: top;
                     margin-right: -15px;
@@ -527,872 +1049,726 @@ background-size: 15px 30px
 
     .devBoard-right {
       display: inline-block;
-      width: 320px;
-      background-color: $gray-dark;
+      width: 319px;
+      // background-color: $gray-dark;
       // padding-bottom: 10px;
       // padding-right: 10px;
-      padding-left: 5px;
+      // padding-left: 2px;
       // padding-top: 10px;
       margin-top: 258px;
 
       .devboard-wrapper {
         width: 100%;
+        height: 100%;
 
-        .devboard-right-content {
+        .devboard-right-content-items {
+          margin-top: 0px;
+          // border-bottom: 3px solid rgba(#fff, .5);
           width: 100%;
-          height: 100%;
+        }
 
-          .devboard-right-content-items {
-            margin-top: 0px;
-            // border-bottom: 3px solid rgba(#fff, .5);
-            width: 100%;
+        .contrib-create-form-wrapper {
+          padding: 15px;
+          background-color: $yellow-zero;
+          height: 258px;
+          width: 322px;
+          // margin-left: -5px;
+          text-align: left;
+          position: fixed;
+          top: 0;
+          // border-left: 3px solid $gray-dark;
+
+          box-shadow: 0 8px 0 rgba(#000, 0.5);
+          z-index: 1;
+
+          .devboard-form-title {
+            font-family: 'lepb';
+            font-size: 2.5rem;
           }
 
-          .contrib-create-form-wrapper {
-            padding: 15px;
-            background-color: $yellow-zero;
-            height: 258px;
-            width: 330px;
-            margin-left: -5px;
-            text-align: left;
-            position: fixed;
-            top: 0;
-            // border-left: 3px solid $gray-dark;
-          
-            box-shadow: 0 8px 0 rgba(#000, 0.5);
-            z-index: 1;
+          #contrib-create-form {
 
-            .devboard-form-title {
-              font-family: 'lepb';
-              font-size: 2.5rem;
+            .type-contrib-form {
+              margin-top: 10px;
+              margin-bottom: 3px;
+              width: 100%;
+              display: flex;
+              justify-content: space-between;
+              position: relative;
+
+              input[type="radio"]{
+                opacity: 0;
+                width: 70px;
+                position: absolute;
+                height: 30px;
+                cursor: url('/img/devil-hand.png'), pointer;
+                bottom: -8px;
+              }
+
+              input[type="radio"] + span {
+                // margin-right: 42px;
+                color: $gray-dark;
+                font-size: 0.9rem;
+                font-family: 'lepb';
+                padding: 2px 5px 2px 5px;
+                transition: all 0.2s;
+              }
+
+              input[type="radio"]:checked + span {
+                background-color: $game-background;
+                border-radius: 2px;
+              }
+
+              input[type="radio"]:focus + span {
+                color: $red-alert;
+              }
+
+              span[for="bug"] {
+                color: $red-alert !important;
+              }
             }
 
-            #contrib-create-form {
-
-              .type-contrib-form {
-                margin-top: 10px;
-                margin-bottom: 3px;
+            .title-contrib-form {
+              input[name=title] {
+                border: 2px solid $gray-dark !important;
+                border-radius: 2px;
+                padding: 5px 4px 5px 4px;
                 width: 100%;
-                display: flex;
-                justify-content: space-between;
-                position: relative;
+                margin-top: 10px;
+                background-color: transparent;
+                font-family: 'lepm';
+                font-size: 0.8rem;
+              }
+            }
 
-                input[type="radio"]{
-                  opacity: 0;
-                  width: 70px;
+            .comment-contrib-form {
+              textarea[name=info] {
+                border-radius: 2px;
+                width: 100%;
+                resize: none;
+                background-color: transparent;
+                border: 2px solid $gray-dark;
+                // padding: 5px;
+                height: 70px;
+                font-family: 'lepm';
+                font-size: 0.8rem;
+                margin-top: 11px;
+              }
+            }
+
+            .submit-contrib-form {
+              button[type=submit] {
+                border: none;
+                color: $yellow-zero;
+                font-family: 'square';
+                font-size: 1.1rem;
+                background-color: $gray-dark;
+                padding: 3px 5px 1px 5px;
+                border-radius: 2px;
+                margin-top: 8px;
+                cursor: url('/img/devil-hand.png'), pointer;
+
+                &:hover {
+                background-color: $game-background;
+                color: $gray-dark;
+                }
+              }
+            }
+          }
+
+          #contrib-create-form-counter {
+            position: absolute;
+            right: 16px;
+            bottom: 25px;
+            font-family: 'square';
+            font-size: 0.9rem;
+          }
+        }
+
+        .one-contrib-container {
+          color: $gray-dark;
+
+          .one-contrib-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+
+            .one-contrib-loader {
+              height: 130px;
+              border-radius: 2px;
+              border-left: 2px solid rgba(white, 0.62);
+              background-color: rgb(225, 225, 225);
+              box-shadow: 0 -4px 0px rgba($gray-dark, .1);
+              // z-index: 2;
+              transition: all 100ms cubic-bezier(0.350, -0.255, 0.585, 1.460); /* custom */
+              width: 100%;
+              margin-top: 1px;
+              position: relative;
+
+              .loader {
+                position: absolute;
+                top: 58px;
+                left: 150px;
+                width: 16px;
+                height: 16px;
+                border-radius: 50%;
+                background-color: rgba($gray-dark, 0.6);
+                overflow: hidden;
+                box-shadow: 0 -5px 2px rgba($gray-dark, 0.3) inset, 0 3px 0px rgba($gray-dark, 0.2);
+
+                &:before {
+                  content: '';
                   position: absolute;
-                  height: 30px;
-                  cursor: url('/img/devil-hand.png'), pointer;
-                  bottom: -8px;
-                }
-
-                input[type="radio"] + span {
-                  // margin-right: 42px;
-                  color: $gray-dark;
-                  font-size: 0.9rem;
-                  font-family: 'lepb';
-                  padding: 2px 5px 2px 5px;
-                  transition: all 0.2s;
-                }
-
-                input[type="radio"]:checked + span {
-                  background-color: $game-background;
-                  border-radius: 2px;
-                }
-
-                input[type="radio"]:focus + span {
-                  color: $red-alert;
-                }
-
-                span[for="bug"] {
-                  color: $red-alert !important;
+                  opacity: 0.3;
+                  margin-top: -10px;
+                  width: 200%;
+                  height: 200%;
+                  @include shimmer-grad(white);
+                  animation: loaderMove 1.2s ease-in-out infinite;
                 }
               }
+            }
 
-              .title-contrib-form {
-                input[name=title] {
-                  border: 2px solid $gray-dark !important;
-                  border-radius: 2px;
-                  padding: 5px 4px 5px 4px;
-                  width: 100%;
-                  margin-top: 10px;
-                  background-color: transparent;
-                  font-family: 'lepm';
-                  font-size: 0.8rem;
-                }
-              }
+            .one-contrib-content {
+              width: 100%;
+              margin-top: 1px;
 
-              .comment-contrib-form {
-                textarea[name=info] {
-                  border-radius: 2px;
-                  width: 100%;
-                  resize: none;
-                  background-color: transparent;
-                  border: 2px solid $gray-dark;
-                  // padding: 5px;
-                  height: 70px;
-                  font-family: 'lepm';
-                  font-size: 0.8rem;
-                  margin-top: 11px;
-                }
-              }
+              .one-contrib-content-scroll {
+                border-radius: 2px;
+                border-left: 2px solid rgba(white, 0.62);
+                background-color: rgb(225, 225, 225);
+                box-shadow: 0 -4px 0px rgba($gray-dark, .1);
+                z-index: 2;
+                transition: all 100ms cubic-bezier(0.350, -0.255, 0.585, 1.460); /* custom */
+                width: 100%;
 
-              .submit-contrib-form {
-                button[type=submit] {
-                  border: none;
-                  color: $yellow-zero;
-                  font-family: 'square';
-                  font-size: 1.1rem;
-                  background-color: $gray-dark;
-                  padding: 3px 5px 1px 5px;
-                  border-radius: 2px;
-                  margin-top: 8px;
-                  cursor: url('/img/devil-hand.png'), pointer;
+                .one-contrib-header {
+                  text-align: left;
 
-                  &:hover {
-                  background-color: $game-background;
-                  color: $gray-dark;
+                  .one-contrib-left {
+                    float: left;
+                    width: 65px;
+                    height: 40px;
+                    position: relative;
+
+                    .one-contrib-avatar-container {
+                      width: 40px;
+                      height: 40px;
+                      border-radius: 2px;
+                      position: absolute;
+                      left: 50%;
+                      top: 12px;
+                      transform: translate(-50%, 0);
+
+                      .one-contrib-user-image {
+                        position: absolute;
+                        width: 100%;
+                        height: 100%;
+                      }
+                    }
+                  }
+
+                  .one-contrib-right {
+                    width: $right / 2 - 125px;
+                    display: inline-block;
+                    margin-top: 12px;
+
+                    .one-contrib-title {
+                      font-family: 'lepb';
+                      font-size: 1.2rem;
+                      text-transform: uppercase;
+                      white-space: nowrap;
+                      text-overflow: ellipsis;
+                      overflow: hidden;
+                      margin-bottom: -1px;
+
+                      &:hover {
+                        cursor: url('/img/devil-hand.png'), pointer;
+                      }
+
+                    }
+
+                    .one-contrib-por {
+                      font-size: 0.7rem;
+                      vertical-align: top;
+                      font-family: 'square';
+                      text-decoration: underline;
+                      position: relative;
+                      
+                      &:before {
+                        text-decoration: none !important;
+                        position: absolute;
+                        left: -8px;
+                        top: -2px;
+                        font-family: 'lepb';
+                        color: $gray-dark;
+                        content: '<';
+
+                      }
+                    }
+
+                    .one-contrib-username {
+                      vertical-align: bottom;
+                      text-transform: uppercase;
+                      font-size: 0.9rem;
+                      margin-top: 5px;
+                      font-family: 'lepm';
+                      margin-bottom: 4px;
+                    }
+
+                    .date {
+                      font-size: 0.6rem;
+                      vertical-align: top;
+                      font-family: 'lepm';
+                      color: rgba($gray-dark, 0.8)
+                    }
+                  }
+
+                  .one-contrib-info {
+                    // margin-top: 5px;
+                    width: 100%;
+                    padding: 5px 13px 3px 13px;
+                    font-family: 'lepm';
+                    font-size: 0.8rem;
+                    line-height: 1.10rem;
                   }
                 }
-              }
-            }
 
-            #contrib-create-form-counter {
-              position: absolute;
-              right: 16px;
-              bottom: 25px;
-              font-family: 'square';
-              font-size: 0.9rem;
-            }
-          }
-
-          .one-contrib-container {
-            color: $gray-dark;
-            
-            .one-contrib-wrapper {
-              position: relative;
-              width: 100%;
-              height: 100%;
-
-              .one-contrib-content {
-                width: 100%;
-                margin-top: 2px;
-
-                .one-contrib-content-scroll {
-                  border-radius: 1px;
-                  background-color: rgb(175, 175, 175);
-                  // box-shadow: 0 -70px 20px rgba($gray-dark, .05) inset;
-                  z-index: 2;
-                  transition: all 100ms cubic-bezier(0.350, -0.255, 0.585, 1.460); /* custom */
+                .one-contrib-likes {
                   width: 100%;
+                  height: 47px;
+                  font-family: 'lepb';
+                  text-align: center;
+                  font-size: .8rem;
 
-                  .one-contrib-header {
+                  .one-contrib-likes-container {
+                    width: 100%;
+                    margin-top: 4px;
                     text-align: left;
 
-                    .one-contrib-left {
-                      float: left;
-                      width: 70px;
-                      height: 40px;
+                    .one-contrib-likes-container-button-arrow {
+                      width: 40px;
+                      height: 46px;
+                      margin-left: -4px;
+                      display: inline-block;
                       position: relative;
 
-                      .one-contrib-avatar-container {
-                        padding: 10px;
-                        width: 45px;
-                        height: 45px;
-                        background-color: $gray-dark;
-                        border-radius: 2px;
+                      &:after {
+                        content: '+';
                         position: absolute;
-                        left: 50%;
-                        top: 12px;
-                        transform: translate(-50%, 0);
+                        width: 25px;
+                        height: 25px;
+                        top: 8px;
+                        left: 55%;
+                        font-size: 1.7rem;
+                        color: $gray-dark;
+                      }
 
-                        .one-contrib-user-image {
+                      &:hover {
+                        cursor: url('/img/devil-hand.png'), pointer;
+                        &:after {
+
+                          color: red !important;
+                        }
+                      }
+
+                    }
+
+                    .one-contrib-delete-container {
+                      width: 35px;
+                      height: 40px;
+                      cursor: url('/img/devil-hand.png'), pointer;
+                      color: $gray-dark;
+                      display: inline-block;
+                      position: relative;
+                      top: -14px;
+                      text-align: center;
+
+                      .one-contrib-delete {
+                        width: 18px;
+                        height: 40px;
+                        margin-bottom: 10px;
+                        cursor: url('/img/devil-hand.png'), pointer;
+                        color: $gray-dark;
+                        display: inline-block;
+
+                        .appear-confirm {
+                          transform: rotateX(0deg) !important;
+                        }
+
+                        .confirmation {
+                          border-radius: 2px;
+                          width: 24px;
+                          height: 24px;
+                          bottom: -10px;
+                          position: absolute;
+                          z-index: 10;
+                          right: 5px;
+                          background-color: $red-alert;
+                          color: $gray-dark;
+                          transform-origin: 100% 0;
+                          transform: rotateX(90deg);
+                          transition: 0.2s cubic-bezier(0.77, 0, 0.175, 1);
+                          box-shadow: 0 3px 0 rgba(0,0,0,0.3);
+
+                          &:before {
+                            content: '';
+                            position: absolute;
+                            width: 0;
+                            height: 0;
+                            top: -7px;
+                            border-left: 5px solid transparent;  /* left arrow slant */
+                            border-right: 5px solid transparent; /* right arrow slant */
+                            border-bottom: 7px solid $red-alert; /* bottom, add background color here */
+                            font-size: 0;
+                            line-height: 0;
+                          }
+
+                          .accept {
+                            font-size: 1.3rem;
+                            position: absolute;
+                            top: 2px;
+                            left: 2px;
+                            &:hover {
+                              color: $yellow-light;
+                            }
+                          }
+                        }
+
+                        .trash-body {
+                          transition: .1s
+                        }
+
+                        .trash-cap {
+                          transform-origin: 100% 100%;
+                          -moz-transform-origin: 100% 25%;
+                          transition: .1s;
+                        }
+
+                        &:hover {
+                          .trash-body {
+                            opacity: 0;
+                          }
+
+                          .trash-cap {
+                            transform: rotate(14deg);
+                          }
                         }
                       }
                     }
 
-                    .one-contrib-right {
-                      width: $right / 2 - 125px;
+
+                    .one-contrib-likes-container-button {
+                      width: 35px;
+                      height: 46px;
                       display: inline-block;
-                      margin-top: 12px;
+                      margin-left: -4px;
+                      // margin: 0 auto;
 
-                      .one-contrib-username {
-                        font-family: 'lepb';
-                        text-transform: uppercase;
-                        font-size: 1.2rem;
-                        margin-bottom: 3px;
-                      }
-                      .one-contrib-title {
-                        margin-top: 10px;
-                        font-family: 'square';
-                        font-size: 1.2rem;
-                      }
-                    }
-
-                    .one-contrib-info {
-                      margin-top: 5px;
-                      width: 100%;
-                      padding: 13px 13px 0px 13px;
-                      font-family: 'lepm';
-                      font-size: 0.8rem;
-                      line-height: 1.14rem;
-                    }
-                  }
-
-                  .one-contrib-likes {
-                    width: 100%;
-                    height: 47px;
-                    font-family: 'lepb';
-                    text-align: center;
-                    font-size: .8rem;
-
-                    .one-contrib-likes-container {
-                      width: 100%;
-                      margin-top: 4px;
-                      text-align: left;
-
-                      .one-contrib-likes-container-button-arrow {
-                        width: 40px;
-                        height: 46px;
-                        margin-left: -4px;
-                        display: inline-block;
+                      .demon-body {
                         position: relative;
+                        top: 10px;
+                        $demon-color: rgb(159, 159, 159);
+                        $demon-eyes: $gray-dark;
 
-                        &:after {
-                          content: '+';
-                          position: absolute;
-                          width: 25px;
-                          height: 25px;
-                          top: 8px;
-                          left: 55%;
-                          font-size: 1.7rem;
-                          color: $gray-dark;
+                        .demon-head {
+                          width: 24px;
+                          height: 21px;
+                          left: 8px;
+                          position: relative;
+
+                          .demon-face {
+                            transition: .1s ease-out;
+                            width: 22px;
+                            height: 23px;
+                            left: 50%;
+                            margin-left: -11px;
+                            background-color: $demon-color;
+                            position: absolute;
+                            border-radius: 17px 17px 13px 13px;
+                            box-shadow: 0 -4px 0 rgba($gray-dark, 0.1) inset;
+                            text-align: center;
+
+                            &::after {
+                              content: '';
+                              background-color: $demon-color;
+                              width: 2px;
+                              height: 2px;
+                              right: 15px;
+                              top: 4px;
+                              position: absolute;
+                            }
+
+                            &::before {
+                              content: '';
+                              background-color: $gray-dark;
+                              z-index: 1;
+                              width: 2px;
+                              height: 3px;
+                              right: 10px;
+                              top: 20px;
+                              position: absolute;
+                              opacity: 0;
+                            }
+
+
+                            .demon-plus1 {
+                              padding-top: 8px;
+                              padding-right: 1px;
+                              margin: 0 auto;
+                              color: $demon-eyes;
+                              font-size: 0.7rem;
+                              transition: .1s ease-out;
+
+                              &:before {
+                                content: '+'
+                              }
+                              &:after {
+                                opacity: 0;
+                                content: '+'
+                              }
+                            }
+                          }
+
+                          .demon-ears {
+                            background-color: $demon-color;
+                            position: absolute;
+                            left: 50%;
+                            margin-left: -14px;
+                            top: 14px;
+                            width: 28px;
+                            height: 8px;
+                            border-radius: 0px 0px 20px 20px;
+
+                            &:after {
+                              content: '◀';
+                              color: $demon-color;
+                              position: absolute;
+                              right: 3px;
+                              top: -11px;
+
+                            }
+                          }
+
+                          .demon-tongue {
+                            position: absolute;
+                            width: 2px;
+                            height: 8px;
+                            background-color: #AD3CFF;
+                            bottom: 0px;
+                            left: 50%;
+                            margin-left: -1px;
+                            box-shadow: 0 4px 0 rgba($gray-dark, 0.7) inset;
+                          }
                         }
 
                         &:hover {
                           cursor: url('/img/devil-hand.png'), pointer;
-                          &:after {
-
-                            color: red !important;
-                          }
-                        }
-
-                      }
-
-                      .one-contrib-delete-container {
-                        width: 35px;
-                        height: 40px;
-                        cursor: url('/img/devil-hand.png'), pointer;
-                        color: $gray-dark;
-                        display: inline-block;
-                        position: relative;
-                        top: -14px;
-                        text-align: center;
-
-                        .one-contrib-delete {
-                          width: 18px;
-                          height: 40px;
-                          margin-bottom: 10px;
-                          cursor: url('/img/devil-hand.png'), pointer;
-                          color: $gray-dark;
-                          display: inline-block;
-
-                          .appear-confirm {
-                            transform: rotateX(0deg) !important;
-                          }
-
-                          .confirmation {
-                            border-radius: 2px;
-                            width: 24px;
-                            height: 24px;
-                            bottom: -10px;
-                            position: absolute;
-                            z-index: 10;
-                            right: 5px;
-                            background-color: $red-alert;
-                            color: $gray-dark;
-                            transform-origin: 100% 0;
-                            transform: rotateX(90deg);
-                            transition: 0.2s cubic-bezier(0.77, 0, 0.175, 1);
-                            box-shadow: 0 3px 0 rgba(0,0,0,0.3);
-    
-                            &:before {
-                              content: '';
-                              position: absolute;
-                              width: 0; 
-                              height: 0; 
-                              top: -7px;
-                              border-left: 5px solid transparent;  /* left arrow slant */
-                              border-right: 5px solid transparent; /* right arrow slant */
-                              border-bottom: 7px solid $red-alert; /* bottom, add background color here */
-                              font-size: 0;
-                              line-height: 0;
-                            }
-    
-                            .accept {
-                              font-size: 1.3rem;
-                              position: absolute;
-                              top: 2px;
-                              left: 2px;
-                              &:hover {
-                                color: $yellow-light;
-                              }
-                            }
-                          }
-    
-                          .trash-body {
-                            transition: .1s
-                          }
-    
-                          .trash-cap {
-                            transform-origin: 100% 100%;
-                            -moz-transform-origin: 100% 25%;
-                            transition: .1s;
-                          }
-    
-                          &:hover {
-                            .trash-body {
-                              opacity: 0;
-                            }
-    
-                            .trash-cap {
-                              transform: rotate(14deg);
-                            }
-                          }
-                        }
-                      }
-  
-
-                      .one-contrib-likes-container-button {
-                        width: 35px;
-                        height: 46px;
-                        display: inline-block;
-                        margin-left: -4px;
-                        // margin: 0 auto;
-
-                        .demon-body {
-                          position: relative;
-                          top: 10px;
-                          $demon-color: rgb(209, 209, 209);
-                          $demon-eyes: $gray-dark;
-
                           .demon-head {
-                            width: 24px;
-                            height: 21px;
-                            left: 8px;
-                            position: relative;
-
                             .demon-face {
-                              transition: .1s ease-out;
-                              width: 22px;
-                              height: 23px;
-                              left: 50%;
-                              margin-left: -11px;
-                              background-color: $demon-color;
-                              position: absolute;
-                              border-radius: 17px 17px 13px 13px;
-                              box-shadow: 0 -4px 0 rgba($gray-dark, 0.1) inset;
-                              text-align: center;
-
-                              &::after {
-                                content: '';
-                                background-color: $demon-color;
-                                width: 2px;
-                                height: 2px;
-                                right: 15px;
-                                top: 4px;
-                                position: absolute;
-                              }
-
-                              &::before {
-                                content: '';
-                                background-color: $gray-dark;
-                                z-index: 1;
-                                width: 2px;
-                                height: 3px;
-                                right: 10px;
-                                top: 20px;
-                                position: absolute;
-                                opacity: 0;
-                              }
-
+                              background-color: $red-alert !important;
 
                               .demon-plus1 {
-                                padding-top: 8px;
-                                padding-right: 1px;
-                                margin: 0 auto;
-                                color: $demon-eyes;
-                                font-size: 0.7rem;
-                                transition: .1s ease-out;
-
-                                &:before {
-                                  content: '+'
-                                }
                                 &:after {
-                                  opacity: 0;
-                                  content: '+'
+                                  opacity: 1;
                                 }
+                                &:before {
+                                  content: '+';
+                                }
+                              }
+
+                              &:before {
+                                opacity: 1;
+                              }
+
+                              &:after {
+                                background-color: white;
                               }
                             }
 
                             .demon-ears {
-                              background-color: $demon-color;
-                              position: absolute;
-                              left: 50%;
-                              margin-left: -14px;
-                              top: 14px;
-                              width: 28px;
-                              height: 8px;
-                              border-radius: 0px 0px 20px 20px;
-
+                              background-color: $red-alert !important;
                               &:after {
-                                content: '◀';
-                                color: $demon-color;
-                                position: absolute;
-                                right: 3px;
-                                top: -11px;
-
+                                top: -16px;
+                                color: $red-alert;
                               }
                             }
 
                             .demon-tongue {
-                              position: absolute;
-                              width: 2px;
-                              height: 8px;
-                              background-color: #AD3CFF;
-                              bottom: 0px;
-                              left: 50%;
-                              margin-left: -1px;
-                              box-shadow: 0 4px 0 rgba($gray-dark, 0.7) inset;
+                              bottom: -6px;
+                              animation: tongue .1s ease-out infinite alternate;
                             }
-                          }
-
-                          &:hover {
-                            cursor: url('/img/devil-hand.png'), pointer;
-                            .demon-head {
-                              .demon-face {
-                                background-color: $red-alert !important;
-
-                                .demon-plus1 {
-                                  &:after {
-                                    opacity: 1;
-                                  }
-                                  &:before {
-                                    content: '+';
-                                  }
-                                }
-
-                                &:before {
-                                  opacity: 1;
-                                }
-
-                                &:after {
-                                  background-color: white;
-                                }
-                              }
-
-                              .demon-ears {
-                                background-color: $red-alert !important;
-                                &:after {
-                                  top: -16px;
-                                  color: $red-alert;
-                                }
-                              }
-
-                              .demon-tongue {
-                                bottom: -6px;
-                                animation: tongue .1s ease-out infinite alternate;
-                              }
-
-                            }
-                          }
-                        }
-                      }
-
-                      .one-contrib-likes-container-names {
-                        height: 45px;
-                        width: 198px;
-                        display: inline-block;
-                        vertical-align: top;
-                        position: relative;
-                        margin-left: 5px;
-
-                        .one-contrib-likes-container-names-list {
-                          font-family: 'lepl';
-                          font-size: 0.65rem;
-                          position: absolute;
-                          top: 50%;
-                          transform: translateY(-50%);
-                          line-height: 1.1rem;
-
-                          .one-contrib-likes-container-item {
-                            // margin: 1px;
-                            text-align: center;
-
-                            .name {
-                              padding: 2px 2px 2px 2px;
-                              border-radius: 2px;
-                              background-color: $gray-dark;
-                              margin-right: -2px;
-                              //margin-right: 2px;
-                              color: $game-background;
-
-                              &:hover {
-                                cursor: url('/img/devil-hand.png'), pointer;
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                  .one-contrib-show-hidden-content {
-                    height: auto !important;
-                  }
-
-                  .one-contrib-hidden-content {
-                    width: 100%;
-                    overflow: hidden;
-                    height: 0;
-
-                    .one-contrib-messages-container {
-                      width: 100%;
-
-                      .one-contrib-messages {
-                        text-align: left;
-
-                        .one-contrib-messages-single {
-                          padding-top: 12px;
-                          min-height: 60px;
-                          &:nth-child(odd) {
-                            background-color: rgba(0, 0, 0, .1);
-                          }
-                          padding-bottom: 15px;
-
-                          .delete-message-template {
-                            color: rgba(#000,0.5);
-                            font-family: 'lepl';
-                            font-size: 0.7rem;
-                            margin-left: 70px;
-                            margin-top: 12px;
-
-                            .delete-message-template-username {
-                              font-family: 'lepb'
-                            }
-                          }
-                          .one-contrib-messages-single-left {
-                            vertical-align: top;
-                            width: 57px;
-                            display: inline-block;
-                            margin-right: 12px;
-                            text-align: right;
-
-                            .one-contrib-messages-single-avatar-container {
-                              display: inline-block;
-                              background-color: gray;
-                              width: 30px;
-                              height: 30px;
-                              border-radius: 2px;
-
-                              .one-contrib-messages-single-avatar {
-                              }
-                            }
-                          }
-                          .one-contrib-messages-single-right {
-                            text-align: left;
-                            vertical-align: top;
-                            display: inline-block;
-                            width: 74%;
-
-                            .one-contrib-messages-single-date {
-                              margin-top: 2px;
-                            }
-
-                            .one-contrib-messages-single-content {
-                              padding-right: 10px;
-                              font-family: 'lepm';
-                              font-size: 0.8rem;
-                              line-height: 1.1rem;
-                            }
-
-                            .one-contrib-messages-single-userName {
-                              font-family: 'lepb';
-                              font-size: 0.9rem;
-                            }
-
-                            .one-contrib-messages-single-delete {
-                              width: 13px;
-                              height: 25px;
-                              cursor: url('/img/devil-hand.png'), pointer;
-                              float: right;
-                              color: $gray-dark;
-                              
-                              .appear-confirm {
-                                transform: rotateX(0deg) !important;
-                              }
-
-                              .confirmation {
-                                border-radius: 2px;
-                                width: 24px;
-                                height: 24px;
-                                bottom: -7px;
-                                position: relative;
-                                right: 5px;
-                                background-color: $red-alert;
-                                color: $gray-dark;
-                                transform-origin: 100% 0;
-                                transform: rotateX(90deg);
-                                transition: 0.2s cubic-bezier(0.77, 0, 0.175, 1);
-                                box-shadow: 0 3px 0 rgba(0,0,0,0.3);
-
-                                &:before {
-                                  content: '';
-                                  position: absolute;
-                                  width: 0; 
-                                  height: 0; 
-                                  top: -7px;
-                                  border-left: 5px solid transparent;  /* left arrow slant */
-                                  border-right: 5px solid transparent; /* right arrow slant */
-                                  border-bottom: 7px solid $red-alert; /* bottom, add background color here */
-                                  font-size: 0;
-                                  line-height: 0;
-                                }
-
-                                .accept {
-                                  font-size: 1.3rem;
-                                  position: absolute;
-                                  top: 2px;
-                                  left: 2px;
-                                  &:hover {
-                                    color: $yellow-light;
-                                  }
-                                }
-                              }
-
-                              .trash-body {
-                                transition: .1s
-                              }
-
-                              .trash-cap {
-                                transform-origin: 100% 100%;
-                                transition: .1s;
-                              }
-
-                              &:hover {
-                                .trash-body {
-                                  opacity: 0;
-                                }
-
-                                .trash-cap {
-                                  transform: rotate(14deg);
-                                }
-                              }
-                            }
-
-                            .one-contrib-messages-single-delete {
-                              float: right;
-                              margin-right: -20px;
-                              color: $gray-dark;
-                              font-family: 'geo';
-                              font-size: 0.8rem;
-
-                              &:hover {
-                                cursor: url('/img/devil-hand.png'), pointer;
-                                color: $red-alert;
-                              }
-                            }
-                          }
-                        }
-                      }
-
-                      .one-contrib-messages-form-container {
-                        width: 100%;
-                        margin-top: 13px;
-                        margin-bottom: 13px;
-
-                        .one-contrib-messages-form {
-                          border: none;
-
-                          .one-contrib-messages-uimage-container {
-                            vertical-align: top;
-                            width: 30px;
-                            height: 30px;
-                            background-color: salmon;
-                            display: inline-block;
-                            margin-right: 10px;
-                            margin-top: 1px;
-                          }
-
-                          .one-contrib-messages-text-form-container {
-                            display: inline-block;
-                            position: relative;
-                            width: 78%;
-                            text-align: left;
-
-                            .one-contrib-messages-text-form {
-                              background-color: $game-background;
-                              width: 100%;
-                              min-height: 32px;
-                              display: inline-block;
-                              // overflow: hidden;
-                              font-family: 'lepm';
-                              font-size: 0.8rem;
-                              line-height: 1.1rem;
-                              border-radius: 2px;
-                              position: relative;
-
-                              .one-contrib-messages-text-editable {
-                                padding: 5px 10px 5px 10px;
-                                text-align: left;
-                                display: inline-block;
-                                min-width: 245px;
-                                max-width: 100%;
-                                position: relative;
-                              }
-
-                              .one-contrib-messages-submit{
-                                height: 32px;
-                                width: 50px;
-                                // background-color: $game-background-dark;
-                                color: white;
-                                float: right;
-                                font-family: 'lepl';
-                                letter-spacing: 0.05rem;
-                                font-size: 0.8rem;
-                                background-color: rgba(0,0,0,0.2);
-                                text-align: center;
-                                &:hover {
-                                  cursor: url('/img/devil-hand.png'), pointer;
-                                }
-                              }
-                            }
-
 
                           }
                         }
                       }
                     }
 
-                    .one-contrib-dev-res-form {
-                      width: 100%;
-                      height: 127px;
+                    .one-contrib-likes-container-names {
+                      height: 45px;
+                      width: 198px;
+                      display: inline-block;
+                      vertical-align: top;
+                      position: relative;
+                      margin-left: 5px;
 
-                      .one-contrib-dev-form {
-                        border: 2px solid $gray-dark;
-                        margin: 7px;
-                        margin-top: 13px;
-                        vertical-align: middle;
-                        display: inline-block;
-                        width: 91%;
-                        // overflow: hidden;
-                        height: 100px;
-                        border-radius: 3px;
+                      .one-contrib-likes-container-names-list {
+                        font-family: 'lepl';
+                        font-size: 0.65rem;
+                        position: absolute;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        line-height: 1.1rem;
 
-                        .one-contrib-dev-textarea-container {
-                          display: inline-block;
-                          width: 85%;
-                          height: 100%;
+                        .one-contrib-likes-container-item {
+                          // margin: 1px;
+                          text-align: center;
 
-                          .one-contrib-dev-textarea {
+                          .name {
+                            padding: 2px 2px 2px 2px;
                             border-radius: 2px;
-                            width: 100%;
-                            border: none;
-                            resize: none;
-                            height: 100%;
-                            font-family: 'lepm';
-                            font-size: 0.8rem;
-                            line-height: 1.2rem;
-                            background-color: $game-background;
-                            padding: 5px;
+                            background-color: $gray-dark;
+                            margin-right: -2px;
+                            //margin-right: 2px;
+                            color: $game-background;
+
+                            &:hover {
+                              cursor: url('/img/devil-hand.png'), pointer;
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                .one-contrib-show-hidden-content {
+                  height: auto !important;
+                }
+
+                .one-contrib-hidden-content {
+                  width: 100%;
+                  overflow: hidden;
+                  height: 0;
+
+                  .one-contrib-dev-res-form {
+                    width: 100%;
+                    height: 127px;
+
+                    .one-contrib-dev-form {
+                      border: 2px solid $gray-dark;
+                      margin: 7px;
+                      margin-top: 13px;
+                      vertical-align: middle;
+                      display: inline-block;
+                      width: 91%;
+                      // overflow: hidden;
+                      height: 100px;
+                      border-radius: 3px;
+
+                      .one-contrib-dev-textarea-container {
+                        display: inline-block;
+                        width: 85%;
+                        height: 100%;
+
+                        .one-contrib-dev-textarea {
+                          border-radius: 2px;
+                          width: 100%;
+                          border: none;
+                          resize: none;
+                          height: 100%;
+                          font-family: 'lepm';
+                          font-size: 0.8rem;
+                          line-height: 1.2rem;
+                          background-color: $game-background;
+                          padding: 5px;
+                        }
+                      }
+
+                      .one-contrib-dev-buttons {
+                        display: inline-block;
+                        width: 15%;
+                        height: 100px;
+                        vertical-align: top;
+                        margin-left: -3px;
+
+                        .one-contrib-dev-input-false {
+                          height: 48px;
+                          width: 100%;
+                          background: $yellow-zero url('/img/false-s.png') no-repeat 45% 50%;
+                          background-size: 25px;
+                        }
+
+                        .button {
+                          border: none;
+                          &:hover{
+                            cursor: url('/img/devil-hand.png'), pointer;
                           }
                         }
 
-                        .one-contrib-dev-buttons {
-                          display: inline-block;
-                          width: 15%;
-                          height: 100px;
-                          vertical-align: top;
-                          margin-left: -3px;
-
-                          .one-contrib-dev-input-false {
-                            height: 48px;
+                        .one-contrib-dev-input-true {
+                          width: 100%;
+                          height: 48px;
+                          background: $green-true url('/img/true-s.png') no-repeat 45% 45%;
+                          background-size: 25px;
+                          input {
+                            color: transparent;
                             width: 100%;
-                            background: $yellow-zero url('/img/false-s.png') no-repeat 45% 50%;
-                            background-size: 25px;
-                          }
-
-                          .button {
-                            border: none;
+                            height: 100%;
                             &:hover{
                               cursor: url('/img/devil-hand.png'), pointer;
                             }
                           }
-
-                          .one-contrib-dev-input-true {
-                            width: 100%;
-                            height: 48px;
-                            background: $green-true url('/img/true-s.png') no-repeat 45% 45%;
-                            background-size: 25px;
-                            input {
-                              color: transparent;
-                              width: 100%;
-                              height: 100%;
-                              &:hover{
-                                cursor: url('/img/devil-hand.png'), pointer;
-                              }
-                            }
-                          }
                         }
                       }
                     }
+                  }
 
-                    .one-contrib-dev-panel {
-                      width: 100%;
-                      display: inline-block;
-                      border-top: 1px dotted #717171;
-                      margin-top: 5px;
+                  .one-contrib-dev-panel {
+                    width: 100%;
+                    display: inline-block;
+                    border-top: 1px dotted #717171;
+                    margin-top: 5px;
 
 
-                      .one-contrib-dev-response {
-                        height: 100%;
-                        position: relative;
-                        margin: 20px;
-                        text-align: left;
+                    .one-contrib-dev-response {
+                      height: 100%;
+                      position: relative;
+                      margin: 20px;
+                      text-align: left;
 
-                        .one-contrib-dev-response-left {
-                          display: inline-block;
+                      .one-contrib-dev-response-left {
+                        display: inline-block;
+                        width: 100%;
+
+                        .one-contrib-dev-left-title {
+                          font-family: 'lepb';
+                          font-size: 1.8rem;
                           width: 100%;
 
-                          .one-contrib-dev-left-title {
-                            font-family: 'lepb';
-                            font-size: 1.8rem;
-                            width: 100%;
+                          .one-contrib-dev-hand {
+                            height: 30px;
+                            display: inline-block;
+                            position: relative;
+                            margin-left: 2px;
 
-                            .one-contrib-dev-hand {
-                              height: 30px;
-                              display: inline-block;
-                              position: relative;
-                              margin-left: 2px;
-
-                              img {
-                                width: 30px;
-                                vertical-align: top;
-                                margin-top: 1px;
-                              }
+                            img {
+                              width: 30px;
+                              vertical-align: top;
+                              margin-top: 1px;
                             }
                           }
+                        }
 
-                          .one-contrib-dev-left-content {
-                            margin-top: 10px;
-                            font-family: 'lepm';
-                            font-size: .9rem;
-                            line-height: 1.14rem;
-                          }
+                        .one-contrib-dev-left-content {
+                          margin-top: 10px;
+                          font-family: 'lepm';
+                          font-size: .9rem;
+                          line-height: 1.14rem;
                         }
                       }
                     }
-
                   }
+
                 }
               }
             }
