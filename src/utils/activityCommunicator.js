@@ -15,10 +15,16 @@ class ActivityBoard {
     let style
     switch (data.type) {
       case 'newMom':
-        style = 'single-message mom'
+        style = 'single-message styl-mom'
+        break;
+      case 'error':
+        style = 'single-message styl-error'
+        break;
+      case 'delete':
+        style = 'single-message styl-delete'
         break;
       default:
-        style = 'single-message normal'
+        style = 'single-message styl-normal'
     }
 
     let template = yo`
@@ -28,6 +34,7 @@ class ActivityBoard {
     let removeChild = this.removeChild.bind(this)
 
     this.container.appendChild(template)
+    console.log(data.info)
     this.drawMessage(template, (err, toDelete) => {
       removeChild(toDelete)
     })

@@ -545,6 +545,7 @@ app.get('/api/contributions/getbytag/:tag', (req, res) => {
   let tag = req.params.tag
   client.getContribsByTag(tag, (err, contribs) => {
     if (err) return res.status(500).json(err)
+    console.log(contribs)
     res.status(200).json(contribs)
   })
 })
@@ -565,7 +566,7 @@ app.post('/api/contributions', secure, (req, res) => {
   let token = req.user.token
 
   client.createContrib(contribution, username, token, (err, data) => {
-    if (err) return res.status(500).json({error: err})
+    if (err) return res.status(400).json({error: err})
     data.message = 'gracias por su contribucion'
     res.status(200).json(data)
   })
@@ -587,7 +588,12 @@ app.get('/api/contributions/delete/:id', secure, (req, res) => {
   let token = req.user.token
 
   client.deleteContrib(contributionId, username, token, (err, data) => {
-    if (err) return res.status(500).json({error: err})
+    if (err) {
+      if (err.error.error === 'Contributions aprovated can\'t be deleted') {
+        return res.status(400).json({error: err.error.error})
+      }
+      return res.status(500).json({error: err})
+    }
     data.message = `${username} ha eliminado la contribucion: ${contributionId}`
 
     userSocket.rt.deleteContrib(data, (err, response) => {

@@ -30,12 +30,13 @@ $color_yellow: #EAEAEA;
 }
 
 #menu{
-  height: 100px;
   width: 350px;
-  top: 20%;
   position: fixed;
-  transform: translate(0, -50%);
   z-index: 3;
+  background-color: $gray-dark;
+  height: 100%;
+  width: 5px;
+  box-shadow: 3px 3px 0 rgba($gray-dark, .2);
 
   #logo{
     height: 130px;

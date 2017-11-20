@@ -39,8 +39,6 @@ module.exports = {
       </div>`
     }
 
-    console.log(user, moM)
-
     let userTooltip = new Tooltips (moM.username, user)
 
     let manOfMonth = yo`
@@ -49,7 +47,7 @@ module.exports = {
       <div class="mom-divisor">${title}</div>
       <div class="user-name">${userTooltip.get()}</div>
       <div class="image-container">
-        <img src="" alt="">
+        <img src="${moM.avatar}" alt="${moM.username}">
       </div>
     </div>`
 
@@ -311,7 +309,7 @@ module.exports = {
     })
 
     return yo`
-      <div class="one-contrib-messages-single-delete-container">
+      <div class="trash-button-delete">
         ${trash}
         ${confirm}
       </div>

@@ -10,19 +10,35 @@
       font-size: 0.8rem !important;
       margin-bottom: 12px;
       color: $gray-dark;
+      padding: 8px 15px;
+      border-radius: 3px;
     }
 
     // estilos segun tipo
-    .normal {
-      padding: 8px 15px;
-      border-radius: 3px;
+    .styl-normal {
       box-shadow: 0 3px 0 rgba(#000, 0.6);
       background-color: $yellow-zero;
     }
 
-    .mom {
+    .styl-mom {
+      background-color: $purple-active;
+      color: $yellow-zero;
+    }
+    .styl-error {
       background-color: $red-alert;
       color: $yellow-zero;
+    }
+    .styl-delete {
+      background-color: $gray-dark;
+      color: $yellow-zero;
+      &:before {
+        content: 'x';
+        margin-right: 10px;
+        display: inline-block;
+        color: $red-alert;
+        font-family: 'square';
+        font-size: 1rem;
+      }
     }
 
 

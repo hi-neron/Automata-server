@@ -20,6 +20,8 @@ const barContainer = document.getElementById('dialog-container')
 const bar = yo`<div class="dialog-bar"></div>`
 barContainer.appendChild(bar)
 
+//
+const SingleMessage = require('./singleMessage')
 
 // global variables
 let os
@@ -46,6 +48,9 @@ class Contrib {
     this.opened = false
     this.barHide = false
 
+    // array de messages
+    this.messagesList = []
+
     // si el elemento esta visible en scroll TRUE
     this.onView = false
 
@@ -55,8 +60,14 @@ class Contrib {
     // llama los tooltips
     let usernameTooltip = new Tooltips (this.user.username, this.my)
 
+    this.deleteOk = yo`
+    <div class="accept">
+      <i class="fa fa-check"></i>
+    </div>
+    `
+
     // icono de eliminar
-    let trash = templates.getTrash()
+    let trash = templates.getTrash(this.deleteOk)
 
     // pequeño boton de  like
     this.likeButton = templates.drawLikesDevil()
@@ -174,6 +185,7 @@ class Contrib {
         ${contribRate}
       </div>
     `
+
     this.basicContainer = yo`
       <div class="one-contrib-content" contrib="${this.publicId}">
         <div class="one-contrib-content-scroll">
@@ -301,11 +313,7 @@ class Contrib {
 
       devAddApproval(id, data, (err, res) => {
         if (err) return console.log('este es un mensaje de error a optimizar', err)
-
         let approval = res.body.data.approval
-
-        console.log(res.body)
-
         let changes = {
           dev: res.body.data
         }
@@ -342,7 +350,6 @@ class Contrib {
 
       rateContrib(id, (err, contribRated) => {
         if (err) return console.log(err)
-        console.log(my, user)
         let newRateRender = templates.renderRate(contribRated.rate, my.username, user.username)
         newRateRender = newRateRender === null ? '': newRateRender
         empty(likeContainerNames).append(newRateRender)
@@ -359,7 +366,7 @@ class Contrib {
       let textToSend = $form.html()
 
       let data = {
-        userMessage: textToSend.replace(/<\/?[^>]+(>|$)/g, "")
+        userMessage: textToSend.replace(/(<\/?[^>]+(>|$))|(&+[a-z]+[;^])/g, "")
       }
 
       let sendingMessage = yo`
@@ -383,12 +390,32 @@ class Contrib {
       })
     }
 
-    this.messagesForm.onkeyup = (ev) => {
-      ev.preventDefault()
+    this.messagesForm.onkeypress = (ev) => {
       if (ev.key === 'Enter'){
+        ev.preventDefault()
         let $messagesForm = $(this.messagesForm)
         $messagesForm.unbind().submit()
       }
+    }
+
+    let delContribution = this.delContribution.bind(this)
+    this.deleteOk.onclick = (ev) => {
+      delContribution((err, res) => {
+        if (err) {
+          let myerr = err.toString()
+          myerr = myerr === 'Error: Bad Request'? 'Una contribución aprobada, no se puede eliminar': myerr
+          console.log(myerr)
+          return communicator.addMessage({
+            message:`El mensaje no fue eliminado. Error: ${myerr}.`,
+            type: 'error'
+          })
+        }
+
+        communicator.addMessage({
+          message: res.message,
+          type: 'delete'
+        })
+      })
     }
   }
 
@@ -460,128 +487,70 @@ class Contrib {
     empty(this.wrapper).appendChild(this.basicContainer)
   }
 
-  reduce() {
-    empty(this.wrapper).appendChild(this.loader)
-  }
-
   drawMessages(){
     let myMessages = this.messages
-    let allMessages = yo`
+    this.messagesContainer = yo`
       <div class="bar-item-messages">
       </div>
     `
     for(let i = 0; i < myMessages.length; i++) {
-      allMessages.prepend(this.drawSingleMessage(myMessages[i]))
+      let messageToAdd = this.singleMessage (myMessages[i])
+      this.messagesList.push(messageToAdd)
+      this.messagesContainer.prepend(messageToAdd.message.getTemplate())
     }
 
-    this.allMessages = allMessages
-    return allMessages
+    return this.messagesContainer
+  }
+
+  // Hace una peticion al servidor: eliminar una contribucion
+  delContribution(cb) {
+    request
+      .get(`/api/contributions/delete/${this.publicId}`)
+      .set('Accept', 'application/json')
+      .end((err, res) => {
+        if (err) return cb(err)
+        cb(null, res.body)
+      })
   }
 
   // Dibuja un mensaje solo
-  drawSingleMessage (data) {
-    let ok = yo`
-      <div class="accept">
-        <i class="fa fa-check"></i>
-      </div>
-    `
+  singleMessage (messageData) {
+    // this.messagesContainer.prepend(this.drawSingleMessage(myMessages[i]))
+    let message = new SingleMessage(messageData, this.publicId,  this.my)
 
-    let trash = templates.getTrash(ok)
-
-    let deleteMessage = yo`
-      <div class="bar-item-messages-single-delete">
-        ${trash}
-      </div>
-    `
-
-    let message = yo`
-      <span class="bar-item-messages-single-message">
-      </span>
-    `
-
-
-    // Queda a la escucha de una eliminacion del mensaje! XD
-    // let deleteContribMessage = this.deleteMessageContrib.bind(this)
-
-    let deleteMessageContrib = this.deleteMessageContrib.bind(this)
-
-    ok.onclick = (ev) => {
-      ev.preventDefault()
-      let $head = $(ev.target).closest('.bar-item-content')
-      let $message = $(ev.target).closest('.bar-item-messages-single')
-
-      let messageId = $message.attr('messageId')
-
-      deleteMessageContrib(this.publicId, messageId, (err, res) => {
-        if (err) return console.log(err)
-        console.log(res)
-      })
+    let messageToAdd = {
+      messageId: message.messageId,
+      message: message
     }
 
-    let $message = $(message)
-    $message.html(data.content.userMessage)
-
-    return yo`
-      <div class="bar-item-messages-single" messageId="${data.id}">
-        <div class="bar-item-messages-single-left">
-          <div class="bar-item-messages-single-avatar-container">
-            <img src="${data.user.image}" alt="${data.user.username}">
-          </div>
-        </div>
-        <div class="bar-item-messages-single-right">
-          ${data.user.username === this.my.username ? deleteMessage: ''}
-          <p class="bar-item-messages-single-content">
-            <span class="bar-item-messages-single-userName">
-              ${data.user.username}
-            </span>
-            ${message}
-          </p>
-          <p class="bar-item-messages-single-date">${templates.drawDate(data.date)}</p>
-        </div>
-      </div>
-    `
+    return messageToAdd
   }
 
   // acciones con mensajes
   addNewMessage (message) {
-    console.log(this.messages, message)
-    this.messages.push(message)
-
     if (this.opened) {
-      this.allMessages.prepend(this.drawSingleMessage(message))
+      let newMessage = this.singleMessage(message)
+      this.messagesList.push(newMessage)
+      this.messagesContainer.prepend(newMessage.message.getTemplate())
     }
-
-    // if (this.contentOpen) {
-    //   let myContent = this.contentOpened.find('.one-contrib-content')
-    //   let $myContent = $(myContent[0])
-    //   let id = $(myContent[0]).attr('contrib')
-
-    //   if (id === newMessage.contribId) {
-    //     let $container = $myContent.find('.one-contrib-messages')
-    //     $container[0].prepend(drawSingleMessage(newMessage))
-    //   }
-    // }
   }
 
   removeMessage (messageInfo) {
     let messageId = messageInfo.id
-    console.log(messageId)
+    let deleted = _.find(this.messagesList, {messageId: messageId}).message
+    deleted.remove()
+  }
 
+  removeThis () {
     if (this.opened) {
-      let deleteMessageTemplate = yo`
-        <div class="delete-message-template">
-          <span class="delete-message-template-username">
-            ${messageInfo.username}
-          </span>
-          ha eliminado el comentario ...
-        </div>
-      `
-      let $container = $(this.allMessages).find('.bar-item-messages')
-      console.log($container)
-      let $message = $container.children(`.bar-item-messages-single[messageid='${messageId}']`)
-      console.log($message)
-      // $message.empty().append(deleteMessageTemplate)
+      bar.removeChild(this.barClearfix)
+      this.opened = false
     }
+    empty(this.loaderContainer)
+    this.loaderContainer.style.height = '0'
+    setTimeout(() => {
+      this.loaderContainer.style.display = 'none'
+    }, 500);
   }
 
   // PETICIONES
@@ -628,20 +597,6 @@ class Contrib {
     })
   }
 
-  // elimina un mensaje en una contribucion
-  deleteMessageContrib(contribId, messageId, cb){
-    request
-    .get(`/api/contributions/delmessage/${contribId}/${messageId}`)
-    .set('Accept', 'application/json')
-    .end((err, res) => {
-      if (err) {
-        console.log(err.body,'kalalalala')
-        return cb(err)
-      }
-      cb(null, res.body)
-    })
-  }
-
   // ESTATICOS!!
   static setContainer(scrollInside) {
     container = yo`<div id="devboard-wrapper-right" class="devboard-wrapper"></div>`
@@ -649,7 +604,7 @@ class Contrib {
 
     os = new OnScreen({
       container: scrollMaster,
-      tolerance: 100,
+      tolerance: -50
     })
 
     return container
@@ -657,7 +612,6 @@ class Contrib {
 
   static addList(array) {
     list = array
-    console.log(list)
     // dibuja
     os.on('enter', '.grid-item', (element, e) => {
       let id = element.getAttribute('id')
