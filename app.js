@@ -309,6 +309,8 @@ app.post('/api/images', secure, (req, res) => {
 
   let userSocket = _.find(usersSockets, {username: req.user.username})
 
+  console.log(req.body)
+
   if (!userSocket) {
     return res.status(500).json({error: 'you need be logged with realtime too'})
   }
@@ -333,6 +335,8 @@ app.post('/api/images', secure, (req, res) => {
       src: src,
       name: name
     }
+
+    console.log(req.body)
 
     client.createPicture(image, token, (err, data) => {
       if (err) return res.json(err)

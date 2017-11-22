@@ -15,11 +15,13 @@ $color_yellow: #EAEAEA;
 
 .tooltip {
   position: relative;
-  background-color: $display-black;
+  background-color: $color_gray;
   visibility: hidden;
   display: block;
-  color: white;
-  font-size: 1.2em;
+  color: $gray-dark;
+  font-family: 'lepm';
+  font-size: .7rem;
+  text-transform: uppercase;
 }
 
 .bat {
@@ -30,52 +32,58 @@ $color_yellow: #EAEAEA;
 }
 
 #menu{
-  width: 350px;
+  width: 450px;
   position: fixed;
-  z-index: 3;
+  z-index: 5;
   background-color: $gray-dark;
   height: 100%;
   width: 5px;
-  box-shadow: 3px 3px 0 rgba($gray-dark, .2);
+  box-shadow: 3px 0 0 rgba($gray-dark, .2);
 
   #logo{
-    height: 130px;
-    width: 250px;
+    height: 240px;
+    width: 220px;
     background-color: $logo-background;
     position: absolute;
     overflow: hidden;
-    top: 20px;
-
+    border-radius: 0 50px 0 0;
+    transform-origin: 50% 100%;
+    top: 300px;
+    left: 5px;
+    box-shadow: 4px -4px 0 rgba(#000, .1) inset;
 
     img {
       display: inline-block;
       position: absolute;
-      width: 60%;
+      width: 50%;
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
     }
+  }
 
-    #logout {
-      position: absolute;
-      right: 15px;
-      top: 15px;
-      height: 35px;
-      font-size: 1.4em;
+  #logout {
+    position: absolute;
+    left: 225px;
+    top: 248px;
+    overflow: hidden;
 
-      a {
-        width: 35px;
-        height: 35px;
-        background: url('/img/close.svg') no-repeat center center;
-        background-size: 50%;
-        display: block;
+    .logout-text{
+      background-color: $red-alert;
+      text-align: center;
+      display: block;
+      padding: 6px;
+      font-family: 'lepl';
+      font-size: 1rem;
+      color: $game-background;
+      box-shadow: 3px -4px 0 rgba(#000, .15) inset;
+      border-radius: 0 3px 0px 0px;
+      position: relative;
 
-        &:hover {
-          background: url('/img/close-o-white.svg') no-repeat center center;
-          background-size: 50%;
-        }
+      &:hover {
+        color: $gray-dark;
+        // background-color: $gray-dark;
       }
-
     }
   }
 
@@ -99,10 +107,11 @@ $color_yellow: #EAEAEA;
     cursor: pointer;
     display: inline-block;
     position: relative;
-    top: 150px;
+    top: 275px;
     border-right: 2px solid rgba($red-alert-light, 0.35);
     box-shadow: 0px 3px 0px rgba(#000, 0.3);
     border-radius: 0 3px 3px 0;
+    z-index: 5;
 
     &:after {
       content: '';
@@ -123,13 +132,85 @@ $color_yellow: #EAEAEA;
   #noise {
     display: inline-block;
     position: relative;
-    margin-left: -4px;
-    top: 150px;
-    width: 250px;
+    margin-left: -2px;
+    z-index: 0;
+    left: 100px;
+    top: 172px;
+    width: 200px;
     height: 100px;
 
     a {
       cursor: pointer;
+    }
+    .noise-items-wrapper {
+      #profile-menu-trigger {
+        display: inline-block;
+        background: url("/img/profile.png") no-repeat center center;
+        background-size: 26%;
+        width: 54%;
+        height: 100%;
+        left: -2px;
+        position: absolute;
+        z-index: 3;
+        transition: .2s ease-in;
+  
+        &:after {
+          content: 'perfil';
+          left: 3px;
+          width: 45px;
+          bottom: 0px;
+          padding: 5px;
+          @extend .tooltip;
+        }
+  
+        &:hover {
+          background: url("/img/profile-over.png") no-repeat center center;
+          background-size: 26%;
+          &:after {
+            visibility: visible;
+          }
+        }
+      }
+      .line {
+        width: 10px;
+        height: 140%;
+        left: 52%;
+        z-index: 3;
+        position: absolute;
+        margin-left: -8px;
+        margin-right: -10px;
+        margin-top: -7%;
+        display: inline-block;
+      }
+  
+      #images-menu-trigger{
+        position: absolute;
+        z-index: 3;
+        display: inline-block;
+        background: url("/img/images-icon.png") no-repeat center center;
+        background-size: 24%;
+        width: 54%;
+        left: 48%;
+        height: 100%;
+        transition: .2s ease-in;
+        
+        &:after {
+          content: 'fragmentos';
+          left: 3px;
+          width: 75px;
+          bottom: 0px;
+          padding: 5px;
+          @extend .tooltip;
+        }
+        
+        &:hover {
+          background: url("/img/images-icon-over.png") no-repeat center center;
+          background-size: 24%;
+          &:after {
+            visibility: visible;
+          }
+        }
+      }
     }
 
     #back_noise {
@@ -138,74 +219,17 @@ $color_yellow: #EAEAEA;
       height: 100px;
       width: 100%;
       z-index: 1;
-    }
-    // box-shadow: 0 5px 0 rgba(#000, 0.2);
+      border-radius: 2px;
 
-    #profile-menu-trigger {
-      display: inline-block;
-      background: url("/img/profile.svg") no-repeat center center;
-      background-size: 108%;
-      width: 48%;
-      height: 100%;
-      left: 5px;
-      position: absolute;
-      z-index: 3;
-      // transition: .2s ease-in;
-
-      &:after {
-        content: 'perfil';
-        left: 3px;
-        width: 35px;
-        bottom: 0px;
-        padding: 5px;
-        @extend .tooltip;
-      }
-
-      &:hover {
-        background: url("/img/profile-o.svg") no-repeat center center;
-        background-size: 108%;
-        &:after {
-          visibility: visible;
-        }
-      }
-    }
-    .line {
-      width: 10px;
-      height: 140%;
-      left: 52%;
-      z-index: 3;
-      position: absolute;
-      margin-left: -8px;
-      margin-right: -10px;
-      margin-top: -7%;
-      display: inline-block;
-    }
-
-    #images-menu-trigger{
-      position: absolute;
-      z-index: 3;
-      display: inline-block;
-      background: url("/img/images.svg") no-repeat center center;
-      background-size: 105%;
-      width: 48%;
-      left: 51%;
-      height: 100%;
-
-      &:after {
-        content: 'fragmentos';
-        left: 3px;
-        width: 63px;
-        bottom: 0px;
-        padding: 5px;
-        @extend .tooltip;
-      }
-
-      &:hover {
-        background: url("/img/images-o.svg") no-repeat center center;
-        background-size: 105%;
-        &:after {
-          visibility: visible;
-        }
+      .content-shadow {
+        border-top: 5px solid rgba(#000, .05);
+        border-bottom: 3px solid rgba(#000, .05);
+        border-left: 7px solid rgba(#000, .05);
+        border-right: 3px solid rgba(#000, .05);
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        z-index: 5;
       }
     }
   }
@@ -218,7 +242,7 @@ $color_yellow: #EAEAEA;
   transform: translate(-50%, -50%);
   cursor: pointer;
   z-index: 4;
-  
+
 }
 
 #empty_screen {

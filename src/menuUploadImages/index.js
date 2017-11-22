@@ -16,7 +16,8 @@ let $closer = $(yo`
 `)
 
 //iniciar animacion
-function dummyAnimationStart ($template) {
+function dummyAnimationStart (template) {
+  let $template = $(template)
   let $dummy = $template.find('#dummy')
   let $bubble1 = $template.find('#bubble1')
   let $bubble2 = $template.find('#bubble2')
@@ -65,19 +66,21 @@ function dummyAnimationStart ($template) {
 
 // renderizar la informacion de la imagenes
 function renderImages (images, next) {
-  let $OldImages = $('<div id="old-images"></div>')
-  let $lastestImages = $('<div id="lastest-images"></div>')
-  let $template = $('<div id="supervisor-images-user"></div>')
+  let OldImages = yo`<div id="old-images"></div>`
+  let lastestImages = yo`<div id="lastest-images"></div>`
+  let template = yo`<div id="supervisor-images-user"></div>`
+  let wrapper = yo`<div class="supervisor-images-wrapper"></div>`
 
   for (let i = 0; i < images.length; i++) {
     console.log(images[i])
-    $OldImages.append(imageTemplate(images[i]))
+    OldImages.appendChild(imageTemplate(images[i]))
   }
 
-  $template.append($OldImages)
-  $template.append($lastestImages)
+  template.appendChild(OldImages)
+  template.appendChild(lastestImages)
+  wrapper.appendChild(template)
   // aqui se renderizaran una a una las imagenes
-  next(null, $template, images.length)
+  next(null, wrapper, images.length)
 }
 
 // agrega al template el formulario de subida

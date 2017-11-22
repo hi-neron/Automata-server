@@ -57,7 +57,7 @@
 
 @font-face {
     font-family: 'lepm';
-    src: url('/fonts/lep-medium.otf');
+    src: url('/fonts/lephh-medium.otf');
 }
 
 @font-face {
@@ -115,3 +115,14 @@ body {
 }
 
 
+textarea {
+    border: none;
+    overflow: auto;
+    outline: none;
+}
+
+button, input[type='password']{
+    &:focus {
+        outline: none;
+    }
+}

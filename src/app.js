@@ -15,7 +15,6 @@ require('./signin')
 require('./signup')
 // require('./forms') // formularios de materialize... ya son engorrosos 
 require('./leftMenu')
-require('masonry-layout')
 // axios
 // empty-element
 // page

@@ -8,16 +8,16 @@ module.exports = yo`
     <div class="signin-up">
       <div class="divisor first"></div>
       <div class="input-sign">
-        <input id="sign-username" type="text" name="username" autocomplete="off"/>
         <label for="sign-username" class="label"/>nombre</label>
+        <input id="sign-username" type="text" name="username" autocomplete="off"/>
       </div>
       <div class="input-sign">
-        <input id="sign-password" type="password" name="password"/>
         <label for="sign-password" class="label"/>password</label>
+        <input id="sign-password" type="password" name="password"/>
       </div>
       <div class="input-sign">
-        <input id="sign-email" type="email" name="email" autocomplete="off"/>
         <label for="sign-email" class="label"/>email</label>
+        <input id="sign-email" type="email" name="email" autocomplete="off"/>
       </div>
       <div class="divisor"></div>
       <div class="input-sign">

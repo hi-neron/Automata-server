@@ -87,15 +87,15 @@ module.exports = {
         <form id="contrib-create-form">
           <div class="type-contrib-form">
             <div class="type-contrib-aporte-form">
-              <input type="radio" name="type" value="contribution" id="type-contrib-contribution-form" checked="checked">
+              <input type="radio" name="type" value="discussion" id="type-contrib-contribution-form" checked="checked">
               <span for="aporte">DISCUSIÓN</span>
             </div>
             <div class="type-contrib-message-form">
-              <input type="radio" name="type" value="message" id="type-contrib-message-form">
+              <input type="radio" name="type" value="idea" id="type-contrib-message-form">
               <span for="message">IDEA</span>
             </div>
             <div class="type-contrib-advert-form">
-              <input type="radio" name="type" value="advertise" id="type-contrib-advert-form" title="advert">
+              <input type="radio" name="type" value="annunce" id="type-contrib-advert-form" title="advert">
               <span for="advert">ANUNCIO</span>
             </div>
             <div class="type-contrib-bug-form">
@@ -253,6 +253,22 @@ module.exports = {
       return rateTemplate
     }
     return null
+  },
+
+  drawTypeIcon: (type) => {
+    let types = ['discussion', 'idea', 'annunce', 'bug']
+    let typesEspanol = ['DISCUSIÓN', 'IDEA', 'ANUNCIO', 'ERROR']
+    let result = types.filter(t => t === type)
+    result = result.length > 0 ? type : 'discussion'
+    let indexE = types.indexOf(result)
+
+    let template = yo`
+    <div class="bar-item-content-icons-type">
+      <img src="/img/${result}.png" alt="">
+      <div class="bar-item-content-icons-type-label">${typesEspanol[indexE]}</div>
+    </div>
+    `
+    return template
   },
 
   getTrash: (okAccept) => {

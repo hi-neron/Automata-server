@@ -5,15 +5,19 @@ const request = require('superagent')
 const $ = require('jquery')
 const dummy = require('./dummy')
 
+let dummyButton, uploadForm
+
 function onsubmit(ev) {
   ev.preventDefault();
   let data = new FormData(this);
-  console.log(data, ev, this)
+  console.log(data)
+
   request
     .post('/api/images')
     .send(data)
     .end(function (err, res) {
       // This is the user uploaded images container
+      console.log(res.body)
       let $imagesContainer = $('#lastest-images')
 
       // this is the image template
@@ -37,45 +41,83 @@ function onsubmit(ev) {
           }
       */
 
-      console.log(res.body)
-
       if (res.body.error || res.body.code ){
         let data = res.body.error || res.body.code
         // error time, body : {error, message, name}
         // error large picture, body : {code}
         // error invalid picture, body.error.error {invalid picture}
-
         // funcion que agrega un cuadro de dialogo en la pagina
         onMessage(data)
       }else{
         let toDraw = imageTemplate(res.body.data)
         $imagesContainer.append(toDraw)
+        dummyButton.style.display = 'none'
+        uploadForm.style.display = 'none'
       }
 
     })
 }
 
 module.exports = function (type) {
+  let closer = yo`
+  <div class="closer-upload-form">
+  </div>
+  `
+  console.log(type)
+
+  uploadForm = yo`
+    <div id="image-upload-form">
+      ${closer}
+      <form enctype="multipart/form-data" id="data-form-upload" onsubmit=${onsubmit}>
+        <h2 class="upload-images-title">NUEVA IMAGEN</h2>
+        <div class="upload-images-right">
+          <div class="title-upload-images">
+            <label for="name">NOMBRE</label>
+            <input type="text" name="name" maxlength="22"/>
+          </div>
+          <div class="file-upload-images">
+            <label for="file" class="label">NUEVO</label>
+            <input type="file" id="file" name="file" />
+          </div>
+          <div class="submit-upload-images">
+            <button type="submit" action="#">
+              <span class="upload-image">SUBIR</span>
+            </button>
+          </div>
+        </div>
+        <div id="image-upload-container" class="upload-images-left">
+        </div>
+      </form>
+    </div>
+  `
+
+  dummyButton = yo`
+    <div id="baby-dummy">
+      ${dummy}
+      <div class="title-baby-dummy">
+        CREAR UNA PIEZA
+      </div>
+    </div>
+  `
+
+  if(type > 0) {
+    dummy.style.display = 'none'
+    dummyButton.style.position = 'inherit'
+  }
+
+  // events
+  closer.onclick = (ev) => {
+    uploadForm.style.display = 'none'
+  }
+  dummyButton.onclick = (ev) => {
+    uploadForm.style.display = 'block'
+  }
+
   let form = yo`
   <div id="upload-form">
     <div class="toCenter">
-      <div id="image-upload-form">
-        <form enctype="multipart/form-data" id="data-form-upload" onsubmit=${onsubmit}>
-          <div class="file-upload-images">
-              <input type="file" id="file" name="file" />
-              <label for="file" class="label">NUEVO</label>
-          </div>
-          <div class="input-upload-images">
-              <label for="name">NOMBRE</label>
-              <input type="text" name="name"/>
-          </div>
-          <div class="input-submit-images">
-            <button type="submit" action="#">
-              <div class="upload-image"></div>
-            </button>
-          </div>
-        </form>
-      </div>
+      ${dummyButton}
+      ${uploadForm}
     </div>
   </div>
   `

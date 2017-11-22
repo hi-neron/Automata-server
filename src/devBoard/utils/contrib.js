@@ -43,6 +43,9 @@ class Contrib {
     this.user = data.user
     this.my = user
     this.info = data.data || data.info
+    this.type = this.info.type
+
+    let error = this.type === 'bug'? 'error-contrib': ''
 
     // abierto o cerrado
     this.opened = false
@@ -188,7 +191,7 @@ class Contrib {
 
     this.basicContainer = yo`
       <div class="one-contrib-content" contrib="${this.publicId}">
-        <div class="one-contrib-content-scroll">
+        <div class="one-contrib-content-scroll ${error}">
           <div class="one-contrib-header">
             <div class="one-contrib-left">
               <div class="one-contrib-avatar-container">
@@ -232,6 +235,8 @@ class Contrib {
       </div>
     `
 
+    let typeIcon = templates.drawTypeIcon(this.type)
+
     this.bar = yo`
       <div class="bar-item-container">
         ${barHeader}
@@ -242,6 +247,7 @@ class Contrib {
                 <img src="${this.user.avatar}" alt="${this.user.username}">
               </div>
               ${devResponse}
+              ${typeIcon}
             </div>
             <div class="bar-item-content-text">
               ${this.info.data || this.info.info}

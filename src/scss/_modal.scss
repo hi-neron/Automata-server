@@ -231,6 +231,10 @@ $placeholder-text-color: $gray-dark;
     border-bottom: 0.14em solid $yellow-logo-light;
     margin-top: 10px;
   }
+
+  input {
+    border-bottom: 2px solid $gray-dark;
+  }
 }
 
 .bottom-sign {

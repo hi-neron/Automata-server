@@ -25,238 +25,239 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
   left: 0px !important;
 }
 
+$background-color: #a1a1a1;
+
 #images-menu-container {
   width: 100%;
   max-width: 400px;
   height: 100%;
-  background-color: $white-body;
+  background-color: $background-color;
   position: fixed;
-  overflow: hidden;
   z-index: 10;
   left: -490px;
   transition: 0.2s ease-out;
-  box-shadow: 8px 0 1px rgba(#000, 0.35);
+  box-shadow: 5px 0 0px rgba(#000, 0.3);
 
   .closer {
-    width: 50px;
-    background-color: $yellow-logo;
+    width: 45px;
+    background-color: $background-color;
     position: absolute;
-    right: -8px;
+    right: -45px;
     top: 20%;
     height: 45px;
     cursor: pointer;
-    border-radius: 2px;
-    box-shadow: 0 4px rgba(black, 0.2);
+    border-radius: 0px 2px 2px 0;
+    box-shadow: 0 4px rgba(black, 0.3);
 
     .closer-images {
-      margin-left: -2px;
-      background: url('/img/close.svg')no-repeat 45% center;
+      background: url('/img/close-red.png') no-repeat 50% center;
       background-size: 40%;
       height: 100%;
       width: 100%;
       color: $gray-dark;
       transition: 0.1s ease-out;
       &:hover {
-        background: url('/img/close-o-yellow.svg')no-repeat 45% center;
+        background: url('/img/close-o-white.svg') no-repeat 50% center;
         background-size: 40%;
       }
     }
   }
 
-  #supervisor-images-user {
-    width: 104%;
-    overflow: scroll;
-    height: 104%;
+  .supervisor-images-wrapper {
+    overflow: hidden;
 
-    .supervisor-loading-image {
-      height: 55px !important;
-    }
-
-    .supervisor-image-single {
-      width: 100%;
-      height: 400px;
-      overflow: hidden;
-      display: inline-block;
-      position: relative;
-      margin-top: -3px;
-      transition: 0.5s ease-in-out;
-
-      &:before {
-        content: '';
-        width: 100%;
-        height: 2px;
-        background-color: rgba($upload-body-title, 0.4);
-        position: absolute;
-        top: 0;
-        left: 0;
+    #supervisor-images-user {
+      width: 104%;
+      overflow: scroll;
+      height: 104%;
+  
+      .supervisor-loading-image {
+        height: 55px !important;
       }
-
-      .supervisor-image-main {
+  
+      .supervisor-image-single {
         width: 100%;
-        z-index: 0;
-      }
-
-      .supervisor-image-awards {
-        width: 100%;
-        position: absolute;
-        bottom: 48px;
-        z-index: 0;
-        left: -25px;
-
-        .awards-body {
-          border-radius: 1px;
-          text-align: right;
-          display: inline-block;
-          width: 190px;
-          height: 35px;
-          border-top: 1px solid rgba(255, 255, 255, 0.3);
-          box-shadow: 0 0 3px rgba(191, 255, 223, 0.5), inset 0 -1px 0 rgba(26, 26, 26, 0.1);
-          background-color: rgba(191, 255, 223, 0.8);
-          position: relative;
-          padding-right: 7px;
-
-          .awards {
-            color: $purple-text-supervisor;
-            font-family: 'dense';
-            font-size: 0.9rem;
-            display: inline-block;
-            margin: 0 9px;
-            padding: 7px 0px;
-            width: 30px;
-            text-shadow: 0 0 2px rgba(#000, 0.25);
-
-            .inner-award {
-              display: inline-block;
-            }
-
-            .icon {
-              font-size: 0.7rem;
-              padding-left: 3px;
-              vertical-align: middle;
-            }
-          }
-        }
-      }
-
-
-      .supervisor-body-content {
-        background: $upload-body-title;
-        position: absolute;
-        background-size: 104% 101%;
-        bottom: -1px;
-        width: 101%;
-        height: 55px;
-        left: 50%;
-        transform: translate(-50.5%, -1px);
-        // border-bottom: 1px solid rgba(#3D3549, 0.5);
-        z-index: 0;
-        box-shadow: 0 -2px 0px rgba($upload-body-title, 0.3);
-
-        .supervisor-image-delete {
+        height: 400px;
+        overflow: hidden;
+        display: inline-block;
+        position: relative;
+        margin-top: -3px;
+        transition: 0.5s ease-in-out;
+  
+        &:before {
+          content: '';
+          width: 100%;
+          height: 2px;
+          background-color: rgba($upload-body-title, 0.4);
           position: absolute;
-          top: 15px;
-          right: 35px;
-          width: 16px;
-          height: 30px;
-          cursor: pointer;
-
-          .appear-confirm {
-            transform: rotateX(0deg) !important;
-          }
-
-          .confirmation {
-            border-radius: 2px;
+          top: 0;
+          left: 0;
+        }
+  
+        .supervisor-image-main {
+          width: 100%;
+          z-index: 0;
+        }
+  
+        .supervisor-image-awards {
+          width: 100%;
+          position: absolute;
+          bottom: 48px;
+          z-index: 0;
+          left: -25px;
+  
+          .awards-body {
+            border-radius: 1px;
+            text-align: right;
+            display: inline-block;
+            width: 190px;
+            height: 35px;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 3px rgba(191, 255, 223, 0.5), inset 0 -1px 0 rgba(26, 26, 26, 0.1);
+            background-color: rgba(191, 255, 223, 0.8);
             position: relative;
-            width: 30px;
-            height: 60px;
-            bottom: 90px;
-            right: 7px;
-            background-color: $yellow-light;
-            text-align: center;
-            color: $gray-dark;
-            transform-origin: 0 100%;
-            transform: rotateX(90deg);
-            transition: 0.2s cubic-bezier(0.77, 0, 0.175, 1);
-
-
-            .rly {
-              font-family: 'cast';
-              font-size: 1.8rem;
-            }
-
-            .accept {
-              font-size: 1.7rem;
-              &:hover {
-                color: $red-alert;
+            padding-right: 7px;
+  
+            .awards {
+              color: $purple-text-supervisor;
+              font-family: 'dense';
+              font-size: 0.9rem;
+              display: inline-block;
+              margin: 0 9px;
+              padding: 7px 0px;
+              width: 30px;
+              text-shadow: 0 0 2px rgba(#000, 0.25);
+  
+              .inner-award {
+                display: inline-block;
+              }
+  
+              .icon {
+                font-size: 0.7rem;
+                padding-left: 3px;
+                vertical-align: middle;
               }
             }
           }
-
-          .trash-body {
-            transition: .1s
-          }
-          .trash-cap {
-            transition: .1s;
-          }
-
-          &:hover {
-
-            .trash-body {
-              opacity: 0;
-            }
-
-            .trash-cap {
-              fill: #ff486b !important;
-              transform-origin: 50% 100%;
-              transform: translate(0px, -75px) rotate(7deg);
-            }
-          }
         }
-
-        .supervisor-image-name {
-          line-height: 3.2em;
-          width: 100%;
-          height: 69%;
-          padding-left: 20px;
-
-          h2 {
-            text-transform: uppercase;
-            font-family: 'cast';
-            letter-spacing: 1px;
-            line-height: 1.39em;
-            color: transparent;
-            @include purple();
-            -webkit-background-clip: text;
-            background-clip: text;
-            //  text-shadow: 0 2px 0 rgba(#000, 0.3);
-            font-size: 2.3em;
-            // font-family: 'cast', sans-serif;
-            // letter-spacing: 0.02rem;
-          }
-        }
-
-        .reflex {
-          content: '';
-          width: 100%;
-          height: 100%;
+  
+  
+        .supervisor-body-content {
+          background: $upload-body-title;
           position: absolute;
-          z-index: -1;
-          top: 0;
-          left: 0;
-          transform: translate(-100px);
-          transition: 0.1s;
-          opacity: 0.05;
-          @include shimmer-grad($color-grad);
+          background-size: 104% 101%;
+          bottom: -1px;
+          width: 101%;
+          height: 55px;
+          left: 50%;
+          transform: translate(-50.5%, -1px);
+          // border-bottom: 1px solid rgba(#3D3549, 0.5);
+          z-index: 0;
+          box-shadow: 0 -2px 0px rgba($upload-body-title, 0.3);
+  
+          .supervisor-image-delete {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            width: 16px;
+            height: 30px;
+            cursor: pointer;
+  
+            .appear-confirm {
+              transform: rotateX(0deg) !important;
+            }
+  
+            .confirmation {
+              border-radius: 2px;
+              position: relative;
+              width: 30px;
+              height: 60px;
+              bottom: 90px;
+              right: 7px;
+              background-color: $yellow-light;
+              text-align: center;
+              color: $gray-dark;
+              transform-origin: 0 100%;
+              transform: rotateX(90deg);
+              transition: 0.2s cubic-bezier(0.77, 0, 0.175, 1);
+  
+  
+              .rly {
+                font-family: 'cast';
+                font-size: 1.8rem;
+              }
+  
+              .accept {
+                font-size: 1.7rem;
+                &:hover {
+                  color: $red-alert;
+                }
+              }
+            }
+  
+            .trash-body {
+              transition: .1s
+            }
+            .trash-cap {
+              transition: .1s;
+            }
+  
+            &:hover {
+  
+              .trash-body {
+                opacity: 0;
+              }
+  
+              .trash-cap {
+                fill: #ff486b !important;
+                transform-origin: 50% 100%;
+                transform: translate(0px, -75px) rotate(7deg);
+              }
+            }
+          }
+  
+          .supervisor-image-name {
+            line-height: 3.2em;
+            width: 100%;
+            height: 69%;
+            padding-left: 20px;
+  
+            h2 {
+              text-transform: uppercase;
+              font-family: 'cast';
+              letter-spacing: 1px;
+              line-height: 1.39em;
+              color: transparent;
+              @include purple();
+              -webkit-background-clip: text;
+              background-clip: text;
+              //  text-shadow: 0 2px 0 rgba(#000, 0.3);
+              font-size: 2.3em;
+              // font-family: 'cast', sans-serif;
+              // letter-spacing: 0.02rem;
+            }
+          }
+  
+          .reflex {
+            content: '';
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            z-index: -1;
+            top: 0;
+            left: 0;
+            transform: translate(-100px);
+            transition: 0.1s;
+            opacity: 0.05;
+            @include shimmer-grad($color-grad);
+          }
         }
       }
+  
     }
 
     #upload-form {
       width: 100%;
-      display: inline-block;
-      height: 580px;
-      position: relative;
-
       &:before {
         content: '';
         width: 100%;
@@ -269,160 +270,274 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
       }
 
       .toCenter {
-        width: 85%;
-        min-width: 320px;
-        height: 370px;
-        position: relative;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
+        width: 100%;
 
         #baby-dummy {
+          position: absolute;
+          top: 50%;
           height: 300px;
           width: 100%;
-          overflow: hidden;
-
+          opacity: .8;
+          transform: translate(0, -60%);
+          transition: opacity .2s;
+          
           svg {
             position: relative;
             left: 50%;
-            width: 110%;
+            width: 100%;
+            height: 130%;
             min-width: 100px;
             max-width: 420px;
             transform: translate(-50%, -12%);
+          }
+
+          .title-baby-dummy {
+            position: absolute;
+            font-family: 'square';
+            text-align: center;
+            width: 100%;
+            color: rgba($gray-dark, .9);
+            font-size: 1.3rem;
+            bottom: -20px;
+          }
+
+          &:hover{
+            opacity: 1;
+            cursor: url('/img/devil-hand.png'), pointer;
           }
         }
 
         #image-upload-form {
           width: 100%;
-          height: 50px;
-          margin-top: 10px;
-
+          height: 100%;
+          top: 0;
+          left: 0;
+          position: fixed;
+          z-index: 1;
+          color: $gray-dark;
+          background-color: $yellow-zero;
+          padding-bottom: 25px;
+          display: none;
+          
           form {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            position: absolute;
+            min-width: 680px;
+            max-width: 980px;
+            height: 500px;
             text-align: center;
+            padding: 15px;
+            margin-top: -90px;
 
-            .file-upload-images {
-              display: inline-block;
-              input[type="file"]{
-                z-index: -1;
-                opacity: 0;
-                width: .1px;
-                height: .1px;
-                overflow: hidden;
+            .closer-upload-form {
+              position: absolute;
+              right: 20px;
+              font-family: 'square';
+              font-size: 1.5rem;
+              color: $red-alert;
+
+              &:hover {
+                cursor: url('/img/devil-hand.png'), pointer;
               }
 
-              label[for="file"] {
-                background-color: $upload-color-1;
-                color: $gray-add-body;
-                cursor: pointer;
-                padding: 1px 9px 3px 10px;
-                font-family: 'cast';
-                letter-spacing: 1px;
-                font-size: 2rem;
-                position: relative;
-                display: block;
-                height: 37px;
+              &:after {
+                content: '\f00d';
+                font-family: 'fontawesome';
+              }
+            }
 
-                &:before {
-                  content: '';
-                  width: 100%;
-                  height: 0.18rem;
-                  background-color: $gray-add-body;
-                  position: absolute;
-                  left: 0px;
-                  top: 17px;
+            .upload-images-title{
+              text-align: left;
+              font-family: 'lepb';
+              font-size: 2.5rem;
+              margin-bottom: 65px;
+
+            }
+            
+            .upload-images-left{
+              vertical-align: top;
+              text-align: left;
+              width: 47%;
+              min-width: 300px;
+              max-width: 550px;
+              height: 100%;
+              border: 2px solid $gray-dark;
+              display: inline-block;
+              background-color: rgba($game-background, .3);
+            }
+            
+            .upload-images-right{
+              margin-right: 40px;
+              vertical-align: top;
+              text-align: left;
+              width: 46%;
+              max-width: 550px;
+              min-width: 300px;
+              display: inline-block;
+
+              .title-upload-images {
+                display: inline-block;
+                width: 100%;
+                padding-bottom: 20px;
+  
+                label {
+                  font-family: 'lepb';
+                  font-size: 1.4rem;
+                  cursor: text;
+                  transition: .2s ease-out;
                 }
-
-                &:hover {
-                  &:before {
-                    background-color: $upload-color-1;
+                
+                input[type="text"]{
+                  line-height: 1.5rem;
+                  border-bottom: 2px solid $gray-dark;
+                  outline: none;
+                  width: 100%;
+                  font-size: 1rem;
+                  font-family: 'lepm';
+                }
+              }
+  
+              .file-upload-images {
+                display: inline-block;
+                width: 100%;
+                padding-bottom: 20px;
+  
+                label[for="file"] {
+                  line-height: 2.2rem;
+                  color: $gray-dark;
+                  cursor: pointer;
+                  font-family: 'lepb';
+                  font-size: 1.4rem;
+                  display: inline-block;
+                  width: 100%;
+                }
+              }
+  
+              .abstract-upload-images {
+                font-family: 'lepm';
+                padding-bottom: 20px;
+  
+                label[for="abstract"] {
+                  display: inline-block;
+                  width: 100%;
+                  line-height: 2.2rem;
+                  color: $gray-dark;
+                  cursor: pointer;
+                  font-family: 'lepb';
+                  font-size: 1.4rem;
+                }
+                
+                textarea {
+                  line-height: 1.16rem;
+                  border-radius: 2px;
+                  width: 100%;
+                  border: none;
+                  resize: none;
+                  height: 145px;
+                  font-family: 'lepm';
+                  font-size: 0.8rem;
+                  background-color: $yellow-zero;
+                  border: 2px solid $gray-dark;
+                  padding: 5px;
+  
+                  // &:focus {
+                  //   border: transparent;
+                  // }
+                }
+              }
+  
+              .licence-upload-images {
+                margin-top: 2px;
+                float: left;
+                width: 100%;
+                padding: 28px 0px 11px 0px;
+                border: 2px solid rgba($gray-dark, 1);
+                text-align: center;
+                border-radius: 2px;
+                background-color: rgba(rgb(240, 240, 240), 1);
+                height: 70px;
+                position: relative;
+                margin-bottom: 6px;
+  
+                .input-upload-licence-label {
+                  text-align: center;
+                  font-family: 'lepb';
+                  font-size: 1.4rem;
+                  margin-bottom: 10px;
+                  background-color: $yellow-zero;
+                  position: absolute;
+                  padding: 3px 5px;
+                  border-radius: 3px;
+                  top: -14px;
+                  left: 50%;
+                  transform: translate(-45px, 0);
+                }
+  
+                .input-upload-radio {
+                  color: white;
+                  font-size: 1rem;
+                  display: inline-block;
+                  margin-left: 8px;
+                  
+                  input[type="radio"]{
+                    opacity: 0;
+                    width: 70px;
+                    position: absolute;
+                    height: 40px;
+                    cursor: url('/img/devil-hand.png'), pointer;
+                  }
+    
+                  input[type="radio"] + span {
+                    // margin-right: 42px;
+                    color: $gray-dark;
+                    font-size: 1.1rem;
+                    font-family: 'lepm';
+                    padding: 3px 6px 3px 6px;
+                    transition: all 0.2s;
+                  }
+    
+                  input[type="radio"]:checked + span {
+                    background-color: $red-alert;
+                    border-radius: 3px;
+                  }
+    
+                  input[type="radio"]:focus + span {
+                    color: $yellow-zero;
                   }
                 }
               }
-
-            }
-
-            .input-upload-images {
-              height: 38px;
-              display: inline-block;
-              margin: 0 10px;
-
-              width: 80px;
-              position: relative;
-
-              input[type="text"]{
-                position: absolute;
-                border-bottom: 0.12em solid $gray-add-body;
-                outline: none;
-                width: 100%;
-                font-size: 2rem;
-                transition: $input-transition;
-                left: 0;
-                top: -10px;
-                font-family: 'dense';
-
-                &:hover {
-                  border-bottom: 0.12em solid $yellow-logo-light !important;
+  
+              .submit-upload-images {
+                display: inline-block;
+                float: right;
+                text-align: right;
+                margin-top: 15px;
+                margin-right: -5px;
+  
+  
+                .upload-image {
+                  background-color: $gray-dark;
+                  font-family: 'square';
+                  font-size: 1.5rem;
+                  padding: 6px 8px 4px 8px;
+                  color: $yellow-zero;
+                  border-radius: 2px;
                 }
-
-                // Focused input style
-                &:focus:not([readonly]) {
-                  border-bottom: 0.12em solid $yellow-logo-light !important;
-                  margin-top: 9px;
+  
+                button[type="submit"]{
+                  background-color: transparent;
+                  cursor: pointer;
+                  border: none;
                 }
+  
               }
-
-              label {
-                position: absolute;
-                left: 50%;
-                top: 62%;
-                transform: translate(-50%, -50%);
-                font-family: 'cast';
-                color: $upload-color-1;
-                text-align: center;
-                font-size: 2rem;
-                letter-spacing: 2px;
-                cursor: text;
-                transition: .2s ease-out;
-              }
-
-              label.active {
-                color: $shadow-light;
-              }
-
-              input.active {
-                border-bottom: 0.10em solid $upload-color-1 !important;
-                margin-top: 9px;
-              }
-            }
-
-            .input-submit-images {
-              display: inline-block;
-              margin-left: -10px;
-
-              .upload-image {
-                background: url('/img/add.svg') no-repeat left center;
-                background-size: 75%;
-                width: 34px;
-                height: 26px;
-              }
-
-              button[type="submit"]{
-                background-color: transparent;
-                cursor: pointer;
-                border: none;
-              }
-
             }
           }
         }
       }
     }
-  }
-}
-
-.big-upload-form {
-  .toCenter {
-    
   }
 }
 
