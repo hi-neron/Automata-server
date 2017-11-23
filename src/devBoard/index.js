@@ -280,7 +280,7 @@ class devBoard {
 
   createContrib (contrib, position) {
     this.contribList.push({
-      id: contrib.publicId,
+      id: contrib.publicId || contrib.id,
       contrib: new Single(contrib, this.user, position),
       position: position
     })
