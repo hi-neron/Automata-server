@@ -47,8 +47,8 @@ $color_yellow: #EAEAEA;
     border-radius: 0 50px 0 0;
     transform-origin: 50% 100%;
     top: 300px;
-    left: 5px;
-    box-shadow: 4px -4px 0 rgba(#000, .1) inset;
+    left: 0px;
+    box-shadow: 4px -4px 0 rgba(#000, .15) inset;
 
     img {
       display: inline-block;
@@ -62,7 +62,7 @@ $color_yellow: #EAEAEA;
 
   #logout {
     position: absolute;
-    left: 225px;
+    left: 220px;
     top: 248px;
     overflow: hidden;
 
@@ -72,14 +72,15 @@ $color_yellow: #EAEAEA;
       display: block;
       padding: 6px;
       font-family: 'lepl';
-      font-size: 1rem;
-      color: $game-background;
-      box-shadow: 3px -4px 0 rgba(#000, .15) inset;
+      font-size: .9rem;
+      letter-spacing: .05rem;
+      color: $game-white;
+      box-shadow: 3px -3px 0 rgba(#000, .15) inset;
       border-radius: 0 3px 0px 0px;
       position: relative;
 
       &:hover {
-        color: $gray-dark;
+        color: $purple-active;
         // background-color: $gray-dark;
       }
     }

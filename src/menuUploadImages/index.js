@@ -9,11 +9,33 @@ const request = require('superagent')
 const uploadForm = require('./uploadForm')
 const imageTemplate = require('./image-template')
 
-let $closer = $(yo`
+const d3 = require('d3')
+
+let xmlns="http://www.w3.org/2000/svg"
+let xmlns_xlink = "http://www.w3.org/1999/xlink"
+
+let closer = yo`
   <div class="closer">
-    <div class="closer-images"></div>
+    <svg class="close-icon" viewBox="0 0 15.29 15.46">
+      <defs>
+        <style>
+        .cls-close-1{
+          fill:#ffffff;
+        }
+        </style>
+      </defs>
+      <title>close</title>
+      <rect class="cls-close-1" x="6.15" y="-1.58" width="3" height="18.62" transform="translate(-3.23 7.67) rotate(-45)"/>
+      <rect class="cls-close-1" x="-1.67" y="6.23" width="18.62" height="3" transform="translate(-3.23 7.84) rotate(-45.9)"/>
+    </svg>
   </div>
-`)
+`
+
+let d3closer = d3.select(closer)
+
+d3closer
+.attr("xmlns", xmlns)
+.attr("xmlns:xlink", xmlns_xlink)
 
 //iniciar animacion
 function dummyAnimationStart (template) {
@@ -70,10 +92,15 @@ function renderImages (images, next) {
   let lastestImages = yo`<div id="lastest-images"></div>`
   let template = yo`<div id="supervisor-images-user"></div>`
   let wrapper = yo`<div class="supervisor-images-wrapper"></div>`
+  let arrowDown = yo`<div class="supervisor-images-arrow"></div>`
 
   for (let i = 0; i < images.length; i++) {
     console.log(images[i])
     OldImages.appendChild(imageTemplate(images[i]))
+  }
+
+  if (images.length > 2) {
+    wrapper.appendChild(arrowDown)
   }
 
   template.appendChild(OldImages)
@@ -84,11 +111,11 @@ function renderImages (images, next) {
 }
 
 // agrega al template el formulario de subida
-function addUploadForm ($template, images, next) {
-  $template.append(uploadForm(images))
+function addUploadForm (template, images, next) {
+  template.append(uploadForm(images))
 
-  dummyAnimationStart($template)
-  next(null, $template)
+  dummyAnimationStart(template)
+  next(null, template)
 }
 
 module.exports = function(username, cb) {
@@ -115,14 +142,14 @@ module.exports = function(username, cb) {
     }
 
     let imagesMenu = document.getElementById('images-menu-container')
-    let $imagesMenu = $(empty(imagesMenu))
-    $imagesMenu.append($template).append($closer)
+    imagesMenu = empty(imagesMenu)
+    imagesMenu.appendChild($template).appendChild(closer)
 
-    $closer.on('click', function (ev) {
+    closer.onclick = function (ev) {
       ev.preventDefault()
       let imageMenu = document.getElementById('images-menu-container')
       imageMenu.classList.remove('active-images-supervisor')
-    })
+    }
 
     cb(null, {ok: 'ok'})
   })

@@ -46,11 +46,6 @@
 }
 
 @font-face {
-    font-family: 'dense';
-    src: url('/fonts/dense.otf');
-}
-
-@font-face {
     font-family: 'lepb';
     src: url('/fonts/lep-black.otf');
 }
@@ -72,7 +67,7 @@
 
 body {
   background-color: $game-background;
-  font-family: 'dense';
+  font-family: 'lepm';
 }
 
 @keyframes mouse {
@@ -121,7 +116,7 @@ textarea {
     outline: none;
 }
 
-button, input[type='password']{
+button, input[type='password'], input[type='email']{
     &:focus {
         outline: none;
     }

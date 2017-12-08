@@ -8,15 +8,19 @@ module.exports = yo`
     <div class="signin-up">
       <div class="divisor first"></div>
       <div class="input-sign">
-        <label for="sign-username" class="label"/>nombre</label>
+        <label for="forename" class="label"/>nombre</label>
+        <input id="sign-forename" type="text" name="forename" autocomplete="off"/>
+      </div>
+      <div class="input-sign">
+        <label for="username" class="label"/>usuario</label>
         <input id="sign-username" type="text" name="username" autocomplete="off"/>
       </div>
       <div class="input-sign">
-        <label for="sign-password" class="label"/>password</label>
+        <label for="password" class="label"/>password</label>
         <input id="sign-password" type="password" name="password"/>
       </div>
       <div class="input-sign">
-        <label for="sign-email" class="label"/>email</label>
+        <label for="email" class="label"/>email</label>
         <input id="sign-email" type="email" name="email" autocomplete="off"/>
       </div>
       <div class="divisor"></div>
@@ -26,7 +30,7 @@ module.exports = yo`
         </button>
       </div>
       <div class="bottom-sign">
-        <a class="already" href="/#!/signin">Already have account</a>
+        <a class="already" href="/#!/signin">¡Ya tengo una cuenta!</a>
         <a class="facebook-signup" href="#"></a>
       </div>
     </div>

@@ -1,7 +1,7 @@
 'use strict'
 
 require('gsap')
-const noise = require('./noise.js')
+const noise = require('../utils/noise')
 const empty = require('empty-element')
 const yo = require('yo-yo')
 const uploadImages = require('../menuUploadImages')

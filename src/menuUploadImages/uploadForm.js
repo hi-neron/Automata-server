@@ -5,7 +5,7 @@ const request = require('superagent')
 const $ = require('jquery')
 const dummy = require('./dummy')
 
-let dummyButton, uploadForm
+let trigger, uploadForm
 
 function onsubmit(ev) {
   ev.preventDefault();
@@ -51,7 +51,7 @@ function onsubmit(ev) {
       }else{
         let toDraw = imageTemplate(res.body.data)
         $imagesContainer.append(toDraw)
-        dummyButton.style.display = 'none'
+        dummy.style.display = 'none'
         uploadForm.style.display = 'none'
       }
 
@@ -67,8 +67,8 @@ module.exports = function (type) {
 
   uploadForm = yo`
     <div id="image-upload-form">
-      ${closer}
       <form enctype="multipart/form-data" id="data-form-upload" onsubmit=${onsubmit}>
+        ${closer}
         <h2 class="upload-images-title">NUEVA IMAGEN</h2>
         <div class="upload-images-right">
           <div class="title-upload-images">
@@ -91,38 +91,44 @@ module.exports = function (type) {
     </div>
   `
 
-  dummyButton = yo`
-    <div id="baby-dummy">
-      ${dummy}
-      <div class="title-baby-dummy">
-        CREAR UNA PIEZA
+  let message = 'SUBIR UNA PIEZA'
+
+  let smallIcon = yo`<p class="upload-form-trigger-icon">
+  </p>`
+
+  trigger = yo`
+    <div id="upload-form-trigger">
+      <div class="dummy-container">
+        ${type > 0? smallIcon: dummy}
+      </div>
+      <div class="upload-form-trigger">
+        <p class="upload-form-trigger-label">
+          ${message}
+        </p>
       </div>
     </div>
   `
-
-  if(type > 0) {
-    dummy.style.display = 'none'
-    dummyButton.style.position = 'inherit'
-  }
 
   // events
   closer.onclick = (ev) => {
     uploadForm.style.display = 'none'
   }
-  dummyButton.onclick = (ev) => {
+
+  trigger.onclick = (ev) => {
     uploadForm.style.display = 'block'
   }
 
   let form = yo`
-  <div id="upload-form">
-    <div class="toCenter">
-      ${dummyButton}
-      ${uploadForm}
-    </div>
+  <div id="upload-form-container">
+    ${trigger}
+    ${uploadForm}
   </div>
   `
-  if (type === 0) {
-    form.classList.add('big-upload-form')
+
+  if(type > 0) {
+    dummy.style.display = 'none'
+    // dummyButton.classList.add('now-fixed')
+    form.classList.add('now-fixed')
   }
 
   // if type is normal let it pass

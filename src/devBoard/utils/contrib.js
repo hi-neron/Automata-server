@@ -36,7 +36,7 @@ class Contrib {
     this.id = data.id
     this.inProcess = data.inProcess
     this.messages = data.messages
-    this.publicId = data.publicId ? data.publicId : data.id
+    this.publicId = data.publicId || data.id
     this.rate = data.rate
     this.tags = data.tags
     this.title = data.title

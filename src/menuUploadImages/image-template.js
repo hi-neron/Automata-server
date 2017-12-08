@@ -4,7 +4,6 @@ const $ = require('jquery')
 const d3 = require('d3')
 
 module.exports = function(image) {
-
   let imageObj = new Image()
   imageObj.src = image.src
 
@@ -16,29 +15,20 @@ module.exports = function(image) {
     <svg viewBox="0 -75 414.19 530">
       <defs>
         <style>
-        .trash-cls-1 {
-          fill:url(#linear-gradient-trash-hover);
+        .trash-img-cls-1 {
+          fill: #E2E2E2;
         }
-        .trash-cls-2 {
-          fill: #fff;
+        .trash-img-cls-2 {
+          fill: #E2E2E2;
         }
-        .trash-cls-3 {
-          fill:url(#linear-gradient-trash);
+        .trash-img-cls-3 {
+          fill: #E2E2E2;
         }
         </style>
-        <linearGradient id="linear-gradient-trash" x1="207.09" y1="480" x2="207.09" y2="126.2" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stop-color="#acfae0"/>
-          <stop offset="1" stop-color="#fff"/>
-        </linearGradient>
-        <linearGradient id="linear-gradient-trash-hover" x1="207.09" y1="480" x2="207.09" y2="126.2" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stop-color="#ff1959"/>
-          <stop offset="1" stop-color="#ff486b"/>
-        </linearGradient>
       </defs>
       <title>trash</title>
-      <path class="trash-cls-1 trash-body-hover" d="M40.26,126.2V480H373.93V126.2H40.26Zm86.25,284H93.15V183.74h33.37V410.21Zm97.27,0H190.41V183.74h33.37V410.21Zm97.26,0H287.67V183.74H321V410.21Z"/>
-      <path class="trash-cls-3 trash-body" d="M40.26,126.2V480H373.93V126.2H40.26Zm86.25,284H93.15V183.74h33.37V410.21Zm97.27,0H190.41V183.74h33.37V410.21Zm97.26,0H287.67V183.74H321V410.21Z"/>
-      <path class="trash-cls-2 trash-cap" d="M292.79,77.09V0H114.56V77.09H0v54H414.19v-54H292.79Zm-37.88,0H152.45V34.65H254.91V77.09Z"/>
+      <path class="trash-img-cls-3 trash-body" d="M40.26,126.2V480H373.93V126.2H40.26Zm86.25,284H93.15V183.74h33.37V410.21Zm97.27,0H190.41V183.74h33.37V410.21Zm97.26,0H287.67V183.74H321V410.21Z"/>
+      <path class="trash-img-cls-2 trash-cap" d="M292.79,77.09V0H114.56V77.09H0v54H414.19v-54H292.79Zm-37.88,0H152.45V34.65H254.91V77.09Z"/>
     </svg>
   `
 
@@ -55,44 +45,55 @@ module.exports = function(image) {
     </div>
   `
 
-let reflex = yo`<div className="reflex"></div>`
+  let reflex = yo`
+    <div className="reflex"></div>
+  `
+
+  let loaderContainer = yo`
+    <div class="supervisor-images-loader remove-loader-images">
+      ${loader()}
+    </div>
+  `
 
   let d3trash = d3.select(trash)
 
   let template = yo`
-  <div class="supervisor-loading-image supervisor-image-single">
-    <img class="supervisor-image-main" src="${imageObj.src}" alt="${image.name}">
-    <div class="supervisor-image-awards">
-      <ul class="awards-body">
-        <li class="awards">
-          <p class="label inner-award">${image.awards.amazing}</p>
-          <div class="fa fa-heart inner-award icon"></div>
-        </li>
-        <li class="awards">
-          <p class="label inner-award">${image.awards.bastard}</p>
-          <div class="fa fa-glass inner-award icon"></div>
-        </li>
-        <li class="awards">
-          <p class="label inner-award">${image.awards.takeMyMoney}</p>
-          <div class="fa fa-credit-card-alt inner-award icon"></div>
-        </li>
-      </ul>
+    <div class="supervisor-image-single">
+      <div class="supervisor-image-main">
+        <img src="${imageObj.src}" alt="${image.name}">
+      </div>
+      <div class="supervisor-image-awards">
+        <ul class="awards-body">
+          <li class="awards">
+            <p class="label inner-award">${image.awards.amazing}</p>
+            <div class="fa fa-heart inner-award icon"></div>
+          </li>
+          <li class="awards">
+            <p class="label inner-award">${image.awards.bastard}</p>
+            <div class="fa fa-glass inner-award icon"></div>
+          </li>
+          <li class="awards">
+            <p class="label inner-award">${image.awards.takeMyMoney}</p>
+            <div class="fa fa-credit-card-alt inner-award icon"></div>
+          </li>
+        </ul>
+      </div>
+      <div class="supervisor-body-content">
+        ${reflex}
+        <div class="supervisor-image-delete">
+          ${trash}
+          ${confirm}
+        </div>
+        <div class="supervisor-image-name">
+          <h2 class="image-name">
+            ${image.name}
+          </h2>
+        </div>
+        <div class="supervisor-image-line">
+        </div>
+      </div>
+      ${loaderContainer}
     </div>
-    <div class="supervisor-body-content">
-      ${reflex}
-      <div class="supervisor-image-delete">
-        ${trash}
-        ${confirm}
-      </div>
-      <div class="supervisor-image-name">
-        <h2 class="image-name">
-          ${image.name}
-        </h2>
-      </div>
-      <div class="supervisor-image-line">
-      </div>
-    </div>
-  </div>
   `
 
   d3trash
@@ -109,20 +110,6 @@ let reflex = yo`<div className="reflex"></div>`
 
   let container = document.getElementById('images-menu-container')
   let $container = $(container)
-
-
-// mueve el reflejo cuando se hace scroll
-  function reflectMove (content) {
-    console.log(content)
-  }
-
-  $container.on('mousewheel', '#supervisor-images-user', (ev) => {
-    reflectMove(ev)
-  })
-
-  $container.on('touchmove', '#supervisor-images-user', (ev) => {
-    reflectMove(ev)
-  })
 
   // abre el dialogo de eliminar imagen
   $trash.click(function(){
@@ -147,7 +134,10 @@ let reflex = yo`<div className="reflex"></div>`
   // muestra la imagen cuando esta cargada
   imageObj.onload = function(){
     setTimeout(function() {
-      template.classList.remove('supervisor-loading-image')
+      loaderContainer.classList.remove('remove-loader-images')
+      setTimeout(() => {
+        loaderContainer.style.display = 'none'
+      }, 50);
     }, time);
   }
 

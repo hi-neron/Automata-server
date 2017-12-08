@@ -99,7 +99,6 @@ class devBoard {
     let inside = this.inside
 
     this.launcher.onclick = function(ev) {
-
       // se crea un loader
       let loader = yo`
       <div class="devboard-loader">
