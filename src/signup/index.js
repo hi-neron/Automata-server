@@ -6,8 +6,10 @@ let modal = require('../modal')
 let page = require('page')
 let template = require('./template')
 let messages = require('../messages')
+let onboarding = require('../onboarding')
 page('/signup', auth, messages, (ctx, next) => {
   let modalContainer = document.getElementById('modal-container')
+  onboarding.start()
   empty(modalContainer).appendChild(modal(template))
 })
 

@@ -121,7 +121,7 @@ let startMenu = function () {
     // visibility: 'hidden',
     opacity: 1,
     height: '0',
-    top: '300'
+    top: '310'
   })
 
   TweenMax.set(menu_static, {
@@ -181,8 +181,8 @@ let startMenu = function () {
       opacity: '1',
       ease: RoughEase.ease.config({ template: Sine.easeInOut, strength: 1.2, points: 6, taper: "none", randomize: false, clamp: false})
     }).to(logo, 0.3, {
-      height: '180',
-      top: '95',
+      height: '185',
+      top: '90',
       ease: Expo.easeOut
     }, '-=0.5').to(logoutButton, 0.4, {
       width: '56',

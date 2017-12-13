@@ -1,0 +1,288 @@
+$back-color: rgba(15, 0, 10, 1);
+
+#on-boarding-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 20;
+  $toProof: none;
+  
+  .on-boarding-black-background {
+    transform: translate(-50%, -50%);
+    position: absolute;
+    background-color: $back-color;
+    width: 2000px;
+    height: 2000px;
+  }
+
+  .on-boarding-wrapper {
+    transform: translate(-50%, -50%);
+    position: absolute;
+    
+    .on-boarding-top-container {
+      left: -300px;
+      top: -300px;
+      position: relative;
+      
+      .on-boarding-vignette {
+        .on-boarding-mask {
+          width: 600px;
+          height: 600px;
+          top: -105px;
+          position: absolute;
+          fill: $back-color;
+          display: $toProof;
+        }
+
+        .on-boarding-scene {
+          position: absolute;
+          left: 133px;
+          top: 20px;
+
+          .on-boarding-background {
+            position: absolute;
+            left: -35px;
+            top: -10px;
+            width: 400px;
+            height: 350px;
+            background:url('../img/onboarding.png') ;
+            background-position-y: 100%;
+            background-size: 100%;
+            display: $toProof;
+          }
+
+          .on-boarding-skull {
+            position: relative;
+
+            .on-boarding-spine {
+              top: 175px;
+              left: 120px;
+              position: relative;
+
+              .on-boarding-sp1 {
+                position: absolute;
+                left: 115px;
+                top: 35px;
+                width: 45px;
+                height: 45px;
+                background:url('../img/onboarding.png') ;
+                background-size: 900%;
+                background-position-y: 0px;
+                background-position-x: 0px;
+              }
+              .on-boarding-sp2 {
+                position: absolute;
+                left: 123px;
+                top: 55px;
+                width: 45px;
+                height: 45px;
+                background:url('../img/onboarding.png') ;
+                background-size: 900%;
+                background-position-y: 0px;
+                background-position-x: -46px;
+              }
+              .on-boarding-sp3 {
+                position: absolute;
+                left: 130px;
+                top: 73px;
+                width: 45px;
+                height: 45px;
+                background:url('../img/onboarding.png');
+                background-size: 900%;
+                background-position-y: 0px;
+                background-position-x: -92px;
+              }
+              
+              .on-boarding-sp4 {
+                position: absolute;
+                left: 128px;
+                top: 94px;
+                width: 45px;
+                height: 45px;
+                background:url('../img/onboarding.png');
+                background-size: 900%;
+                background-position-y: 0px;
+                background-position-x: -131px;
+              }
+            }
+
+            .on-boarding-head {
+              top: 120px;
+              left: 70px;
+              position: relative;
+
+              .on-boarding-eye {
+                position: absolute;
+                left: 115px;
+                top: 35px;
+                width: 53px;
+                height: 53px;
+                background:url('../img/onboarding.png') ;
+                background-position-y: -102px;
+                background-position-x: -5px;
+                background-size: 850%;
+              }
+
+              .on-boarding-eye-on {
+                position: absolute;
+                left: 115px;
+                top: 35px;
+                width: 53px;
+                height: 53px;
+                background:url('../img/onboarding.png') ;
+                background-position-y: -102px;
+                background-position-x: -62px;
+                background-size: 850%;
+              }
+
+              .on-boarding-cranium {
+                position: absolute;
+                .on-boarding-cranium-bone {
+                  position: absolute;
+                  left: -20px;
+                  width: 238px;
+                  height: 110px;
+                  background:url('../img/onboarding.png') ;
+                  background-position-y: -388px;
+                  background-position-x: -3px;
+                  background-size: 175%;
+                }
+                .on-boarding-cranium-shadow {
+                  position: absolute;
+                  left: -30px;
+                  top: 20px;
+                  width: 238px;
+                  height: 90px;
+                  background:url('../img/onboarding.png') ;
+                  background-position-y: -60px;
+                  background-position-x: 100%;
+                  background-size: 175%;
+                }
+              }
+              
+              .on-boarding-land {
+                position: absolute;
+                bottom: -225px;
+                left: -104px;
+                width: 238px;
+                height: 160px;
+                background:url('../img/onboarding.png') ;
+                background-size: 100%;
+                background-position-y: -479px;
+                background-position-x: -2px;
+                width: 400px;
+                display: $toProof;
+
+              }
+
+              .on-boarding-shadow-bottom {
+                display: $toProof;
+                position: absolute;
+                top: 70px;
+                left: -70px;
+                width: 308px;
+                height: 215px;
+                background:url('../img/onboarding.png') ;
+                background-position-y: -155px;
+                background-position-x: 50px;
+                background-size: 120%;
+              }
+
+              .on-boarding-tongue {
+                position: absolute;
+                width: 148px;
+                height: 58px;
+                background:url('../img/onboarding.png');
+                background-size: 250%;
+                background-position-y: 0;
+                background-position-x: 100%;
+              }
+
+              .on-boarding-jaw {
+                position: absolute;
+
+                .on-boarding-jaw-bone {
+                  top: 15px;
+                  left: 5px;
+                  position: absolute;
+                  width: 166px;
+                  height: 98px;
+                  background:url('../img/onboarding.png') ;
+                  background-size: 250%;
+                  background-position-x: 99%;
+                  background-position-y: -398px;
+                }
+
+                .on-boarding-jaw-shadow {
+                  top: 13px;
+                  left: -2px;
+                  position: absolute;
+                  width: 166px;
+                  height: 94px;
+                  background:url('../img/onboarding.png') ;
+                  background-size: 250%;
+                  background-position-x: 99%;
+                  background-position-y: -302px;
+                }
+
+              }
+            }
+
+          }
+
+          .on-boarding-nuage1 {
+            position: absolute;
+            left: 125px;
+            top: 130px;
+            width: 223px;
+            height: 123px;
+            background:url('../img/onboarding.png') ;
+            background-position-y: 520px;
+            background-size: 200%;
+          }
+
+          .on-boarding-nuage2 {
+            position: absolute;
+            left: 35px;
+            top: 160px;
+            width: 223px;
+            height: 123px;
+            background:url('../img/onboarding.png') ;
+            background-position-y: 640px;
+            background-size: 200%;
+          }
+        }
+      }
+
+    }
+
+    .on-boarding-dialog-container {
+      width: 360px;
+      height: 70px;
+      left: 50%;
+      top: 110px;
+      margin-left: -180px;
+      text-align: center;
+      color: $white-skull;
+      font-family: 'square';
+      letter-spacing: .2rem;
+      position: absolute;
+
+      .on-boarding-dialog-top {
+        font-size: 1.3rem;
+        position: absolute;
+        width: 100%;
+        top: 0;
+      }
+      .on-boarding-dialog-bottom {
+        width: 100%;
+        font-size: 1.3rem;
+        padding-top: 10px;
+        position: absolute;
+        bottom: 0;
+      }
+    }
+
+  }
+
+}

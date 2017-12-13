@@ -1,7 +1,8 @@
 @mixin purple($top, $bottom){
 // $top: rgb(255, 190, 204);
 // $bottom: $red-alert;
-// 29059974
+// 
+
 
 background: $top;
 background: -moz-linear-gradient(top, $top 0%, $bottom 70%, $bottom 72%);
@@ -159,8 +160,8 @@ $letter-color: $gray-dark;
           overflow: hidden;
           
           img {
-            // -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
-            // filter: grayscale(100%);
+            -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
+            filter: grayscale(100%);
             width: 100%;
           }
         }
