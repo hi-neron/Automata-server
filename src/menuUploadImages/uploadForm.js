@@ -5,13 +5,15 @@ const request = require('superagent')
 const $ = require('jquery')
 const dummy = require('./dummy')
 const Cropper = require('cropperjs')
+const loader = require('../loader')()
 
-let trigger, uploadForm, cropper
+let trigger, uploadForm, cropper, loaderScreen
 
 function onsubmit(ev) {
   ev.preventDefault();
   if (cropper) {
     let data = new FormData(this);
+    loaderScreen.classList.add('show')
 
     cropper.getCroppedCanvas().toBlob((blob) => {
       data.append('file', blob)
@@ -20,6 +22,7 @@ function onsubmit(ev) {
       .send(data)
       .end(function (err, res) {
         // This is the user uploaded images container
+        loaderScreen.classList.remove('show')
         console.log(res.body)
         let $imagesContainer = $('#lastest-images')
   
@@ -80,10 +83,17 @@ module.exports = function (type) {
     </div>
   `
 
+  loaderScreen = yo`
+    <div id="upload-image-loader-screen">
+      ${loader}
+    </div>
+  `
+
   console.log(type)
 
   uploadForm = yo`
     <div id="image-upload-form">
+      ${loaderScreen}
       <div class="image-upload-form-wrapper">
       <h2 class="upload-images-title">CREADOR DE HISTORIAS</h2>
       ${closer}

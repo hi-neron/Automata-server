@@ -436,13 +436,14 @@ function tooltipForPeople ($body, sponsors) {
 }
 
 class Skill {
-  constructor (x, y, size, skills, username) {
+  constructor (x, y, size, skills, username, images) {
     this.x = x
     this.y = y
     this.size = size
     this.skills = skills
     this.username = username
     this.$skillContainer = $('<div></div>')
+    this.images = images
     this.init()
   }
 
@@ -457,23 +458,23 @@ class Skill {
       left: _thisY * _thisSize + 'px',
       width: _thisSize + 'px',
       height: _thisSize + 'px'
-    }).html(skillTemplate(this.skills))
+    }).html(skillTemplate(this.skills, this.images))
 
     $grid.append(this.$skillContainer)
 
     switch (this.skills.length) {
-      case 1:
-        this.$skillContainer.find('.skills-single').css({
-          width: '100%',
-          height: '100%'
-        })
-        break;
-      case 2:
-        this.$skillContainer.find('.skills-single').css({
-          width: '50%',
-          height: '50%'
-        })
-        break;
+      // case 1:
+      //   this.$skillContainer.find('.skills-single').css({
+      //     width: '100%',
+      //     height: '100%'
+      //   })
+      //   break;
+      // case 2:
+      //   this.$skillContainer.find('.skills-single').css({
+      //     width: '50%',
+      //     height: '50%'
+      //   })
+      //   break;
       default:
         this.$skillContainer.find('.skills-single').css({
           width: '33.3%',
@@ -579,7 +580,8 @@ class Image {
 
   static skillBoxCreator (x, y, size, skills, user) {
     let username = user.username
-    return new Skill(x, y, size, skills, username)
+    let images = user.images
+    return new Skill(x, y, size, skills, username, images)
   }
 
   // skillTemplateOn (skillTemplate) {

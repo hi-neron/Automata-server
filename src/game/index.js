@@ -12,7 +12,7 @@ class Game {
     this.user = user
     this.size = 280;
 
-    console.log('start game')
+    console.log(this.user)
 
     let drawImages = this.drawImages.bind(this)
 
