@@ -1,4 +1,5 @@
 @charset "UTF-8";
+@import "cropper";
 
 // reset
 @import 'reset';
@@ -67,7 +68,7 @@
 }
 
 body {
-  background-color: $game-background;
+  background-color: $gray-light;
   font-family: 'lepm';
 }
 

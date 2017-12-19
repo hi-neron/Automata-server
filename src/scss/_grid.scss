@@ -126,18 +126,14 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
   overflow: hidden;
   position: fixed;
   z-index: 0;
-  top: 15px;
-  left: -15px;
 
   .game-scrollbars{
-    width: 100%;
-    height: 100%;
+    width: 102%;
+    height: 102%;
     position: absolute;
     overflow: scroll;
     z-index: 0;
     text-align: center;
-    top: 15px;
-    left: 15px;
 
     .game-grid {
       padding: 250px;
@@ -153,7 +149,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
           // el cuerpo de las piezas se ajusta desde js
           .corpose-hover {
             width: 70%;
-            height: 100%;
+            height: 70%;
             position: absolute;
             top: 50%;
             left: 50%;
@@ -168,79 +164,75 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
                 opacity: 1;
               }
             }
+
             .header {
               opacity: 0;
               transition: 0.05s ease-in;
+              width: 100%;
+              top: 0;
+              background-color: #222;
+              padding: 5px;
+              text-align: left;
+              border-radius: 2px;
+              border-right: 2px solid rgba($red-alert-light, 0.35);
+              border-left: 2px solid rgba($red-alert-light, 0.35);
+              box-shadow: 0 5px 0 rgba(#000, .35);
+              overflow: hidden;
+              position: relative;
+
+              &:before {
+                border-radius: 2px;
+                box-shadow: 0 2px 0 rgba(#000, 0.25);
+                border-left: 2px solid rgba(#fff, 0.25);
+                border-right: 2px solid rgba(#fff, 0.25);
+                content: '';
+                width: 100%;
+                position: absolute;
+                z-index: -1;
+
+              }
+
+              &:after {
+                content: '';
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+                position: absolute;
+                opacity: 0.15;
+                z-index: 0;
+                @include shimmer-grad($color-grad);
+              }
+
 
               .name {
                 display: inline-block;
                 text-transform: uppercase;
-                font-family: 'cast';
+                font-family: 'lepm';
                 color: white;
-                font-size: 2.2rem;
-                padding: 0 7px 25px 7px;
-                letter-spacing: 1px;
-                margin-top: 45%;
+                font-size: 1.4rem;
                 margin-bottom: 3px;
-                line-height: 1.1em;
-                min-width: 110px;
+                margin-right: 3px;
+                line-height: 1.6rem;
+                min-width: 20px;
                 position: relative;
-                color:transparent;
-                @include purple();
-                -webkit-background-clip: text;
-                background-clip: text;
-                border-radius: 2px;
                 text-shadow: 0 2px 0 rgba(#000, 0.3);
                 cursor: pointer;
-
-                &:before {
-                  border-radius: 2px;
-                  box-shadow: 0 2px 0 rgba(#000, 0.25);
-                  border-left: 2px solid rgba(#fff, 0.25);
-                  border-right: 2px solid rgba(#fff, 0.25);
-                  content: '';
-                  width: 100%;
-                  height: 100%;
-                  position: absolute;
-                  z-index: -1;
-                  top: 0;
-                  left: 0;
-                  background-color: #222;
-                }
-
-                &:after {
-                  content: '';
-                  width: 100%;
-                  height: 100%;
-                  position: absolute;
-                  top: 0;
-                  left: 0;
-                  opacity: 0.08;
-                  @include shimmer-grad($color-grad);
-                }
-
               }
 
               .from {
-                font-family: 'dense';
-                font-size: 1.3rem;
-                margin-top: -30px;
-                left: 50%;
-                text-align: center;
-                transform: translate(-50%, 0);
-                position: absolute;
+                font-family: 'lepm';
+                font-size: 1rem;
+                text-align: left;
+                display: inline-block;
                 color: $display-letters;
-                text-shadow: 0px 0px 6px rgba($display-letters-outer, 0.60);
-                width: 50%;
                 padding: 2px 0 3px 0;
                 cursor: pointer;
 
                 &:before {
                   content: 'by ';
-                  left: 50%;
                   vertical-align: top;
-                  font-size: 0.8rem;
-                  margin-left: -4px;
+                  font-size: 0.7rem;
                   color: white;
                   margin-top: -8px;
                 }
@@ -251,26 +243,20 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
               position: relative;
               width: 140px;
               height: 28px;
-              bottom: -110px;
+              bottom: -170px;
               margin-bottom: -3px;
               left: 50%;
-              border-left: 2px solid rgba(#fff, 0.7);
-              border-right: 2px solid rgba(#fff, 0.7);
+              border-left: 2px solid rgba(#fff, 0.9);
+              border-right: 2px solid rgba(#fff, 0.9);
               margin-left: -70px;
               border-radius: 1px;
               box-shadow: 0 0 2px rgba(#000, 0.5);
               transition: .1s ease-out;
-              -webkit-transition: all .13s cubic-bezier(0.900, 0.025, 0.245, 1); /* older webkit */
-              -webkit-transition: all .13s cubic-bezier(0.900, 0.025, 0.245, 1.445); 
-                -moz-transition: all .13s cubic-bezier(0.900, 0.025, 0.245, 1.445); 
-                  -o-transition: all .13s cubic-bezier(0.900, 0.025, 0.245, 1.445); 
-                      transition: all .13s cubic-bezier(0.900, 0.025, 0.245, 1.445); /* custom */
-
-              -webkit-transition-timing-function: cubic-bezier(0.900, 0.025, 0.245, 1); /* older webkit */
-              -webkit-transition-timing-function: cubic-bezier(0.900, 0.025, 0.245, 1.445); 
-                -moz-transition-timing-function: cubic-bezier(0.900, 0.025, 0.245, 1.445); 
-                  -o-transition-timing-function: cubic-bezier(0.900, 0.025, 0.245, 1.445); 
-                      transition-timing-function: cubic-bezier(0.900, 0.025, 0.245, 1.445); /* custom */
+              -webkit-transition: all .33s cubic-bezier(0.900, 0.025, 0.245, 1); /* older webkit */
+              -webkit-transition: all .33s cubic-bezier(0.900, 0.025, 0.245, 1.445); 
+                -moz-transition: all .33s cubic-bezier(0.900, 0.025, 0.245, 1.445); 
+                  -o-transition: all .33s cubic-bezier(0.900, 0.025, 0.245, 1.445); 
+                      transition: all .33s cubic-bezier(0.900, 0.025, 0.245, 1.445); /* custom */
 
               &:before {
                 content: '';
@@ -306,41 +292,41 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
               $background-tooltip: $display-letters;
 
               .tooltip-people {
-                box-shadow: 0 0 3px rgba($background-tooltip, 0.5),
-                            inset 0 -1px 0 rgba($gray-dark, 0.1);
                 position: absolute;
-                border-top: 1px solid rgba(#fff, 0.3);
-                border-left: 1px solid rgba(#fff, 0.3);
-                border-right: 1px solid rgba(#fff, 0.3);
+                border-top: 2px solid rgba($purple-active, 0.5);
+                border-left: 2px solid rgba($purple-active, 0.5);
+                border-right: 2px solid rgba($purple-active, 0.5);
                 transform-style: preserve-3d;
                 bottom: 28px;
                 left: 50%;
                 min-width: 138px;
-                max-height: 40px;
-                background-color: rgba($background-tooltip, 0.9);
+                max-height: 44px;
+                background-color: rgba($purple-active, 0.9);
                 border-radius: 1px 1px 0 0;
                 padding: 3px;
-                font-size: 1.1rem;
-                color: $color-tooltip;
+                font-size: 1rem;
                 transform-origin: 50% 100%;
                 transform: rotateX(90deg) translate(-50%, 0);
                 transition: 0.1s ease-out;
 
                 .people-container {
                   display: inline-block;
+                  font-size: 0.8rem;
+                  font-family: 'lepl';
+
                   .first-user {
-                    color: $gray-dark;
                     display: inline-block;
                     margin-right: 0px;
+                    color: rgb(255, 220, 246);
                   }
 
                   .others {
                     .sponsor-names {
-                      color: $gray-dark;
                       display: inline-block;
                       margin-right: 2px;
                       padding-left: 2px;
-                      text-decoration: underline;
+                      text-decoration: none;
+                      color: rgb(255, 187, 252);
 
                       &:nth-child(2){
                         &:before {
@@ -375,8 +361,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
                   margin-top: 2px;
                   vertical-align: middle;
                   padding-left: 2px;
-                  font-family: 'Dense';
-                  font-size: 1em;
+                  font-family: 'lepl';
+                  font-size: 0.8rem;
                 }
               }
             }
@@ -404,7 +390,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
           left: 50%;
           width: 8px;
           height: 8px;
-          background-color: #ddd !important;
+          background-color: $gray-light !important;
           border-top: 1px solid white;
           box-shadow: 0 1px 2px rgba(#000, 0.5),
                       inset 0 -2px 3px rgba(#000, 0.2);

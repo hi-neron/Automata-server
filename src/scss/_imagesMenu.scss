@@ -1,3 +1,16 @@
+@mixin background-body() {
+  $color: rgb(196, 196, 196);
+  $sides: rgba($color, 1);
+  $sidesX: rgba($color, .98);
+  $center: rgba($color, .95);
+    /* Permalink - use to edit and share this g333333t: http://colorzilla.com/gradient-editor/#212121+0,212121+51,212121+99&1+0,0.8+51,1+100 */
+  background: -moz-linear-gradient(top, $sides 0%, $sidesX 30%, $center 50%, $sidesX 70%, $sides 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, $sides 0%, $sidesX 30%, $center 50%, $sidesX 70%,$sides 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, $sides 0%, $sidesX 30%, $center 50%, $sidesX 70%,$sides 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#212121', endColorstr='#212121',GradientType=0 ); /* IE6-9 */
+}
+
+
 @mixin purple($top, $bottom){
 // $top: rgb(255, 190, 204);
 // $bottom: $red-alert;
@@ -26,7 +39,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
   background-image: -ms-linear-gradient(top left,rgba(0, 0, 0, 0) 15%,$color 15.6%,rgba(0, 0, 0, 0) 16.7%,rgba(0, 0, 0, 0) 28.6%,$color 28.7%,$color 33.8%,rgba(0, 0, 0, 0) 34%,rgba(0, 0, 0, 0) 36.7%,$color 36.8%,$color 37%,rgba(0, 0, 0, 0) 37.2%,rgba(0, 0, 0, 0) 38%,rgba(0, 0, 0, 0) 44%,$color 44.1%,$color 46.5%,rgba(0, 0, 0, 0) 46.6%,rgba(0, 0, 0, 0) 64.7%,$color 64.8%,$color 66.7%,rgba(255, 255, 255, 0) 66.8%);
 }
 
-$background-color: rgba(130, 130, 130, .98);
+$background-color: $gray-light;
 $back-creator: $red-alert;
 $color-id-white: rgb(235, 235, 235);
 $color-id: $white-menus;
@@ -34,6 +47,9 @@ $back-containers: $white-menus;
 $letter-colors: rgba($gray-dark, .9);
 $letter-color: $gray-dark;
 
+#image-uploaded {
+  max-width: 100%;
+}
 .active-images-supervisor {
   left: 0px !important;
 }
@@ -43,34 +59,23 @@ $letter-color: $gray-dark;
 }
 
 .now-fixed {
-  height: 84px;
+  height: 90px !important;
   background-color: $back-creator;
   width: 100%;
-  position: absolute;
-  bottom: 100px;
+  bottom: 0px !important;
 }
 
 #images-menu-container {
   width: 100%;
   max-width: 250px;
   height: 100%;
-  background-color: $background-color;
+  @include background-body;
   position: fixed;
   z-index: 10;
   left: -490px;
   transition: 0.2s ease-out;
   box-shadow: 5px 0 0 rgba($gray-dark, .30);
   
-  &:after {
-    content: '';
-    position: absolute;
-    width: 1px;
-    height: 100%;
-    background-color: $white-menus;
-    right: 0px;
-    top: 0;
-    opacity: .5;
-  }
 
   .closer {
     width: 45px;
@@ -131,7 +136,7 @@ $letter-color: $gray-dark;
       height: 100%;
       overflow-y: auto;
       width: 265px;
-      padding-bottom: 46px;
+      padding-bottom: 75px;
   
       .supervisor-images-loader {
         position: absolute;
@@ -327,30 +332,48 @@ $letter-color: $gray-dark;
 
     #upload-form-container {
       position: absolute;
-      top: 50%;
       width: 100%;
-
+      height: 100%;
+      bottom: 0;
+      left: 0;
 
       #upload-form-trigger {
         position: absolute;
-        top: 0;
-        left: 0;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
         width: 100%;
-        height: 250px;
+        // margin-top: 130px;
 
-        .dummy-container {
+        .icon-container {
           position: absolute;
           width: 100%;
-          height: 300px;
-          top: 50%;
-          margin-top: -150px;
+          // height: 300px;
+          // top: 50%;
+          margin-top: -48px;
+          background-color: yellow;
+          
+          .upload-form-trigger-icon {
+            transform: translate(-50%, -50%);
+            position: absolute;
+            top: 33px;
+            width: 23px;
+            height: 26px;
+            left: 50%;
+            background: url("/img/buttons.png");
+            background-position-x: -46px;
+            background-size: 500%;
+            
+          }
 
           svg {
+            opacity: 0.85;
             position: absolute;
             left: 50%;
             width: 120%;
-            height: 300px;
-            transform: translate(-50%, -12%);
+            height: 340px;
+            margin-top: -90px;
+            transform: translate(-50%, -50%);
           }
         }
 
@@ -358,41 +381,38 @@ $letter-color: $gray-dark;
           font-family: 'lepb';
           text-align: center;
           width: 100%;
-          font-size: 1rem;
-          bottom: 14px;
+          font-size: 1.2rem;
           color: $gray-dark;
-          height: 30px;
+          height: 40px;
+          position: absolute;
+          bottom: -38px;
           padding-top: 8px;
-          
-          .upload-form-trigger-icon {
-            width: 23px;
-            height: 26px;
-            background: url("/img/images-icon.png") no-repeat center center;
-            background-size: 100%;
-            display: inline-block;
-          }
-          
-          .upload-form-trigger-icon-label {
-            padding-top: 4px;
-            @include purple(rgba($letter-color, 1), rgba($letter-color, .8));
-            color:transparent;
-            -webkit-background-clip: text;
-            background-clip: text;
-            display: inline-block;
-            width: 100%;
-          }
+          opacity: .8;
+
         }
         
-        &:hover{
+        &:hover {
           cursor: url('/img/devil-hand.png'), pointer;
-          .title-baby-dummy {
-            .title-icon-new {
-              background: url("/img/images-icon-over.png") no-repeat center center;
-              background-size: 100%;
+          .icon-container {
+            .upload-form-trigger-icon {
+              background-position-x: -70px;
+            }
+
+            .upload-form-trigger {
+              color: $red-alert;
+            }
+            svg {
+              opacity: .9;
             }
           }
+          background-position-x: -70px;
         }
       }
+
+      $ct: #545454;
+      $cb: $game-background;
+      $cc: $red-alert;
+      $cbu: $game-background;
 
       #image-upload-form {
         width: 100%;
@@ -400,228 +420,271 @@ $letter-color: $gray-dark;
         top: 0;
         left: 0;
         position: fixed;
-        z-index: 1;
-        color: $gray-dark;
-        background-color: $yellow-zero;
+        z-index: 10;
+        color: $ct;
+        background-color: $cb;
         padding-bottom: 25px;
         display: none;
-        
-        form {
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
+        color: ct;
+
+        .closer-upload-form {
           position: absolute;
-          min-width: 680px;
-          max-width: 980px;
-          height: 500px;
-          text-align: center;
-          padding: 15px;
-          margin-top: -90px;
+          right: 20px;
+          top: 0;
+          font-size: 2rem;
+          color: $cc;
 
-          .closer-upload-form {
-            position: absolute;
-            right: 20px;
-            font-family: 'square';
-            font-size: 1.5rem;
-            color: $red-alert;
-
-            &:hover {
-              cursor: url('/img/devil-hand.png'), pointer;
-            }
-
-            &:after {
-              content: '\f00d';
-              font-family: 'fontawesome';
-            }
+          &:hover {
+            cursor: url('/img/devil-hand.png'), pointer;
           }
 
-          .upload-images-title{
-            text-align: left;
-            font-family: 'lepb';
-            font-size: 2.5rem;
-            margin-bottom: 65px;
-
+          &:after {
+            content: '\f00d';
+            font-family: 'fontawesome';
           }
-          
-          .upload-images-left{
+        }
+
+        .upload-images-title{
+          text-align: left;
+          font-family: 'lepb';
+          font-size: 2.5rem;
+          margin-bottom: 35px;
+          width: 260px;
+         
+
+        }
+
+        .image-upload-form-wrapper {
+          text-align: left;
+          top: 20px;
+          position: absolute;
+          width: 100%;
+          min-height: 360px;
+          padding: 4%;
+          vertical-align: top;
+
+          .form-wrappers {
             vertical-align: top;
-            text-align: left;
-            width: 47%;
-            min-width: 300px;
-            max-width: 550px;
-            height: 100%;
-            border: 2px solid $gray-dark;
+            border-radius: 3px;
             display: inline-block;
-            background-color: rgba($game-background, .3);
+            width: 25%;
+            min-width: 270px;
+            max-width: 320px;
+            margin-right: 50px;
           }
-          
-          .upload-images-right{
-            margin-right: 40px;
-            vertical-align: top;
-            text-align: left;
-            width: 46%;
-            max-width: 550px;
-            min-width: 300px;
-            display: inline-block;
 
-            .title-upload-images {
+          #upload-form-body {
+            .upload-images-right{
+              vertical-align: top;
+              text-align: left;
+              width: 330px;
               display: inline-block;
-              width: 100%;
-              padding-bottom: 20px;
-
-              label {
+  
+              .title-upload-images {
+                display: inline-block;
+                padding-bottom: 30px;
                 font-family: 'lepb';
-                font-size: 1.4rem;
-                cursor: text;
-                transition: .2s ease-out;
+                font-size: 2.2rem;
+
+                label {
+                  width: 100%;
+                  display: inline-block;
+                }
+  
+                input {
+                  color: $ct;
+                  width: 270px;
+                  font-family: 'lepl';
+                  font-size: 1.3rem;
+                  line-height: 1.5;
+                  border-bottom: 3px solid $ct;
+                }
               }
-              
-              input[type="text"]{
-                line-height: 1.5rem;
-                border-bottom: 2px solid $gray-dark;
-                outline: none;
-                width: 100%;
-                font-size: 1rem;
+  
+              .abstract-upload-images {
                 font-family: 'lepm';
-              }
-            }
-
-            .file-upload-images {
-              display: inline-block;
-              width: 100%;
-              padding-bottom: 20px;
-
-              label[for="file"] {
-                line-height: 2.2rem;
-                color: $gray-dark;
-                cursor: pointer;
-                font-family: 'lepb';
-                font-size: 1.4rem;
-                display: inline-block;
-                width: 100%;
-              }
-            }
-
-            .abstract-upload-images {
-              font-family: 'lepm';
-              padding-bottom: 20px;
-
-              label[for="abstract"] {
-                display: inline-block;
-                width: 100%;
-                line-height: 2.2rem;
-                color: $gray-dark;
-                cursor: pointer;
-                font-family: 'lepb';
-                font-size: 1.4rem;
-              }
-              
-              textarea {
-                line-height: 1.16rem;
-                border-radius: 2px;
-                width: 100%;
-                border: none;
-                resize: none;
-                height: 145px;
-                font-family: 'lepm';
-                font-size: 0.8rem;
-                background-color: $yellow-zero;
-                border: 2px solid $gray-dark;
-                padding: 5px;
-
-                // &:focus {
-                //   border: transparent;
-                // }
-              }
-            }
-
-            .licence-upload-images {
-              margin-top: 2px;
-              float: left;
-              width: 100%;
-              padding: 28px 0px 11px 0px;
-              border: 2px solid rgba($gray-dark, 1);
-              text-align: center;
-              border-radius: 2px;
-              background-color: rgba(rgb(240, 240, 240), 1);
-              height: 70px;
-              position: relative;
-              margin-bottom: 6px;
-
-              .input-upload-licence-label {
-                text-align: center;
-                font-family: 'lepb';
-                font-size: 1.4rem;
-                margin-bottom: 10px;
-                background-color: $yellow-zero;
-                position: absolute;
-                padding: 3px 5px;
-                border-radius: 3px;
-                top: -14px;
-                left: 50%;
-                transform: translate(-45px, 0);
-              }
-
-              .input-upload-radio {
-                color: white;
-                font-size: 1rem;
-                display: inline-block;
-                margin-left: 8px;
+                padding-bottom: 20px;
+  
+                label[for="abstract"] {
+                  display: inline-block;
+                  width: 100%;
+                  line-height: 2.2rem;
+                  cursor: pointer;
+                  font-family: 'lepb';
+                  font-size: 1.4rem;
+                }
                 
-                input[type="radio"]{
-                  opacity: 0;
-                  width: 70px;
-                  position: absolute;
-                  height: 40px;
-                  cursor: url('/img/devil-hand.png'), pointer;
-                }
-  
-                input[type="radio"] + span {
-                  // margin-right: 42px;
-                  color: $gray-dark;
-                  font-size: 1.1rem;
+                textarea {
+                  line-height: 1.16rem;
+                  border-radius: 2px;
+                  width: 100%;
+                  border: none;
+                  resize: none;
+                  height: 145px;
                   font-family: 'lepm';
-                  padding: 3px 6px 3px 6px;
-                  transition: all 0.2s;
-                }
+                  font-size: 0.8rem;
+                  background-color: $yellow-zero;
+                  border: 2px solid $gray-dark;
+                  padding: 5px;
   
-                input[type="radio"]:checked + span {
-                  background-color: $red-alert;
-                  border-radius: 3px;
-                }
-  
-                input[type="radio"]:focus + span {
-                  color: $yellow-zero;
+                  // &:focus {
+                  //   border: transparent;
+                  // }
                 }
               }
-            }
+  
+              .licence-upload-images {
+                margin-top: 15px;
+                float: left;
+                width: 270px;
+                padding: 6px;
+                padding-top: 10px;
+                border: 3px solid rgba($ct, 1);
+                text-align: center;
+                // background-color: rgba(rgb(240, 240, 240), 1);
+                height: 76px;
+                position: relative;
+                border-radius: 3px;
+                margin-top: 190px;
+  
+                .licence-label {
+                  position: absolute;
+                  font-size: 1.3rem;
+                  font-family: 'lepb';
+                  top: -19px;
+                  padding: 4px;
+                  background-color: $cb;
+                }
+  
+                .upload-images-radio {
+                  color: $ct;
+                  font-size: 1rem;
+                  display: inline-block;
+                  line-height: 1.6rem;
+                  width: 100%;
+                  text-align: left;
 
+                  &:before {
+                    content: '\f25e';
+                    font-family: 'fontawesome';
+                    display: inline-block;
+                    font-size: 1.4rem;
+                  }
+  
+                  input[type="radio"]{
+                    opacity: 0;
+                    width: 100%;
+                    position: absolute;
+                    height: 25px;
+                    cursor: url('/img/devil-hand.png'), pointer;
+                  }
+    
+                  input[type="radio"] + span {
+                    font-size: 1.1rem;
+                    font-family: 'lepm';
+                    padding: 3px 6px 3px 6px;
+                    transition: all 0.2s;
+                  }
+    
+                  input[type="radio"]:checked + span {
+                    background-color: $cc;
+                    color: $cbu;
+                    border-radius: 3px;
+                  }
+    
+                  input[type="radio"]:focus + span {
+                    color: $yellow-zero;
+                  }
+  
+                  .input-upload-licence-label {
+                    text-align: center;
+                    font-family: 'lepb';
+                    font-size: 1.4rem;
+                    border-radius: 3px;
+                    left: 50%;
+                  }
+                }
+  
+              }
+            }
+  
             .submit-upload-images {
               display: inline-block;
-              float: right;
-              text-align: right;
-              margin-top: 15px;
-              margin-right: -5px;
-
-
+              width: 100%;
+              margin-top: 40px;
+              text-align: left;
+  
               .upload-image {
-                background-color: $gray-dark;
-                font-family: 'square';
-                font-size: 1.5rem;
-                padding: 6px 8px 4px 8px;
-                color: $yellow-zero;
-                border-radius: 2px;
+                background-color: $cc;
+                font-family: 'lepm';
+                font-size: 2rem;
+                padding: 3px 6px 4px 6px;
+                color: $cbu;
+                border-radius: 3px;
               }
-
+  
               button[type="submit"]{
                 background-color: transparent;
                 cursor: pointer;
                 border: none;
               }
+            }
+          }
+  
+          .upload-form-image-viewer {
+            width: 30% !important;
 
+            .file-upload-images {
+              display: inline-block;
+              width: 100%;
+              padding-bottom: 30px;
+              
+              label[for="file"] {
+                line-height: 2.2rem;
+                cursor: pointer;
+                font-family: 'lepb';
+                font-size: 2rem;
+                display: inline-block;
+                width: 100%;
+              }
+              input[type="file"] {
+                margin: 10px;
+                text-align: center;
+              }
+            }
+            
+            #image-upload-container {
+              width: 100%;
+              height: 320px;
+              // border: 3px solid $ct;
+              background-color: $ct;
+              border-radius: 3px;
+              margin-top: 20px;
+            }
+          }
+          .upload-form-article {
+            label {
+              width: 100%;
+              display: inline-block;
+              font-family: 'lepb';
+              font-size: 2rem;
+              margin-bottom: 20px;
+            }
+            textarea[name='article'] {
+              display: inline-block;
+              resize: none;
+              width: 100%;
+              height: 324px;
+              background-color: transparent;
+              border: 3px solid $ct;
+              color: $ct;
+              font-family: 'lepl';
+              font-size: 1.1rem;
+              padding: 10px;
             }
           }
         }
+        
       }
     }
   }

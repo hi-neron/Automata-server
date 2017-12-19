@@ -195,7 +195,7 @@ $grid.on('mouseover', '.corpose-container .corpose-hover', (e) => {
 })
 
 // despliega la tarjeta.
-$grid.on('click', '.corpose-container .corpose-hover .header .name', (e) => {
+$grid.on('click', '.corpose-container .corpose-hover .header', (e) => {
   let _this = e.currentTarget
   let $this = $(_this)
   let id = $this.closest('.corpose-body').attr('public')

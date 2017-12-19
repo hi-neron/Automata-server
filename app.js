@@ -328,7 +328,7 @@ app.post('/api/images', secure, (req, res) => {
       return res.status(500).json({error: 'Image not sent'})
     }
 
-    // console.log(req.file)
+    console.log(req.file)
 
     let image = {
       userId: username,
@@ -340,7 +340,6 @@ app.post('/api/images', secure, (req, res) => {
 
     client.createPicture(image, token, (err, data) => {
       if (err) return res.json(err)
-
 
       image.username = req.user.username
       image.publicId = data.publicId
@@ -354,9 +353,7 @@ app.post('/api/images', secure, (req, res) => {
       // activar la accion pushImage en el socket
       userSocket.rt.pushImage(image, (err, response) => {
         if (err) return res.status(400).json(err)
-        let reg = /\w+([A-z])-\w+([0-9]).\w+([a-z])$/g
-        let imagename = reg.exec(src)
-        toSend.message = `image: ${imagename[0]} was uploaded`
+        toSend.message = `image was uploaded`
         res.status(200).json(toSend)
       })
     })

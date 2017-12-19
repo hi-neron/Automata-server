@@ -8,20 +8,16 @@ module.exports = yo`
     <div class="signin-up">
       <div class="divisor first"></div>
       <div class="input-sign">
-        <label for="forename" class="label"/>nombre</label>
-        <input id="sign-forename" type="text" name="forename" autocomplete="off"/>
+        <input id="sign-forename" type="text" name="forename" placeholder="NOMBRE" autocomplete="off"/>
       </div>
       <div class="input-sign">
-        <label for="username" class="label"/>usuario</label>
-        <input id="sign-username" type="text" name="username" autocomplete="off"/>
+        <input id="sign-username" type="text" name="username" placeholder="USUARIO" autocomplete="off"/>
       </div>
       <div class="input-sign">
-        <label for="password" class="label"/>password</label>
-        <input id="sign-password" type="password" name="password"/>
+        <input id="sign-password" type="password" placeholder="PASSWORD" name="password"/>
       </div>
       <div class="input-sign">
-        <label for="email" class="label"/>email</label>
-        <input id="sign-email" type="email" name="email" autocomplete="off"/>
+        <input id="sign-email" type="email" name="email" placeholder="E-MAIL" autocomplete="off"/>
       </div>
       <div class="divisor"></div>
       <div class="input-sign">
@@ -30,7 +26,7 @@ module.exports = yo`
         </button>
       </div>
       <div class="bottom-sign">
-        <a class="already" href="/#!/signin">¡Ya tengo una cuenta!</a>
+        <a class="already" href="/#!/signin">¿Ya había pactado?</a>
         <a class="facebook-signup" href="#"></a>
       </div>
     </div>

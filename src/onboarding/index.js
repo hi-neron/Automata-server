@@ -1,17 +1,19 @@
 'use strict'
 
 let yo = require('yo-yo')
+let $ = require('jquery')
+require('howler')
 require('gsap')
 
 let spine, sp1, sp2, sp3, sp4,
     sp1Bone, sp2Bone, sp3Bone, sp4Bone,
     sp1Shadow, sp2Shadow, sp3Shadow, sp4Shadow,
-    skull,
-    land, eyeB, eyeR, head, tongue,
-    nuage1, nuage2, shadowB, timeline, background, scene,
+    skull, land, eyeB, eyeR, head, tongue,
+    nuage1, nuage2, shadowB, timeline, background, blackBackground, scene,
     dialogBottom, dialogTop, dialogContainer,
     cranium, craniumBone, shadowCranium,
-    jaw, jawBone, jawShadow
+    jaw, jawBone, jawShadow, mask
+
 
 function createAssets(cb) {
   // corpose
@@ -52,14 +54,14 @@ function createAssets(cb) {
   sp2 = yo`<div class="on-boarding-sp2"></div>`
   sp3 = yo`<div class="on-boarding-sp3"></div>`
   sp4 = yo`<div class="on-boarding-sp4"></div>`
-  sp1Bone = yo`<div class="on-boarding-sp1Bone"></div>`
-  sp2Bone = yo`<div class="on-boarding-sp2Bone"></div>`
-  sp3Bone = yo`<div class="on-boarding-sp3Bone"></div>`
-  sp4Bone = yo`<div class="on-boarding-sp4Bone"></div>`
-  sp1Shadow = yo`<div class="on-boarding-sp1Shadow"></div>`
-  sp2Shadow = yo`<div class="on-boarding-sp2Shadow"></div>`
-  sp3Shadow = yo`<div class="on-boarding-sp3Shadow"></div>`
-  sp4Shadow = yo`<div class="on-boarding-sp4Shadow"></div>`
+  sp1Bone = yo`<div class="on-boarding-sp1-bone"></div>`
+  sp2Bone = yo`<div class="on-boarding-sp2-bone"></div>`
+  sp3Bone = yo`<div class="on-boarding-sp3-bone"></div>`
+  sp4Bone = yo`<div class="on-boarding-sp4-bone"></div>`
+  sp1Shadow = yo`<div class="on-boarding-sp1-shadow"></div>`
+  sp2Shadow = yo`<div class="on-boarding-sp2-shadow"></div>`
+  sp3Shadow = yo`<div class="on-boarding-sp3-shadow"></div>`
+  sp4Shadow = yo`<div class="on-boarding-sp4-shadow"></div>`
 
   // whole bottom
   spine = yo`<div class="on-boarding-spine"></div>`
@@ -79,6 +81,18 @@ function createAssets(cb) {
   head.appendChild(cranium)
 
   // bottom
+
+
+  sp1.appendChild(sp1Bone)
+  sp2.appendChild(sp2Bone)
+  sp3.appendChild(sp3Bone)
+  sp4.appendChild(sp4Bone)
+
+  sp1.appendChild(sp1Shadow)
+  sp2.appendChild(sp2Shadow)
+  sp3.appendChild(sp3Shadow)
+  sp4.appendChild(sp4Shadow)
+
   spine.appendChild(sp4)
   spine.appendChild(sp3)
   spine.appendChild(sp2)
@@ -98,10 +112,15 @@ function createAssets(cb) {
 }
 
 function timelineStart() {
-  console.log('start')
+  // CREATE SOUND
+  let windSound = new Howl({
+    src: ['wind.mp3'],
+    loop: true,
+    volume: 0.07 
+  })
 
   TweenMax.set([nuage1, nuage2], {
-    left: '-140',
+    x: '-240',
     opacity: 0
   })
 
@@ -110,27 +129,25 @@ function timelineStart() {
   })
 
   TweenMax.set(head, {
-    transformOrigin: '80% 50%'
+    transformOrigin: '225px 80px'
   })
 
   TweenMax.set(cranium, {
     transformOrigin: '50% 0%',
-    top: 0,
-    left: 0
   })
 
   TweenMax.set(tongue, {
     transformOrigin: '100% 0%',
-    top: '65',
-    rotation: '-=5',
-    left: 0
+    y: '0',
+    x: '5',
+    rotation: 0
   })
 
   TweenMax.set(jaw, {
-    transformOrigin: '100% 0%',
-    top: '70',
-    left: '-=10',
-    rotation: '-=5',
+    transformOrigin: '110px 0px',
+    y: '-25',
+    x: '16',
+    rotation: '+=10',
   })
 
   TweenMax.set([eyeB, eyeR], {
@@ -138,491 +155,556 @@ function timelineStart() {
     opacity: 1
   })
 
+  TweenMax.set([land, background], {
+    transformOrigin: '200px 10px',
+    opacity: 1
+  })
+
 
   let mainTimeLine = new TimelineMax({
-    repeat: -1,
-    repeatDelay: 0
   })
   
   let cloudsTimeLine = new TimelineMax({
     repeat: -1,
-    repeatDelay: 0
   })
 
-  mainTimeLine
-  // .call(changeText,
-  //   ['top', 'Soy un hijo del hombre']
-  // )
-  // .to(dialogTop, 2, {
-  //   opacity: 1
-  // }, '+=0.3')
-  // .call(changeText,
-  //   ['bottom', 'Un bastardo anclado en el olvido']
-  // )
-  // .to(dialogBottom, 2, {
-  //   opacity: 1
-  // }, '+=0.3')
-  // .to(dialogTop, 1, {
-  //   opacity: 0
-  // }, '+=0.3')
-  // .call(changeText,
-  //   ['top', 'Aprendi del tiempo']
-  // )
-  // .to(dialogBottom, 1, {
-  //   opacity: 0
-  // }, '+=0.3')
-  // .call(changeText,
-  //   ['bottom', '... de la soledad']
-  // )
-  // .to(dialogTop, 2, {
-  //   opacity: 1
-  // }, '+=0.3')
-  // .to(dialogBottom, 2, {
-  //   opacity: 1
-  // }, '+=0.1')
-  // .to(dialogTop, 1, {
-  //   opacity: 0
-  // }, '+=0.3')
-  // .to(dialogBottom, 1, {
-  //   opacity: 0
-  // }, '+=0.3')
-  // .to(eyeB, 0.05, {
-  //   opacity: '.1',
-  //   ease: Expo.easeIn
-  // }, '-=3')
-  // .to(eyeB, 0.1, {
-  //   opacity: '1',
-  //   ease: Expo.easeOut
-  // }, '-=2.95')
-  // .to(eyeB, 0.2, {
-  //   opacity: '.4',
-  //   ease: Expo.easeIn
-  // }, '+=1')
-  // .to(eyeB, 0.2, {
-  //   opacity: '1',
-  //   ease: Expo.easeOut
-  // })
+  let breatheTimeLine = new TimelineMax({
+    repeat: -1,
+    yoyo: true,
+    paused: true
+  })
 
-  // // segundo dialogo
-  // .call(changeText,
-  //   ['top', 'A tener esperanza']
-  // )
-  // .to(dialogTop, 2, {
-  //   opacity: 1
-  // }, '+=0.3')
-  // .call(changeText,
-  //   ['bottom', 'Para luego perderla']
-  // )
-  // .to(dialogBottom, 2, {
-  //   opacity: 1
-  // }, '+=0.3')
-  // .to(dialogTop, 1, {
-  //   opacity: 0
-  // }, '+=0.2')
-  // .call(changeText,
-  //   ['top', 'A practicar la moral']
-  // )
-  // .to(dialogBottom, 1, {
-  //   opacity: 0
-  // }, '+=0.3')
-  // .call(changeText,
-  //   ['bottom', 'Y lo inmoral de inmediato']
-  // )
-  // .to(dialogTop, 2, {
-  //   opacity: 1
-  // }, '+=0.3')
-  // .to(dialogBottom, 2, {
-  //   opacity: 1
-  // }, '+=0.3')
-  // .to(dialogTop, 1, {
-  //   opacity: 0
-  // }, '+=0.3')
-  // .to(dialogBottom, 1, {
-  //   opacity: 0
-  // }, '+=0.3')
+  cloudsTimeLine.to(nuage1, 4, {
+    x: '125',
+    opacity: 0,
+    ease: Sine.easeInOut
+  })
+  .to(nuage1, 2, {
+    opacity: 0.6,
+    ease: Sine.easeInOut
+  }, '-=4')
+  .to(nuage2, 6, {
+    opacity: 1,
+    x: '140',
+    ease: Sine.easeInOut
+  }, '-=3')
+  .to(nuage1, 3, {
+    opacity: 0
+  }, '-=3')
+  .to(nuage2, 3, {
+    opacity: 0
+  })
+
+  breatheTimeLine
+  .to(sp1, 2, {
+    y: '-=4',
+    x: '-=2',
+    ease: Power1.easeInOut
+  })
+  .to(sp2, 2, {
+    y: '-=3',
+    x: '-=2',
+    ease: Power1.easeInOut
+  }, '-=2')
+  .to(sp3, 2, {
+    y: '-=2',
+    x: '-=2',
+    ease: Power1.easeInOut
+  }, '-=2')
+  .to(head, 2, {
+    y: '-=6',
+    x: '-=4',
+    rotation: '+=4',
+    ease: Power1.easeInOut
+  }, '-=2')
+  .to(tongue, 2,{
+    rotation: '+=3',
+    ease: Power1.easeInOut
+  }, '-=2')
+
+  .to(jaw, 2,{
+    rotation: '+=4',
+    ease: Power1.easeInOut
+  }, '-=2')
+
+
+  mainTimeLine
+  .call(function(){
+    windSound.play()
+  })
+  .call(changeText,
+    ['top', 'Soy un hijo del hombre']
+  )
+  .to(dialogTop, 2, {
+    opacity: 1
+  }, '+=0.1')
+  .call(changeText,
+    ['bottom', 'Un bastardo con los huesos enterrados en el olvido']
+  )
+  .to(dialogBottom, 2, {
+    opacity: 1
+  }, '+=0.1')
+  .to(dialogTop, 1, {
+    opacity: 0
+  }, '+=0.1')
+  .call(changeText,
+    ['top', 'He aprendido del tiempo']
+  )
+  .to(dialogBottom, 1, {
+    opacity: 0
+  }, '+=0.1')
+  .call(changeText,
+    ['bottom', '... de la soledad']
+  )
+  .to(dialogTop, 1, {
+    opacity: 1
+  }, '+=0.1')
+  .to(dialogBottom, 1, {
+    opacity: 1
+  }, '+=0.1')
+  .to(dialogTop, 0.7, {
+    opacity: 0
+  }, '-=0.1')
+  .to(dialogBottom, 0.7, {
+    opacity: 0
+  }, '+=0.1')
+  .to(eyeB, 0.05, {
+    opacity: '.1',
+    ease: Expo.easeIn
+  }, '-=3')
+  .to(eyeB, 0.1, {
+    opacity: '1',
+    ease: Expo.easeOut
+  }, '-=2.95')
+  .to(eyeB, 0.2, {
+    opacity: '.4',
+    ease: Expo.easeIn
+  }, '+=1')
+  .to(eyeB, 0.2, {
+    opacity: '1',
+    ease: Expo.easeOut
+  })
+
+  // segundo dialogo
+  .call(changeText,
+    ['top', 'A tener esperanza']
+  )
+  .to(dialogTop, 2, {
+    opacity: 1
+  }, '+=0.1')
+  .call(changeText,
+    ['bottom', 'Para luego perderla']
+  )
+  .to(dialogBottom, 2, {
+    opacity: 1
+  }, '+=0.1')
+  .to(dialogTop, 1, {
+    opacity: 0
+  }, '+=0.1')
+  .call(changeText,
+    ['top', 'Se que es el bien']
+  )
+  .to(dialogBottom, 1, {
+    opacity: 0
+  }, '+=0.1')
+  .call(changeText,
+    ['bottom', 'Aún cuando soy todo maldad']
+  )
+  .to(dialogTop, 2, {
+    opacity: 1
+  }, '+=0.1')
+  .to(dialogBottom, 2, {
+    opacity: 1
+  }, '+=0.1')
+  .to(dialogTop, 1, {
+    opacity: 0
+  }, '+=0.1')
+  .to(dialogBottom, 1, {
+    opacity: 0
+  }, '+=0.1')
 
   // tercer dialogo
-  // .call(changeText,
-  //   ['top', 'A sentir angustia']
-  // )
-  // .to(dialogTop, 1, {
-  //   opacity: 1
-  // }, '+=0.1')
-  // .to(dialogTop, 0.5, {
-  //   opacity: 0
-  // }, '+=0.1')
+  .call(changeText,
+    ['top', 'He sentido angustia']
+  )
+  .to(dialogTop, 1, {
+    opacity: 1
+  }, '+=0.1')
+  .to(dialogTop, 0.5, {
+    opacity: 0
+  }, '+=0.1')
 
 
-  // .call(changeText,
-  //   ['top', 'Deseo']
-  // )
-  // .to(dialogTop, 0.9, {
-  //   opacity: 1
-  // }, '+=0.1')
-  // .to(dialogTop, 0.4, {
-  //   opacity: 0
-  // }, '+=0.1')
+  .call(changeText,
+    ['top', 'Deseo']
+  )
+  .to(dialogTop, 0.9, {
+    opacity: 1
+  }, '+=0.1')
+  .to(dialogTop, 0.4, {
+    opacity: 0
+  }, '+=0.1')
 
-  // // eye flicker
-  // .to(eyeB, 0.05, {
-  //   opacity: '0.6',
-  //   ease: Power4.easeOut
-  // }, '-=0.5')
-  // .to(eyeB, 0.05, {
-  //   opacity: '1',
-  //   ease: Power4.easeOut
-  // }, '-=0.4')
-  // .to(eyeB, 0.02, {
-  //   opacity: '0.6',
-  //   ease: Power4.easeOut
-  // }, '-=0.3')
-  // .to(eyeB, 0.02, {
-  //   opacity: '1',
-  //   ease: Power4.easeOut
-  // }, '-=0.25')
+  // eye flicker
+  .to(eyeB, 0.05, {
+    opacity: '0.6',
+    ease: Power4.easeOut
+  }, '-=0.5')
+  .to(eyeB, 0.05, {
+    opacity: '1',
+    ease: Power4.easeOut
+  }, '-=0.4')
+  .to(eyeB, 0.02, {
+    opacity: '0.6',
+    ease: Power4.easeOut
+  }, '-=0.3')
+  .to(eyeB, 0.02, {
+    opacity: '1',
+    ease: Power4.easeOut
+  }, '-=0.25')
 
 
-  // .call(changeText,
-  //   ['top', 'envidia']
-  // )
-  // .to(dialogTop, 0.8, {
-  //   opacity: 1
-  // }, '+=0.1')
-  // .to(dialogTop, 0.3, {
-  //   opacity: 0
-  // }, '+=0.1')
+  .call(changeText,
+    ['top', 'Envidia']
+  )
+  .to(dialogTop, 0.8, {
+    opacity: 1
+  }, '+=0.1')
+  .to(dialogTop, 0.3, {
+    opacity: 0
+  }, '+=0.1')
 
-  // .call(changeText,
-  //   ['top', 'A mentir']
-  // )
-  // .to(dialogTop, 0.7, {
-  //   opacity: 1
-  // }, '+=0.1')
-  // .to(dialogTop, 0.2, {
-  //   opacity: 0
-  // }, '+=0.1')
+  .call(changeText,
+    ['top', 'He mentido']
+  )
+  .to(dialogTop, 0.7, {
+    opacity: 1
+  }, '+=0.1')
+  .to(dialogTop, 0.2, {
+    opacity: 0
+  }, '+=0.1')
   
-  // .call(changeText,
-  //   ['top', 'Amar']
-  // )
-  // .to(dialogTop, 0.6, {
-  //   opacity: 1
-  // }, '+=0.1')
-  // .to(dialogTop, 0.15, {
-  //   opacity: 0
-  // }, '+=0.1')
+  .call(changeText,
+    ['top', 'Aprendi a sobrevivir']
+  )
+  .to(dialogTop, 0.6, {
+    opacity: 1
+  }, '+=0.1')
+  .to(dialogTop, 0.15, {
+    opacity: 0
+  }, '+=0.1')
 
-  // .call(changeText,
-  //   ['top', 'A sobrevivir']
-  // )
-  // .to(dialogTop, 0.5, {
-  //   opacity: 1
-  // }, '+=0.1')
-  // .to(dialogTop, 0.1, {
-  //   opacity: 0
-  // }, '+=0.1')
+  .call(changeText,
+    ['top', 'A ser consciente']
+  )
+  .to(dialogTop, 0.5, {
+    opacity: 1
+  }, '+=0.1')
+  .to(dialogTop, 0.1, {
+    opacity: 0
+  }, '+=0.1')
 
-  // .call(changeText,
-  //   ['top', 'ser consciente']
-  // )
-  // .to(dialogTop, 0.4, {
-  //   opacity: 1
-  // }, '+=0.1')
-  // .to(dialogTop, 0.09, {
-  //   opacity: 0
-  // }, '+=0.1')
+  .call(changeText,
+    ['top', 'A volver a empezar']
+  )
+  .to(dialogTop, 0.4, {
+    opacity: 1
+  }, '+=0.1')
+  .to(dialogTop, 0.09, {
+    opacity: 0
+  }, '+=0.1')
 
-  // .call(changeText,
-  //   ['top', 'A morir']
-  // )
-  // .to(dialogTop, 0.3, {
-  //   opacity: 1
-  // }, '+=0.1')
-  // .to(dialogTop, 0.07, {
-  //   opacity: 0
-  // }, '+=0.1')
+  .call(changeText,
+    ['top', 'A ser libre']
+  )
+  .to(dialogTop, 0.3, {
+    opacity: 1
+  }, '+=0.1')
+  .to(dialogTop, 0.07, {
+    opacity: 0
+  }, '+=0.1')
 
-  // .call(changeText,
-  //   ['top', 'A resurgir']
-  // )
-  // .to(dialogTop, 0.2, {
-  //   opacity: 1
-  // }, '+=0.1')
-  // .to(dialogTop, 0.06, {
-  //   opacity: 0
-  // }, '+=0.1')
+  .call(changeText,
+    ['top', 'Amar y odiar']
+  )
+  .to(dialogTop, 0.2, {
+    opacity: 1
+  }, '+=0.1')
+  .to(dialogTop, 0.06, {
+    opacity: 0
+  }, '+=0.1')
 
-  // .call(changeText,
-  //   ['top', 'Ser libre']
-  // )
-  // .to(dialogTop, 0.1, {
-  //   opacity: 1
-  // }, '+=0.1')
-  // .to(dialogTop, 0.05, {
-  //   opacity: 0
-  // }, '+=0.1')
+  .call(changeText,
+    ['top', 'De la muerte']
+  )
+  .to(dialogTop, 0.1, {
+    opacity: 1
+  }, '+=0.1')
+  .to(dialogTop, 0.05, {
+    opacity: 0
+  }, '+=0.1')
 
-  // // Parte parte tres
+  // Parte parte tres
 
-  // .call(changeText,
-  //   ['top', 'la venganza']
-  // )
-  // .to(dialogTop, 0.09, {
-  //   opacity: 1
-  // }, '+=0.1')
-  // .to(dialogTop, 0.04, {
-  //   opacity: 0
-  // }, '+=0.1')
+  .call(changeText,
+    ['top', 'La venganza']
+  )
+  .to(dialogTop, 0.09, {
+    opacity: 1
+  }, '+=0.1')
+  .to(dialogTop, 0.04, {
+    opacity: 0
+  }, '+=0.1')
 
-  // .call(changeText,
-  //   ['top', '... Lo obsceno']
-  // )
-  // .to(dialogTop, 0.08, {
-  //   opacity: 1
-  // }, '+=0.1')
-  // .to(dialogTop, 0.03, {
-  //   opacity: 0
-  // }, '+=0.1')
+  .call(changeText,
+    ['top', 'Lo obsceno']
+  )
+  .to(dialogTop, 0.08, {
+    opacity: 1
+  }, '+=0.1')
+  .to(dialogTop, 0.03, {
+    opacity: 0
+  }, '+=0.1')
 
-  // .call(changeText,
-  //   ['top', 'Lo impuro']
-  // )
-  // .to(dialogTop, 0.07, {
-  //   opacity: 1
-  // }, '+=0.1')
-  // .to(dialogTop, 0.02, {
-  //   opacity: 0
-  // }, '+=0.1')
+  .call(changeText,
+    ['top', 'Lo impuro']
+  )
+  .to(dialogTop, 0.07, {
+    opacity: 1
+  }, '+=0.1')
+  .to(dialogTop, 0.02, {
+    opacity: 0
+  }, '+=0.1')
 
-  // .call(changeText,
-  //   ['top', 'Lo repugnante']
-  // )
-  // .to(dialogTop, 0.06, {
-  //   opacity: 1
-  // }, '+=0.1')
-  // .to(dialogTop, 0.02, {
-  //   opacity: 0
-  // }, '+=0.1')
+  .call(changeText,
+    ['top', 'Lo repugnante']
+  )
+  .to(dialogTop, 0.06, {
+    opacity: 1
+  }, '+=0.1')
+  .to(dialogTop, 0.02, {
+    opacity: 0
+  }, '+=0.1')
 
-  // .call(changeText,
-  //   ['top', 'Lo bizarro']
-  // )
-  // .to(dialogTop, 0.05, {
-  //   opacity: 1
-  // }, '+=0.1')
-  // .to(dialogTop, 0.01, {
-  //   opacity: 0
-  // }, '+=0.1')
+  .call(changeText,
+    ['top', 'Lo bizarro']
+  )
+  .to(dialogTop, 0.05, {
+    opacity: 1
+  }, '+=0.1')
+  .to(dialogTop, 0.01, {
+    opacity: 0
+  }, '+=0.1')
 
-  // .call(changeText,
-  //   ['top', 'Lo feo']
-  // )
-  // .to(dialogTop, 0.04, {
-  //   opacity: 1
-  // }, '+=0.1')
-  // .to(dialogTop, 0.01, {
-  //   opacity: 0
-  // }, '+=0.1')
+  .call(changeText,
+    ['top', 'Lo grotesco']
+  )
+  .to(dialogTop, 0.04, {
+    opacity: 1
+  }, '+=0.1')
+  .to(dialogTop, 0.01, {
+    opacity: 0
+  }, '+=0.1')
 
-  // .call(changeText,
-  //   ['top', 'El olvido']
-  // )
-  // .to(dialogTop, 0.03, {
-  //   opacity: 1
-  // }, '+=0.1')
-  // .to(dialogTop, 0.01, {
-  //   opacity: 0
-  // }, '+=0.1')
+  .call(changeText,
+    ['top', 'El olvido']
+  )
+  .to(dialogTop, 0.03, {
+    opacity: 1
+  }, '+=0.1')
+  .to(dialogTop, 0.01, {
+    opacity: 0
+  }, '+=0.1')
 
-  // .call(changeText,
-  //   ['top', 'La mugre']
-  // )
-  // .to(dialogTop, 0.03, {
-  //   opacity: 1
-  // }, '+=0.1')
-  // .to(dialogTop, 0.01, {
-  //   opacity: 0
-  // }, '+=0.1')
+  .call(changeText,
+    ['top', 'La nausea']
+  )
+  .to(dialogTop, 0.03, {
+    opacity: 1
+  }, '+=0.1')
+  .to(dialogTop, 0.01, {
+    opacity: 0
+  }, '+=0.1')
 
-  // .call(changeText,
-  //   ['top', 'El dolor']
-  // )
-  // .to(dialogTop, 0.02, {
-  //   opacity: 1
-  // }, '+=0.1')
-  // .to(dialogTop, 0.01, {
-  //   opacity: 0
-  // }, '+=0.1')
+  .call(changeText,
+    ['top', 'El dolor']
+  )
+  .to(dialogTop, 0.02, {
+    opacity: 1
+  }, '+=0.1')
+  .to(dialogTop, 0.01, {
+    opacity: 0
+  }, '+=0.1')
 
-  // .call(changeText,
-  //   ['top', 'Empatia']
-  // )
-  // .to(dialogTop, 0.02, {
-  //   opacity: 1
-  // }, '+=0.1')
-  // .to(dialogTop, 0.01, {
-  //   opacity: 0
-  // }, '+=0.1')
+  .call(changeText,
+    ['top', 'Empatia']
+  )
+  .to(dialogTop, 0.02, {
+    opacity: 1
+  }, '+=0.1')
+  .to(dialogTop, 0.01, {
+    opacity: 0
+  }, '+=0.1')
 
-  // .call(changeText,
-  //   ['top', 'El silencio']
-  // )
-  // .to(dialogTop, 0.02, {
-  //   opacity: 1
-  // }, '+=0.1')
-  // .to(dialogTop, 0.01, {
-  //   opacity: 0
-  // }, '+=0.1')
+  .call(changeText,
+    ['top', 'El silencio']
+  )
+  .to(dialogTop, 0.02, {
+    opacity: 1
+  }, '+=0.1')
+  .to(dialogTop, 0.01, {
+    opacity: 0
+  }, '+=0.1')
 
-  // .call(changeText,
-  //   ['top', 'El ruido']
-  // )
-  // .to(dialogTop, 0.02, {
-  //   opacity: 1
-  // }, '+=0.1')
-  // .to(dialogTop, 0.01, {
-  //   opacity: 0
-  // }, '+=0.1')
+  .call(changeText,
+    ['top', 'El ruido']
+  )
+  .to(dialogTop, 0.02, {
+    opacity: 1
+  }, '+=0.1')
+  .to(dialogTop, 0.01, {
+    opacity: 0
+  }, '+=0.1')
 
-  // .call(changeText,
-  //   ['top', 'Frio']
-  // )
-  // .to(dialogTop, 0.01, {
-  //   opacity: 1
-  // }, '+=0.08')
-  // .to(dialogTop, 0.01, {
-  //   opacity: 0
-  // }, '+=0.08')
+  .call(changeText,
+    ['top', 'Frío']
+  )
+  .to(dialogTop, 0.01, {
+    opacity: 1
+  }, '+=0.08')
+  .to(dialogTop, 0.01, {
+    opacity: 0
+  }, '+=0.08')
 
-  // .call(changeText,
-  //   ['top', 'Oscuridad']
-  // )
-  // .to(dialogTop, 0.01, {
-  //   opacity: 1
-  // }, '+=0.08')
-  // .to(dialogTop, 0.01, {
-  //   opacity: 0
-  // }, '+=0.08')
+  .call(changeText,
+    ['top', 'Oscuridad']
+  )
+  .to(dialogTop, 0.01, {
+    opacity: 1
+  }, '+=0.08')
+  .to(dialogTop, 0.01, {
+    opacity: 0
+  }, '+=0.08')
 
-  // .call(changeText,
-  //   ['top', 'Extinción']
-  // )
-  // .to(dialogTop, 0.02, {
-  //   opacity: 1
-  // }, '+=0.1')
-  // .to(dialogTop, 0.01, {
-  //   opacity: 0
-  // }, '+=0.1')
+  .call(changeText,
+    ['top', 'Extinción']
+  )
+  .to(dialogTop, 0.02, {
+    opacity: 1
+  }, '+=0.1')
+  .to(dialogTop, 0.01, {
+    opacity: 0
+  }, '+=0.1')
 
-  // .call(changeText,
-  //   ['top', 'Historia']
-  // )
-  // .to(dialogTop, 2, {
-  //   opacity: 1,
-  //   ease: Expo.easeIn
-  // }, '+=0.5')
-  // .to(dialogTop, 2, {
-  //   opacity: 0,
-  //   ease: Expo.easeIn
-  // }, '+=1')
+  .call(changeText,
+    ['top', 'Soy una historia']
+  )
+  .to(dialogTop, 2, {
+    opacity: 1,
+    ease: Expo.easeIn
+  }, '+=0.5')
+  .to(dialogTop, 2, {
+    opacity: 0,
+    ease: Expo.easeIn
+  }, '+=1')
 
-  // // eye flicker
-  // .to(eyeB, 0.05, {
-  //   opacity: '0.6',
-  //   ease: Power4.easeOut
-  // }, '-=7.5')
-  // .to(eyeB, 0.05, {
-  //   opacity: '1',
-  //   ease: Power4.easeOut
-  // }, '-=7.4')
-  // .to(eyeB, 0.02, {
-  //   opacity: '0.6',
-  //   ease: Power4.easeOut
-  // }, '-=7.3')
-  // .to(eyeB, 0.02, {
-  //   opacity: '1',
-  //   ease: Power4.easeOut
-  // }, '-=7.25')
+  // eye flicker
+  .to(eyeB, 0.05, {
+    opacity: '0.6',
+    ease: Power4.easeOut
+  }, '-=7.5')
+  .to(eyeB, 0.05, {
+    opacity: '1',
+    ease: Power4.easeOut
+  }, '-=7.4')
+  .to(eyeB, 0.02, {
+    opacity: '0.6',
+    ease: Power4.easeOut
+  }, '-=7.3')
+  .to(eyeB, 0.02, {
+    opacity: '1',
+    ease: Power4.easeOut
+  }, '-=7.25')
 
-  // // eye flicker
-  // .to(eyeB, 0.05, {
-  //   opacity: '0.6',
-  //   ease: Power4.easeOut
-  // }, '-=7')
-  // .to(eyeB, 0.05, {
-  //   opacity: '1',
-  //   ease: Power4.easeOut
-  // }, '-=6.9')
-  // .to(eyeB, 0.02, {
-  //   opacity: '0.6',
-  //   ease: Power4.easeOut
-  // }, '-=6.8')
-  // .to(eyeB, 0.02, {
-  //   opacity: '1',
-  //   ease: Power4.easeOut
-  // }, '-=6.75')
+  // eye flicker
+  .to(eyeB, 0.05, {
+    opacity: '0.6',
+    ease: Power4.easeOut
+  }, '-=7')
+  .to(eyeB, 0.05, {
+    opacity: '1',
+    ease: Power4.easeOut
+  }, '-=6.9')
+  .to(eyeB, 0.02, {
+    opacity: '0.6',
+    ease: Power4.easeOut
+  }, '-=6.8')
+  .to(eyeB, 0.02, {
+    opacity: '1',
+    ease: Power4.easeOut
+  }, '-=6.75')
 
-  // // eye flicker
-  // .to(eyeB, 0.04, {
-  //   opacity: '0.6',
-  //   ease: Power4.easeOut
-  // }, '-=6.2')
-  // .to(eyeB, 0.05, {
-  //   opacity: '1',
-  //   ease: Power4.easeOut
-  // }, '-=6.15')
-  // .to(eyeB, 0.02, {
-  //   opacity: '0.6',
-  //   ease: Power4.easeOut
-  // }, '-=6.1')
-  // .to(eyeB, 0.01, {
-  //   opacity: '1',
-  //   ease: Power4.easeOut
-  // }, '-=6.05')
+  // eye flicker
+  .to(eyeB, 0.04, {
+    opacity: '0.6',
+    ease: Power4.easeOut
+  }, '-=6.2')
+  .to(eyeB, 0.05, {
+    opacity: '1',
+    ease: Power4.easeOut
+  }, '-=6.15')
+  .to(eyeB, 0.02, {
+    opacity: '0.6',
+    ease: Power4.easeOut
+  }, '-=6.1')
+  .to(eyeB, 0.01, {
+    opacity: '1',
+    ease: Power4.easeOut
+  }, '-=6.05')
 
-  // // eye flicker
-  // .to(eyeB, 0.04, {
-  //   opacity: '0.6',
-  //   ease: Power4.easeOut
-  // }, '-=6')
-  // .to(eyeB, 0.05, {
-  //   opacity: '1',
-  //   ease: Power4.easeOut
-  // }, '-=5.9')
-  // .to(eyeB, 0.02, {
-  //   opacity: '0.6',
-  //   ease: Power4.easeOut
-  // }, '-=5.85')
-  // .to(eyeB, 0.01, {
-  //   opacity: '1',
-  //   ease: Power4.easeOut
-  // }, '-=5.75')
+  // eye flicker
+  .to(eyeB, 0.04, {
+    opacity: '0.6',
+    ease: Power4.easeOut
+  }, '-=6')
+  .to(eyeB, 0.05, {
+    opacity: '1',
+    ease: Power4.easeOut
+  }, '-=5.9')
+  .to(eyeB, 0.02, {
+    opacity: '0.6',
+    ease: Power4.easeOut
+  }, '-=5.85')
+  .to(eyeB, 0.01, {
+    opacity: '1',
+    ease: Power4.easeOut
+  }, '-=5.75')
 
-  // // eye flicker
-  // .to(eyeB, 0.04, {
-  //   opacity: '0.6',
-  //   ease: Power4.easeOut
-  // }, '-=6')
-  // .to(eyeB, 0.05, {
-  //   opacity: '0.2',
-  //   ease: Power4.easeOut
-  // }, '-=5.9')
-  // .to(eyeB, 0.02, {
-  //   opacity: '0.8',
-  //   ease: Power4.easeOut
-  // }, '-=5.85')
-  // .to(eyeB, 0.01, {
-  //   opacity: '0.1',
-  //   ease: Power4.easeOut
-  // }, '-=5.75')
-  // .to(eyeB, 0.04, {
-  //   opacity: '0.2',
-  //   ease: Power4.easeOut
-  // }, '-=6')
-  // .to(eyeB, 0.05, {
-  //   opacity: '0',
-  //   ease: Power4.easeOut
-  // }, '-=5.9')
+  // eye flicker
+  .to(eyeB, 0.04, {
+    opacity: '0.6',
+    ease: Power4.easeOut
+  }, '-=6')
+  .to(eyeB, 0.05, {
+    opacity: '0.2',
+    ease: Power4.easeOut
+  }, '-=5.9')
+  .to(eyeB, 0.02, {
+    opacity: '0.8',
+    ease: Power4.easeOut
+  }, '-=5.85')
+  .to(eyeB, 0.01, {
+    opacity: '0.1',
+    ease: Power4.easeOut
+  }, '-=5.75')
+  .to(eyeB, 0.04, {
+    opacity: '0.5',
+    ease: Power4.easeOut
+  }, '-=6')
+  .to(eyeB, 0.05, {
+    opacity: '0.2',
+    ease: Power4.easeOut
+  }, '-=5.9')
   
   // eye flicker
   .to(eyeB, 0.04, {
@@ -630,7 +712,7 @@ function timelineStart() {
     ease: Power4.easeOut
   }, '-=2.5')
   .to(eyeB, 0.05, {
-    opacity: '0',
+    opacity: '0.3',
     ease: Power4.easeOut
   }, '-=2.4')
   .to(eyeB, 0.02, {
@@ -650,28 +732,18 @@ function timelineStart() {
     ease: Power4.easeOut
   }, '-=2.1')
 
-  // .call(changeText,
-  //   ['top', 'Para muchos el olvido puede ser el infierno']
-  // )
-  // .to(dialogTop, 1, {
-  //   opacity: 1
-  // }, '+=0.2')
-  // .to(dialogTop, 0.5, {
-  //   opacity: 0
-  // }, '+=1')
-
-  // .call(changeText,
-  //   ['top', 'lo que aquí cae se condena a desaparecer, a morir en el tiempo.']
-  // )
-  // .to(dialogTop, 1, {
-  //   opacity: 1
-  // }, '+=0.2')
-  // .to(dialogTop, 0.5, {
-  //   opacity: 0
-  // }, '+=2.5')
+  .call(changeText,
+    ['top', 'Para muchos el olvido puede ser el infierno']
+  )
+  .to(dialogTop, 1, {
+    opacity: 1
+  }, '+=0.2')
+  .to(dialogTop, 0.5, {
+    opacity: 0
+  }, '+=2')
 
   .call(changeText,
-    ['top', 'Hice un pacto con el.']
+    ['top', 'Lo que ahí cae esta condenado a desaparecer... morir en el tiempo']
   )
   .to(dialogTop, 1, {
     opacity: 1
@@ -680,52 +752,126 @@ function timelineStart() {
     opacity: 0
   }, '+=2.5')
 
-  .to([cranium, spine, jaw, tongue], 1, {
-    top: '-=10',
-    ease: Power4.easeOut,
-    rotation: '-=4'
+  .call(changeText,
+    ['top', 'He pactado con el infierno']
+  )
+  .to(dialogTop, 1, {
+    opacity: 1
+  }, '+=0.2')
+  .to(dialogTop, 0.5, {
+    opacity: 0
+  }, '+=2.5')
+  .call(changeText,
+    ['top', '... Mi libertad a cambio historias']
+  )
+
+  .to([cranium, jaw, tongue, spine], 1, {
+    y: '-=45',
+    x: '-=20',
+    ease: Back.easeOut.config(3)
+  })
+  .to([cranium, jaw, tongue, spine], 3, {
+    y: '-=30',
+    x: '-=25',
+    ease: Back.easeOut.config(3)
   })
 
-  .to([background, land], 1, {
+  .to(cranium, 3, {
+    rotation: '-=6',
+    ease: Back.easeOut.config(3)
+  }, '-=5.9')
+
+  .to(cranium, 3, {
+    rotation: '-=4',
     ease: Power4.easeOut,
-    rotation: '+=4',
-    top: '+=60'
-  }, '-=1')
+  }, '-=2.9')
 
-  .to(shadowB, 0.1, {
-    opacity: 0,
-    left: '+=10',
-    top: '+=40'
-  }, '-=1')
+  .to(cranium, 4, {
+    rotation: '+=2',
+    ease: Back.easeOut.config(3)
+  }, '-=1.9')
 
-  // head.appendChild(jaw)
-  // head.appendChild(tongue)
-  // head.appendChild(land)
-  // head.appendChild(shadowB)
-  // head.appendChild(eyeR)
-  // head.appendChild(eyeB)
-  // head.appendChild(cranium)
-
-
-  cloudsTimeLine.to(nuage1, 10, {
-    left: '250',
-    opacity: 0,
-    ease: Sine.easeInOut
-  })
-  .to(nuage1, 2, {
-    opacity: 0.6,
-    ease: Sine.easeInOut
-  }, '-=10')
-  .to(nuage2, 7, {
-    opacity: 1,
-    left: '250',
-    ease: Sine.easeInOut
+  .to(tongue, 1.4,{
+    rotation: '-=10',
+    ease: Bounce.easeOut
   }, '-=5')
-  .to(nuage1, 3, {
-    opacity: 0
+
+  .to(jaw, 0.8,{
+    rotation: '-=20',
+    ease: Bounce.easeOut
+  }, '-=4.95')
+  .to(spine, 3,{
+    y: '-=22',
+    ease: Elastic.easeOut.config(1.5, 0.4)
   }, '-=6')
-  .to(nuage2, 3, {
+  .add(() => { breatheTimeLine.play() }, '-=1')
+  .to([background, land], 1, {
+    y: '+=20',
+    x: '-=10',
+    ease: Power4.easeOut
+  }, '-=5')
+
+  .to([nuage1, nuage2], 0.1, {
+    y: '+=50',
+  }, '-=5')
+
+  .to(shadowB, 0.05, {
+    opacity: 0,
+    x: '+=10',
+    y: '+=40',
+    ease: Power1.easeOut
+  }, '-=5.7')
+
+  .to(mask, 0.4, {
+    x: '-=35',
+    y: '-=75',
+    ease: Back.easeOut.config(3)
+  }, '-=6.1')
+
+  .to(dialogTop, 1, {
+    opacity: 1
+  }, '-=2')
+  .to(dialogTop, 0.5, {
     opacity: 0
+  })
+
+  .add( () => {cloudsTimeLine.pause()})
+
+  .call(changeText,
+    ['top', 'Déjame liberar las tuyas']
+  )
+  .to(dialogTop, 1, {
+    opacity: 1
+  }, '+=0.2')
+  .to(dialogTop, 0.5, {
+    opacity: 0
+  }, '+=2.5')
+
+  .call(changeText,
+    ['top', 'y pacta conmigo']
+  )
+  .to(dialogTop, 1, {
+    opacity: 1
+  }, '+=0.2')
+  .to(dialogTop, 0.5, {
+    opacity: 0
+  }, '+=2.5')
+
+  .to([background, blackBackground, mask, land,
+    shadowCranium, jawShadow, shadowB, sp1Shadow,
+    sp2Shadow, sp3Shadow, sp4Shadow, nuage1, nuage2,
+    dialogBottom, dialogTop, dialogContainer], 0.2, {
+    opacity: 0
+  }, '-=2.5')
+
+  .to([background, blackBackground, mask, land,
+    shadowCranium, jawShadow, shadowB, sp1Shadow,
+    sp2Shadow, sp3Shadow, sp4Shadow, nuage1, nuage2,
+    dialogBottom, dialogTop, dialogContainer], 0.1, {
+    display: 'none'
+  })
+  .call(function(){
+    windSound.stop()
   })
 
 }
@@ -766,11 +912,11 @@ function start () {
   let container = document.getElementById('on-boarding-container')
   let wrapper = yo`<div class="on-boarding-wrapper"></div>`
   let vignette = yo`<div class="on-boarding-vignette"></div>`
-  let mask = yo`<div class="on-boarding-mask">
+  mask = yo`<div class="on-boarding-mask">
     ${svgMask}
   </div>`
   let top = yo`<div class="on-boarding-top-container"></div>`
-  let blackBackground = yo`<div class="on-boarding-black-background">
+  blackBackground = yo`<div class="on-boarding-black-background">
   </div>`
 
   createAssets((scene) =>{
@@ -780,9 +926,12 @@ function start () {
     top.appendChild(vignette)
     wrapper.appendChild(top)
     wrapper.appendChild(dialogs)
-    timelineStart()
     container.appendChild(blackBackground)
     container.appendChild(wrapper)
+    $('<img/>').attr('src', 'img/onboarding.png').on('load', function() {
+      $(this).remove(); // prevent memory leaks as @benweet suggested
+      timelineStart()
+   });
   })
 }
 

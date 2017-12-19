@@ -8,12 +8,10 @@ module.exports = yo`
     <div class="signin-up">
       <div class="divisor first"></div>
       <div class="input-sign">
-        <label for="username" class="label"/>usuario</label>
-        <input id="sign-username" type="text" name="username" autocomplete="off"/>
+        <input id="sign-username" placeholder="USER" type="text" name="username" autocomplete="off"/>
       </div>
       <div class="input-sign">
-        <label for="password" class="label"/>password</label>
-        <input id="sign-password" type="password" name="password"/>
+        <input id="sign-password" type="password" placeholder="PASSWORD" name="password"/>
       </div>
       <div class="divisor"></div>
       <div class="input-sign">

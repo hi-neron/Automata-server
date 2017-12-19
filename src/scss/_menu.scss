@@ -22,6 +22,7 @@ $color_yellow: #EAEAEA;
   font-family: 'lepm';
   font-size: .7rem;
   text-transform: uppercase;
+  box-shadow: 0 3px 0 rgba(#000, .25);
 }
 
 .bat {
@@ -41,7 +42,7 @@ $color_yellow: #EAEAEA;
   #logo{
     height: 250px;
     width: 220px;
-    background-color: $logo-background;
+    background: $logo-background;
     position: absolute;
     overflow: hidden;
     border-radius: 0 50px 0 0;
@@ -50,13 +51,16 @@ $color_yellow: #EAEAEA;
     left: 0px;
     box-shadow: 4px -4px 0 rgba(#000, .15) inset;
 
-    img {
-      display: inline-block;
+    .logo-container {
       position: absolute;
-      width: 50%;
-      left: 50%;
-      top: 53px;
-      transform: translateX(-50%);
+      width: 120px;
+      height: 100px;
+      left: 46px;
+      top: 50px;
+      background: url('/img/buttons.png');
+      background-position-x: 0px;
+      background-position-y: -192px;
+      background-size: 128%;
     }
   }
 
@@ -144,18 +148,21 @@ $color_yellow: #EAEAEA;
     .noise-items-wrapper {
       #profile-menu-trigger {
         display: inline-block;
-        background: url("/img/profile.png") no-repeat center center;
-        background-size: 26%;
-        width: 54%;
-        height: 100%;
-        left: -2px;
+        background: url("/img/buttons.png");
+        background-size: 500%;
+        background-position-x: 0%;
+        background-position-y: 0%;
+        width: 30px;
+        height: 36px;
+        left: 37px;
+        top: 32px;
         position: absolute;
         z-index: 3;
-        transition: .2s ease-in;
   
         &:after {
           content: 'perfil';
-          left: 3px;
+          left: -29px;
+          top: -32px;
           width: 45px;
           bottom: 0px;
           padding: 5px;
@@ -163,8 +170,10 @@ $color_yellow: #EAEAEA;
         }
   
         &:hover {
-          background: url("/img/profile-over.png") no-repeat center center;
-          background-size: 26%;
+          background: url("/img/buttons.png");
+          background-size: 500%;
+          background-position-x: -29px;
+          background-position-y: 0%;
           &:after {
             visibility: visible;
           }
@@ -186,25 +195,30 @@ $color_yellow: #EAEAEA;
         position: absolute;
         z-index: 3;
         display: inline-block;
-        background: url("/img/images-icon.png") no-repeat center center;
-        background-size: 24%;
-        width: 54%;
-        left: 48%;
-        height: 100%;
-        transition: .2s ease-in;
+        background: url("/img/buttons.png");
+        background-size: 500%;
+        background-position-x: -51px;
+        background-position-y: 0%;
+        width: 26px;
+        height: 36px;
+        left: 136px;
+        top: 34px;
         
         &:after {
           content: 'fragmentos';
-          left: 3px;
+          left: -32px;
+          top: -34px;
           width: 75px;
-          bottom: 0px;
           padding: 5px;
+          position: absolute;
           @extend .tooltip;
         }
         
         &:hover {
-          background: url("/img/images-icon-over.png") no-repeat center center;
-          background-size: 24%;
+          background: url("/img/buttons.png");
+          background-size: 500%;
+          background-position-x: -79px;
+          background-position-y: 0%;
           &:after {
             visibility: visible;
           }

@@ -482,7 +482,7 @@ function render () {
       <aside id="images"></aside>
       <menu id="menu">
         <div id="logo">
-          <img src="img/brand.png" alt="automata">
+          <div class="logo-container" alt="automata"></div>
         </div>
         <a id="logout" href="/logout">
           <span class="logout-text">logout</span>
